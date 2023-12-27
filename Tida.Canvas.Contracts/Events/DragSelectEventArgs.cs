@@ -7,17 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Events {
+namespace Tida.Canvas.Events
+{
     /// <summary>
     /// 拖放选取事件参数;
     /// </summary>
-    public class DragSelectEventArgs:CancelEventArgs {
-        public DragSelectEventArgs(Vector2D position,Rectangle2D2 rectangle2D,DrawObject[] hitedDrawObjects) {
+    public class DragSelectEventArgs : CancelEventArgs
+    {
+        public DragSelectEventArgs(Vector2D position, Rectangle2D2 rectangle2D, DrawObject[] hitedDrawObjects)
+        {
             Position = position ?? throw new ArgumentNullException(nameof(position));
             Rectangle2D = rectangle2D ?? throw new ArgumentNullException(nameof(rectangle2D));
             HitedDrawObjects = hitedDrawObjects ?? throw new ArgumentNullException(nameof(hitedDrawObjects));
         }
-        
+
         /// <summary>
         /// 鼠标的位置;
         /// </summary>
@@ -32,7 +35,5 @@ namespace Tida.Canvas.Events {
         /// 被命中的绘制单元;
         /// </summary>
         public DrawObject[] HitedDrawObjects { get; }
-        
     }
-
 }

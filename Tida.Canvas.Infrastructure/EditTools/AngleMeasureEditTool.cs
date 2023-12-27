@@ -7,19 +7,20 @@ using Tida.Geometry.Primitives;
 using System;
 using static Tida.Canvas.Infrastructure.Constants;
 
-namespace Tida.Canvas.Infrastructure.EditTools {
+namespace Tida.Canvas.Infrastructure.EditTools
+{
     /// <summary>
     /// 测量工具-角度;
     /// </summary>
-    public class AngleMeasureEditTool : UniqueTypeEditToolGenericBase<MeasureAngle>, IMeasureEditTool {
+    public class AngleMeasureEditTool : UniqueTypeEditToolGenericBase<MeasureAngle>, IMeasureEditTool
+    {
         /// <summary>
         /// 使用一个绘制对象选择器实例构建一个角度测量编辑工具;
         /// </summary>
         /// <param name="drawObjectSelector">绘制对象选择器,用于在操作多个绘制对象时,需确定一个唯一的绘制对象时使用</param>
-        public AngleMeasureEditTool(IDrawObjectSelector drawObjectSelector) {
-
+        public AngleMeasureEditTool(IDrawObjectSelector drawObjectSelector)
+        {
             _drawObjectSelector = drawObjectSelector ?? throw new ArgumentNullException(nameof(drawObjectSelector));
-
         }
 
         private readonly IDrawObjectSelector _drawObjectSelector;
@@ -29,8 +30,10 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         /// </summary>
         public bool ShouldCommitMeasureData { get; set; } = true;
 
-        protected override void OnCommit() {
-            if (ShouldCommitMeasureData) {
+        protected override void OnCommit()
+        {
+            if (ShouldCommitMeasureData)
+            {
                 base.OnCommit();
             }
         }
@@ -39,6 +42,7 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         /// 鼠标首次按下位置;
         /// </summary>
         private Vector2D _firstMouseDownPosition;
+
         /// <summary>
         /// 鼠标第二次按下位置;
         /// </summary>
@@ -55,58 +59,73 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         /// 鼠标首次按下确定;
         /// </summary>
         public event EventHandler<Vector2D> FirstMouseDownPositionConfirmed;
+
         /// <summary>
         /// 鼠标第二次按下确定;
         /// </summary>
         public event EventHandler<Vector2D> SecondMouseDownPositionConfirmed;
+
         public event EventHandler<LineBase> FirstAngleLineConfirmed;
 
-        protected override void OnCanvasContextChanged(ValueChangedEventArgs<ICanvasContextEx> args) {
-            if (args.NewValue is ICanvasContextEx newCanvasContext) {
+        protected override void OnCanvasContextChanged(ValueChangedEventArgs<ICanvasContextEx> args)
+        {
+            if (args.NewValue is ICanvasContextEx newCanvasContext)
+            {
                 newCanvasContext.ClickSelect += CanvasContext_ClickSelect;
             }
 
-            if (args.OldValue is ICanvasContextEx oldCanvasContext) {
+            if (args.OldValue is ICanvasContextEx oldCanvasContext)
+            {
                 oldCanvasContext.ClickSelect -= CanvasContext_ClickSelect;
             }
+
             base.OnCanvasContextChanged(args);
         }
 
-        private void CanvasContext_ClickSelect(object sender,ClickSelectEventArgs e) {
-            if(e.HitedDrawObjects.Length == 1) {
+        private void CanvasContext_ClickSelect(object sender, ClickSelectEventArgs e)
+        {
+            if (e.HitedDrawObjects.Length == 1)
+            {
                 return;
             }
-            
-            if(e.HitedDrawObjects.Length > 1) {
+
+            if (e.HitedDrawObjects.Length > 1)
+            {
                 var slDrawObject = _drawObjectSelector.SelectOneDrawObject(e.HitedDrawObjects);
-                if(slDrawObject != null) {
+                if (slDrawObject != null)
+                {
                     slDrawObject.IsSelected = true;
                 }
+
                 e.Cancel = true;
             }
-            
         }
 
-        protected override void OnBeginOperation() {
+        protected override void OnBeginOperation()
+        {
             base.OnBeginOperation();
-            if (CanvasContext == null) {
+            if (CanvasContext == null)
+            {
                 return;
             }
-            
+
             var drawObjects = CanvasContext.GetAllDrawObjects();
 
-            foreach (var drawObject in drawObjects) {
+            foreach (var drawObject in drawObjects)
+            {
                 drawObject.IsSelected = false;
             }
         }
 
-        protected override void OnMouseDown(MouseDownEventArgs e) {
-            
-            if (e == null) {
+        protected override void OnMouseDown(MouseDownEventArgs e)
+        {
+            if (e == null)
+            {
                 throw new ArgumentNullException(nameof(e));
             }
-           
-            if(CanvasContext == null) {
+
+            if (CanvasContext == null)
+            {
                 return;
             }
 
@@ -116,15 +135,18 @@ namespace Tida.Canvas.Infrastructure.EditTools {
             //    return;
             //}
 
-            if(_secondMouseDownPosition == null && _firstMouseDownPosition == null) {
+            if (_secondMouseDownPosition == null && _firstMouseDownPosition == null)
+            {
                 _firstMouseDownPosition = thisMouseDownPosition;
                 FirstMouseDownPositionConfirmed?.Invoke(this, _firstMouseDownPosition);
             }
-            else if(_secondMouseDownPosition == null) {
+            else if (_secondMouseDownPosition == null)
+            {
                 _secondMouseDownPosition = thisMouseDownPosition;
                 SecondMouseDownPositionConfirmed?.Invoke(this, _secondMouseDownPosition);
             }
-            else if(_firstMouseDownPosition != null){
+            else if (_firstMouseDownPosition != null)
+            {
                 var measureAngle = new MeasureAngle(_firstMouseDownPosition, _secondMouseDownPosition, thisMouseDownPosition);
                 _firstMouseDownPosition = null;
                 _secondMouseDownPosition = null;
@@ -137,9 +159,10 @@ namespace Tida.Canvas.Infrastructure.EditTools {
             RaiseVisualChanged();
         }
 
-        protected override void OnMouseMove(MouseMoveEventArgs e) {
-
-            if (e == null) {
+        protected override void OnMouseMove(MouseMoveEventArgs e)
+        {
+            if (e == null)
+            {
                 throw new ArgumentNullException(nameof(e));
             }
 
@@ -150,29 +173,34 @@ namespace Tida.Canvas.Infrastructure.EditTools {
 
         public override bool IsEditing => true;
 
-        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy) {
-            
+        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy)
+        {
             base.Draw(canvas, canvasProxy);
 
             Vector2D lastMouseDownPosition = null;
 
-            if(_firstMouseDownPosition != null && _secondMouseDownPosition != null) {
+            if (_firstMouseDownPosition != null && _secondMouseDownPosition != null)
+            {
                 canvas.DrawLine(HighLightLinePen, new Line2D(_secondMouseDownPosition, _firstMouseDownPosition));
                 lastMouseDownPosition = _secondMouseDownPosition;
             }
-            else if(_firstMouseDownPosition != null) {
+            else if (_firstMouseDownPosition != null)
+            {
                 lastMouseDownPosition = _firstMouseDownPosition;
             }
-            
-            if(_firstMouseDownPosition != null) {
+
+            if (_firstMouseDownPosition != null)
+            {
                 PointDrawExtensions.DrawSelectedPointState(_firstMouseDownPosition, canvas, canvasProxy);
             }
 
-            if(_secondMouseDownPosition != null) {
+            if (_secondMouseDownPosition != null)
+            {
                 PointDrawExtensions.DrawSelectedPointState(_secondMouseDownPosition, canvas, canvasProxy);
             }
 
-            if(_currentHoverPosition != null && lastMouseDownPosition != null) {
+            if (_currentHoverPosition != null && lastMouseDownPosition != null)
+            {
                 canvas.DrawLine(HighLightLinePen, new Line2D(lastMouseDownPosition, _currentHoverPosition));
             }
         }

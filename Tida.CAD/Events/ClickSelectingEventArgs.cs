@@ -7,8 +7,10 @@ namespace Tida.CAD.Events
     /// <summary>
     /// The eventargs used while selecting drawobjects with clicking;
     /// </summary>
-    public class ClickSelectingEventArgs : CancelEventArgs {
-        public ClickSelectingEventArgs(Point position, IList<DrawObject> hitedDrawObjects) {
+    public class ClickSelectingEventArgs : CancelEventArgs
+    {
+        public ClickSelectingEventArgs(Point position, IList<DrawObject> hitedDrawObjects)
+        {
             this.HitPosition = position;
             this.HitedDrawObjects = hitedDrawObjects;
         }
@@ -17,11 +19,10 @@ namespace Tida.CAD.Events
         /// The position where the mouse clicked;
         /// </summary>
         public Point HitPosition { get; }
-        
+
         /// <summary>
         /// The drawobject to select;
         /// </summary>
         public IList<DrawObject> HitedDrawObjects { get; }
-        
     }
 }

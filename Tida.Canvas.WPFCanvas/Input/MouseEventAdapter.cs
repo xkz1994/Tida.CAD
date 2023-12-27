@@ -7,11 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using SystemInput = System.Windows.Input;
 
-namespace Tida.Canvas.WPFCanvas.Input {
+namespace Tida.Canvas.WPFCanvas.Input
+{
     /// <summary>
     /// 鼠标参数适配器;
     /// </summary>
-    static class MouseEventAdapter {
+    static class MouseEventAdapter
+    {
         /// <summary>
         /// 从WPF鼠标按下事件参数转化为<see cref="MouseDownEventArgs"/>
         /// </summary>
@@ -19,8 +21,10 @@ namespace Tida.Canvas.WPFCanvas.Input {
         /// <param name="position">指针所在的工程数学坐标</param>
         /// <param name="viewLocation">指针所在的视图位置</param>
         /// <returns></returns>
-        public static MouseDownEventArgs ConvertToMouseDownEventArgs(SystemInput.MouseButtonEventArgs e,Vector2D position) {
-            if(e.ButtonState != SystemInput.MouseButtonState.Pressed) {
+        public static MouseDownEventArgs ConvertToMouseDownEventArgs(SystemInput.MouseButtonEventArgs e, Vector2D position)
+        {
+            if (e.ButtonState != SystemInput.MouseButtonState.Pressed)
+            {
                 throw new ArgumentException($"{nameof(e.ButtonState)} is not equal to {nameof(MouseButtonState.Pressed)}.");
             }
 
@@ -35,8 +39,10 @@ namespace Tida.Canvas.WPFCanvas.Input {
         /// <param name="position"></param>
         /// <param name="viewLocation"></param>
         /// <returns></returns>
-        public static MouseUpEventArgs ConvertToMouseUpEventArgs(SystemInput.MouseButtonEventArgs e,Vector2D position) {
-            if(e.ButtonState != SystemInput.MouseButtonState.Released) {
+        public static MouseUpEventArgs ConvertToMouseUpEventArgs(SystemInput.MouseButtonEventArgs e, Vector2D position)
+        {
+            if (e.ButtonState != SystemInput.MouseButtonState.Released)
+            {
                 throw new ArgumentException($"{nameof(e.ButtonState)} is not equal to {nameof(MouseButtonState.Released)}.");
             }
 
@@ -51,9 +57,9 @@ namespace Tida.Canvas.WPFCanvas.Input {
         /// <param name="position"></param>
         /// <param name="viewLocation"></param>
         /// <returns></returns>
-        public static MouseMoveEventArgs ConvertToMouseMoveEventArgs(Vector2D position) {
+        public static MouseMoveEventArgs ConvertToMouseMoveEventArgs(Vector2D position)
+        {
             return new MouseMoveEventArgs(position);
         }
-
     }
 }

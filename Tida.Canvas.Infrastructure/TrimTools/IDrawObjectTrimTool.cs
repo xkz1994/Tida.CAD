@@ -1,11 +1,12 @@
 ﻿using Tida.Canvas.Contracts;
 
-namespace Tida.Canvas.Infrastructure.TrimTools {
+namespace Tida.Canvas.Infrastructure.TrimTools
+{
     /// <summary>
     /// 绘制对象裁剪工具;
     /// </summary>
-    public interface IDrawObjectTrimTool {
-
+    public interface IDrawObjectTrimTool
+    {
         /// <summary>
         /// 检查是否是本单位可以裁剪的绘制对象;
         /// </summary>

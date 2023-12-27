@@ -6,13 +6,16 @@ using static Tida.Canvas.Shell.Contracts.Constants;
 using static Tida.Canvas.Shell.StatusBar.Constants;
 using Tida.Canvas.Infrastructure.Snaping.Rules;
 
-namespace Tida.Canvas.Shell.Canvas.StatusBar {
+namespace Tida.Canvas.Shell.Canvas.StatusBar
+{
     /// <summary>
     /// 状态栏项-极轴追踪;
     /// </summary>
     [Export(typeof(IStatusBarItem))]
-    class AxisTrackingEnabledStatusBarItem: StatusBarCheckBoxItem {
-        public AxisTrackingEnabledStatusBarItem():base(StatusBarItem_AxisTrackingEnabled) {
+    class AxisTrackingEnabledStatusBarItem : StatusBarCheckBoxItem
+    {
+        public AxisTrackingEnabledStatusBarItem() : base(StatusBarItem_AxisTrackingEnabled)
+        {
             this.Order = StatusBarOrder_AxisTrackingEnabled;
             this.Content = LanguageService.FindResourceString(StatusBarText_AxisTrackingEnabled);
 
@@ -26,8 +29,10 @@ namespace Tida.Canvas.Shell.Canvas.StatusBar {
             RefreshEnabled();
         }
 
-        protected override void OnIsCheckedChanged() {
-            if(IsChecked == null) {
+        protected override void OnIsCheckedChanged()
+        {
+            if (IsChecked == null)
+            {
                 return;
             }
 
@@ -37,7 +42,8 @@ namespace Tida.Canvas.Shell.Canvas.StatusBar {
         /// <summary>
         /// 刷新是否能够使用极轴追踪;
         /// </summary>
-        private void RefreshEnabled() {
+        private void RefreshEnabled()
+        {
             var section = SettingsService.GetOrCreateSection(SettingSection_Canvas);
             section.SetAttribute(SettingName_AxisTrackingEnabled, IsChecked.Value);
             AxisTrackingSnapRule.IsEnabled = IsChecked.Value;

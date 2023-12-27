@@ -6,8 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Tida.Canvas.Shell.App {
-    public class ResourceDictionaryEx: ResourceDictionary {
+namespace Tida.Canvas.Shell.App
+{
+    public class ResourceDictionaryEx : ResourceDictionary
+    {
         [EditorBrowsable(EditorBrowsableState.Always)]
         public string Name { get; set; }
     }

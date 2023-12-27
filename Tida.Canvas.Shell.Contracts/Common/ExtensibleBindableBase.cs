@@ -6,11 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.Common {
+namespace Tida.Canvas.Shell.Contracts.Common
+{
     /// <summary>
     /// 可拓展绑定基类;
     /// </summary>
-    public abstract class ExtensibleBindableBase: BindableBase,IExtensible {
+    public abstract class ExtensibleBindableBase : BindableBase, IExtensible
+    {
         private ExtensibleObject _extensibleBase = new ExtensibleObject();
 
         public TInstance GetGeneralInstance<TInstance>(string extName) => _extensibleBase.GetGeneralInstance<TInstance>(extName);

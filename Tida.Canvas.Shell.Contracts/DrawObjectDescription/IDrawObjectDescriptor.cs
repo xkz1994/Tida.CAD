@@ -1,10 +1,12 @@
 ﻿using Tida.Canvas.Contracts;
 
-namespace Tida.Canvas.Shell.Contracts.DrawObjectDescription {
+namespace Tida.Canvas.Shell.Contracts.DrawObjectDescription
+{
     /// <summary>
     /// 绘制对象描述器;
     /// </summary>
-    public interface IDrawObjectDescriptor {
+    public interface IDrawObjectDescriptor
+    {
         /// <summary>
         /// 获取特定绘制对象的类别名;
         /// </summary>
@@ -12,5 +14,4 @@ namespace Tida.Canvas.Shell.Contracts.DrawObjectDescription {
         /// <returns></returns>
         DrawObjectDescription GetDescription(DrawObject drawObject);
     }
-
 }

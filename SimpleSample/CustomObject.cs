@@ -27,7 +27,7 @@ namespace SimpleSample
         {
             base.Draw(canvas, canvasProxy);
 
-            
+
             canvas.DrawEllipse(null, new Pen { Brush = Brushes.Purple, Thickness = 2 }, Vector2D.Zero, 2, 4);
             canvas.DrawText("This is a custom drawObject", 12, Brushes.White, new Vector2D(-1, 0));
         }

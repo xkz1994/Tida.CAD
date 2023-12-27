@@ -6,18 +6,20 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.ComponentModel {
+namespace Tida.Canvas.Shell.Contracts.ComponentModel
+{
     /// <summary>
     /// 类型描述器;
     /// </summary>
-    public interface  IObjectTypeDescriptor {
-    
+    public interface IObjectTypeDescriptor
+    {
     }
 
     /// <summary>
     /// 类型描述器描述器;
     /// </summary>
-    public interface IObjectTypeDescriptorMetaData {
+    public interface IObjectTypeDescriptorMetaData
+    {
         /// <summary>
         /// 类型描述语言名;
         /// </summary>
@@ -29,10 +31,11 @@ namespace Tida.Canvas.Shell.Contracts.ComponentModel {
         Type Type { get; }
     }
 
-    [MetadataAttribute,AttributeUsage(AttributeTargets.Class,AllowMultiple = false)]
-    public sealed class ExportObjectTypeDescriptorAttribute : ExportAttribute,IObjectTypeDescriptorMetaData {
-        public ExportObjectTypeDescriptorAttribute():base(typeof(IObjectTypeDescriptor)) {
-
+    [MetadataAttribute, AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public sealed class ExportObjectTypeDescriptorAttribute : ExportAttribute, IObjectTypeDescriptorMetaData
+    {
+        public ExportObjectTypeDescriptorAttribute() : base(typeof(IObjectTypeDescriptor))
+        {
         }
 
         public string TypeNameKey { get; set; }

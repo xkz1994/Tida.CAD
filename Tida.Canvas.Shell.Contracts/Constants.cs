@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts {
+namespace Tida.Canvas.Shell.Contracts
+{
     /// <summary>
     /// 图层相关常量;
     /// </summary>
-    public static partial class Constants {
+    public static partial class Constants
+    {
         //默认图层;
         public const string CanvasLayer_Default = nameof(CanvasLayer_Default);
 
@@ -42,7 +44,7 @@ namespace Tida.Canvas.Shell.Contracts {
         /// <summary>
         /// 标识将在绘制对象序列化时使用的转换器类型;
         /// </summary>
-        public const string ConverterType_SerializingDrawObjects   = nameof(ConverterType_SerializingDrawObjects);
+        public const string ConverterType_SerializingDrawObjects = nameof(ConverterType_SerializingDrawObjects);
 
 
         /// <summary>
@@ -54,7 +56,5 @@ namespace Tida.Canvas.Shell.Contracts {
         /// 设定——正交模式可用状态;
         /// </summary>
         public const string SettingName_VertexMode = nameof(SettingName_VertexMode);
-        
     }
-
 }

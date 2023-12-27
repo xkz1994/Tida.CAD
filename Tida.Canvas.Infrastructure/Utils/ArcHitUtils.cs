@@ -6,12 +6,13 @@ using Tida.Geometry.External;
 using Tida.Geometry.Primitives;
 using static Tida.Canvas.Infrastructure.Constants;
 
-namespace Tida.Canvas.Infrastructure.Utils {
+namespace Tida.Canvas.Infrastructure.Utils
+{
     /// <summary>
     /// 圆弧判定;
     /// </summary>
-    public class ArcHitUtils {
-
+    public class ArcHitUtils
+    {
         /// <summary>
         /// 判断画布中某个位置是否在某个圆弧附近;
         /// </summary>
@@ -19,12 +20,15 @@ namespace Tida.Canvas.Infrastructure.Utils {
         /// <param name="point"></param>
         /// <param name="canvasProxy"></param>
         /// <returns></returns>
-        public static bool PointInArc(Arc2D arc2D, Vector2D point, ICanvasScreenConvertable canvasProxy) {
-            if (canvasProxy == null) {
+        public static bool PointInArc(Arc2D arc2D, Vector2D point, ICanvasScreenConvertable canvasProxy)
+        {
+            if (canvasProxy == null)
+            {
                 return false;
             }
 
-            if (arc2D == null) {
+            if (arc2D == null)
+            {
                 return false;
             }
 
@@ -33,28 +37,30 @@ namespace Tida.Canvas.Infrastructure.Utils {
             var arcCenterScreenPoint = canvasProxy.ToScreen(arc2D.Center);
             var screenRadius = canvasProxy.ToScreen(arc2D.Radius);
 
-            if(Math.Abs(arcCenterScreenPoint.Distance(screenPoint) - screenRadius) > TolerantedScreenLength) {
+            if (Math.Abs(arcCenterScreenPoint.Distance(screenPoint) - screenRadius) > TolerantedScreenLength)
+            {
                 return false;
             }
-            
+
             var centerToPointDirection = new Line2D(arc2D.Center, point).Direction;
-            if (Extension.AreEqual(centerToPointDirection.Modulus(),0)) {
+            if (Extension.AreEqual(centerToPointDirection.Modulus(), 0))
+            {
                 return false;
             }
 
             var centerToPointAngle = Extension.AngleFrom(
-                new Vector3D(centerToPointDirection.X,centerToPointDirection.Y,0),
+                new Vector3D(centerToPointDirection.X, centerToPointDirection.Y, 0),
                 Vector3D.BasisX
             );
 
-            if(arc2D.Angle > 0) {
+            if (arc2D.Angle > 0)
+            {
                 return centerToPointAngle < arc2D.StartAngle + arc2D.Angle && centerToPointAngle > arc2D.StartAngle;
             }
-            else {
+            else
+            {
                 return centerToPointAngle < arc2D.StartAngle && centerToPointAngle > arc2D.StartAngle + arc2D.Angle;
             }
-            
-            
         }
     }
 }

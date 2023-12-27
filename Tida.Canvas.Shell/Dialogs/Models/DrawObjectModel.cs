@@ -2,12 +2,13 @@
 using Prism.Mvvm;
 using System;
 
-namespace Tida.Canvas.Shell.Dialogs.Models {
-    class DrawObjectModel:BindableBase {
-        public DrawObjectModel(DrawObject drawObject) {
-
+namespace Tida.Canvas.Shell.Dialogs.Models
+{
+    class DrawObjectModel : BindableBase
+    {
+        public DrawObjectModel(DrawObject drawObject)
+        {
             DrawObject = drawObject ?? throw new ArgumentNullException(nameof(drawObject));
-
         }
 
         public DrawObject DrawObject { get; }

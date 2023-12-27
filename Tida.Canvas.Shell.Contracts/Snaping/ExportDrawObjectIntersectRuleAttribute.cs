@@ -6,12 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.Snaping {
-
+namespace Tida.Canvas.Shell.Contracts.Snaping
+{
     [MetadataAttribute, AttributeUsage(AttributeTargets.Class | AttributeTargets.Field, AllowMultiple = false)]
-    public class ExportDrawObjectIntersectRuleAttribute : ExportAttribute, IDrawObjectIntersectRuleMetaData {
-        public ExportDrawObjectIntersectRuleAttribute() : base(typeof(IDrawObjectIntersectRule)) {
-
+    public class ExportDrawObjectIntersectRuleAttribute : ExportAttribute, IDrawObjectIntersectRuleMetaData
+    {
+        public ExportDrawObjectIntersectRuleAttribute() : base(typeof(IDrawObjectIntersectRule))
+        {
         }
 
         public int Order { get; set; }

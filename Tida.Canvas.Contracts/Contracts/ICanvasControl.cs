@@ -8,17 +8,18 @@ using Tida.Canvas.Events;
 using Tida.Canvas.Input;
 using System.IO;
 
-namespace Tida.Canvas.Contracts {
-    
+namespace Tida.Canvas.Contracts
+{
     /// <summary>
     /// 画布控件协约;
     /// </summary>
-    public interface ICanvasControl : IHaveEditTool , ICanvasContextEx,IInputElement {
+    public interface ICanvasControl : IHaveEditTool, ICanvasContextEx, IInputElement
+    {
         /// <summary>
         /// 是否是只读的,当此值设置为真时,本控件及其内容将无法通过输入设备被操作;
         /// </summary>
         bool IsReadOnly { get; set; }
-        
+
         /// <summary>
         /// 撤销;
         /// </summary>
@@ -69,7 +70,7 @@ namespace Tida.Canvas.Contracts {
         /// 事务已经重做;
         /// </summary>
         event EventHandler<EditTransactionRedoneEventArgs> EditTransactionRedone;
-        
+
         /// <summary>
         /// 聚焦;
         /// </summary>
@@ -79,7 +80,7 @@ namespace Tida.Canvas.Contracts {
         /// 是否被聚焦;          
         /// </summary>
         bool IsFocused { get; }
-        
+
         /// <summary>
         /// 画布内绘制对象选定状态发生了变化事件;
         /// </summary>
@@ -100,5 +101,4 @@ namespace Tida.Canvas.Contracts {
         /// </summary>
         event EventHandler<DrawObjectIsEditingChangedEventArgs> DrawObjectIsEditingChanged;
     }
-
 }

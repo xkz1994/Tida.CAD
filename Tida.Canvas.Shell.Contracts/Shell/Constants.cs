@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.Shell {
+namespace Tida.Canvas.Shell.Contracts.Shell
+{
     /// <summary>
     /// Shell相关常量;
     /// </summary>
-    public static class Constants {
+    public static class Constants
+    {
         /// <summary>
         /// 区域名-状态栏;
         /// </summary>
@@ -22,14 +24,11 @@ namespace Tida.Canvas.Shell.Contracts.Shell {
         /// <summary>
         /// 区域名——主区域;
         /// </summary>
-
         public const string RegionName_MainPage = nameof(RegionName_MainPage);
 
         ///// <summary>
         ///// 主窗体名称;
         ///// </summary>
         //public const string ShellView = nameof(ShellView);
-
-
     }
 }

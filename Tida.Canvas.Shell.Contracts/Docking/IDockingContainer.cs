@@ -6,18 +6,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace Tida.Canvas.Shell.Contracts.Docking {
+namespace Tida.Canvas.Shell.Contracts.Docking
+{
     /// <summary>
     /// 停靠容器;
     /// </summary>
-    public interface IDockingContainer:IDockingItem {
-        
+    public interface IDockingContainer : IDockingItem
+    {
     }
 
     /// <summary>
     /// 停靠容器元数据;
     /// </summary>
-    public interface IDockingContainerMetaData:IDockingItemMetaData {
+    public interface IDockingContainerMetaData : IDockingItemMetaData
+    {
         /// <summary>
         /// 初始停靠位置;
         /// </summary>
@@ -38,9 +40,10 @@ namespace Tida.Canvas.Shell.Contracts.Docking {
     /// 导出停靠容器注解;
     /// </summary>
     [MetadataAttribute, AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public sealed class ExportDockingContainerAttribute : ExportAttribute,IDockingContainerMetaData {
-        public ExportDockingContainerAttribute():base(typeof(IDockingContainer)) {
-            
+    public sealed class ExportDockingContainerAttribute : ExportAttribute, IDockingContainerMetaData
+    {
+        public ExportDockingContainerAttribute() : base(typeof(IDockingContainer))
+        {
         }
 
         public DockingPosition InitDockingPosition { get; set; }

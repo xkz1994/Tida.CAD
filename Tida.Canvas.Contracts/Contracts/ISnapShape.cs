@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Contracts {
+namespace Tida.Canvas.Contracts
+{
     /// <summary>
     /// 感应坐标的辅助图形(通常跟鼠标位置有关);
     /// </summary>
-    public interface ISnapShape:IDrawable {
+    public interface ISnapShape : IDrawable
+    {
         /// <summary>
         /// 所属绘制对象;
         /// </summary>

@@ -1,11 +1,13 @@
 ﻿using Tida.Canvas.Contracts;
 using System;
 
-namespace Tida.Canvas.Shell.Contracts.EditTools {
+namespace Tida.Canvas.Shell.Contracts.EditTools
+{
     /// <summary>
     /// 编辑工具提供器;
     /// </summary>
-    public interface IEditToolProvider {
+    public interface IEditToolProvider
+    {
         /// <summary>
         /// 创建一个新的编辑工具;
         /// </summary>

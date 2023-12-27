@@ -12,12 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Tida.Canvas.Shell.CanvasExport.Views {
+namespace Tida.Canvas.Shell.CanvasExport.Views
+{
     /// <summary>
     /// Interaction logic for ExportCanvasAsImgConfigWindow.xaml
     /// </summary>
-    public partial class SaveAsImgConfigWindow : Window {
-        public SaveAsImgConfigWindow() {
+    public partial class SaveAsImgConfigWindow : Window
+    {
+        public SaveAsImgConfigWindow()
+        {
             InitializeComponent();
         }
     }

@@ -13,17 +13,23 @@ using Tida.Canvas.Shell.Contracts.App;
 using Tida.Canvas.Shell.Contracts.Common;
 using Tida.Xml;
 
-namespace Tida.Canvas.Shell.App {
+namespace Tida.Canvas.Shell.App
+{
     /// <summary>
     /// 语言服务实现者;
     /// </summary>
     [Export(typeof(ILanguageService))]
-    public class LanguageServiceImpl : ILanguageService {
+    public class LanguageServiceImpl : ILanguageService
+    {
         private LanguageProvider _currentProvider;
-        public LanguageProvider CurrentProvider {
+
+        public LanguageProvider CurrentProvider
+        {
             get { return _currentProvider; }
-            set {
-                if (value == _currentProvider) {
+            set
+            {
+                if (value == _currentProvider)
+                {
                     return;
                 }
 
@@ -36,38 +42,47 @@ namespace Tida.Canvas.Shell.App {
         public IEnumerable<LanguageProvider> AllProviders => _allProviders.Select(p => p);
 
         private ILanguageDictionary _languageDict;
-        public string FindResourceString(string keyName) {
 
-            if (string.IsNullOrEmpty(keyName)) {
+        public string FindResourceString(string keyName)
+        {
+            if (string.IsNullOrEmpty(keyName))
+            {
                 return keyName;
             }
 
-            if (_languageDict != null) {
+            if (_languageDict != null)
+            {
                 return (_languageDict[keyName] as string) ?? keyName;
             }
 
             return keyName;
         }
 
-        public void Initialize() {
+        public void Initialize()
+        {
             InitializeDocument();
             InitilizeProviders();
             InitilizeCurrentProvider();
         }
 
         private string ConfigFileName => $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/{Constants.LanguageConfigName}";
+
         /// <summary>
         /// 初始化/读取配置文档;
         /// </summary>
-        private void InitializeDocument() {
-            if (!File.Exists(ConfigFileName)) {
+        private void InitializeDocument()
+        {
+            if (!File.Exists(ConfigFileName))
+            {
                 return;
             }
 
-            try {
+            try
+            {
                 _xDoc = XDocument.Load(ConfigFileName);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 LoggerService.WriteCallerLine(ex.Message);
             }
         }
@@ -77,24 +92,30 @@ namespace Tida.Canvas.Shell.App {
         /// <summary>
         /// 初始化所有语言提供者;
         /// </summary>
-        private void InitilizeProviders() {
-            if (_xDoc == null) {
+        private void InitilizeProviders()
+        {
+            if (_xDoc == null)
+            {
                 return;
             }
+
             _allProviders.Clear();
 
-            if (_xDoc == null) {
+            if (_xDoc == null)
+            {
                 return;
             }
 
             var elem = _xDoc.Root.Element(Constants.LanguageProviders);
-            if (elem == null) {
+            if (elem == null)
+            {
                 return;
             }
 
             var providerElems = elem.Elements(Constants.Provider);
 
-            foreach (var pElem in providerElems) {
+            foreach (var pElem in providerElems)
+            {
                 var lanName = pElem.GetXElemValue(Constants.ProviderName);
                 var lanType = pElem.GetXElemValue(Constants.ProviderType);
                 var provider = new LanguageProvider(lanName, lanType);
@@ -105,18 +126,22 @@ namespace Tida.Canvas.Shell.App {
         /// <summary>
         /// 初始化当前语言;
         /// </summary>
-        private void InitilizeCurrentProvider() {
-            if (_xDoc == null) {
+        private void InitilizeCurrentProvider()
+        {
+            if (_xDoc == null)
+            {
                 return;
             }
 
             var curLan = _xDoc.Root.GetXElemValue(Constants.CurrentLanguage);
-            if (string.IsNullOrEmpty(curLan)) {
+            if (string.IsNullOrEmpty(curLan))
+            {
                 return;
             }
 
             var provider = AllProviders.FirstOrDefault(p => p.Type == curLan);
-            if (provider == null) {
+            if (provider == null)
+            {
                 return;
             }
 
@@ -126,50 +151,56 @@ namespace Tida.Canvas.Shell.App {
         /// <summary>
         /// 初始化语言,操作字典等;
         /// </summary>
-        private void InitializeLanguageDict() {
-
-            if (CurrentProvider == null) {
+        private void InitializeLanguageDict()
+        {
+            if (CurrentProvider == null)
+            {
                 return;
             }
 
 
             _languageDict = ServiceProvider.GetInstance<ILanguageDictionary>();
 
-            if (_languageDict == null) {
+            if (_languageDict == null)
+            {
                 return;
             }
 
             _languageDict.ClearMergedDictionaries();
             var dicts = new List<ResourceDictionary>();
             var providerDirect = $"{AppDomainService.ExecutingAssemblyDirectory}\\{Constants.LanguageDirect}\\{CurrentProvider.Type}";
-            if (!Directory.Exists(providerDirect)) {
+            if (!Directory.Exists(providerDirect))
+            {
                 return;
             }
 
             var di = new DirectoryInfo(providerDirect);
             //遍历添加语言文件;
-            foreach (var file in di.GetFiles()) {
-                try {
+            foreach (var file in di.GetFiles())
+            {
+                try
+                {
                     _languageDict.AddMergedDictionaryFromPath($"{providerDirect}/{file.Name}");
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     LoggerService.WriteCallerLine(ex.Message);
                 }
             }
         }
 
-        public string TryGetStringWithFormat(string languageFormatKey, params object[] args) {
-            try {
+        public string TryGetStringWithFormat(string languageFormatKey, params object[] args)
+        {
+            try
+            {
                 var format = FindResourceString(languageFormatKey);
                 return string.Format(format, args);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 LoggerService.WriteException(ex);
                 return FindResourceString(languageFormatKey);
             }
         }
     }
-
-
-   
 }

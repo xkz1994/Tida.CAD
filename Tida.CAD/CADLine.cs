@@ -10,11 +10,12 @@ namespace Tida.CAD
     /// </summary>
     public struct CADLine
     {
-        public CADLine(Point start,Point end)
+        public CADLine(Point start, Point end)
         {
             Start = start;
             End = end;
         }
+
         /// <summary>
         /// Start point;
         /// </summary>

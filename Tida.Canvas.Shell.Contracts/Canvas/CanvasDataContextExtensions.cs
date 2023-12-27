@@ -7,36 +7,40 @@ using Tida.Canvas.Contracts;
 using Tida.Canvas.Shell.Contracts.Canvas;
 using Tida.Geometry.Primitives;
 
-namespace CDO.Common.Canvas.Shell.Contracts.Canvas {
-
+namespace CDO.Common.Canvas.Shell.Contracts.Canvas
+{
     /// <summary>
     /// 业务层的画布的上下文数据拓展;
     /// </summary>
-    public static class CanvasDataContextExtensions {
+    public static class CanvasDataContextExtensions
+    {
         /// <summary>
         /// 调整画布位置和缩放比例,以使得所有绘制对象在可见的范围内;
         /// </summary>
-        public static void ViewAllDrawObjects(this ICanvasDataContext canvasDataContext) {
-            if (canvasDataContext == null) {
+        public static void ViewAllDrawObjects(this ICanvasDataContext canvasDataContext)
+        {
+            if (canvasDataContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasDataContext));
             }
 
-            if (canvasDataContext.CanvasProxy == null) {
+            if (canvasDataContext.CanvasProxy == null)
+            {
                 return;
             }
 
-            if (canvasDataContext.Layers == null) {
+            if (canvasDataContext.Layers == null)
+            {
                 return;
             }
 
             //获取所有绘制对象所在的矩形;
-            var rects = canvasDataContext.Layers.
-                SelectMany(p => p.DrawObjects).
-                Select(p => p.GetBoundingRect()).Where(p => p != null);
+            var rects = canvasDataContext.Layers.SelectMany(p => p.DrawObjects).Select(p => p.GetBoundingRect()).Where(p => p != null);
 
             var allVertexes = rects.SelectMany(p => p.GetVertexes()).ToArray();
 
-            if (allVertexes.Length == 0) {
+            if (allVertexes.Length == 0)
+            {
                 return;
             }
 
@@ -81,9 +85,10 @@ namespace CDO.Common.Canvas.Shell.Contracts.Canvas {
         /// <typeparam name="TDrawObject"></typeparam>
         /// <param name="canvasDataContext"></param>
         /// <returns></returns>
-        public static IEnumerable<TDrawObject> GetAllVisibleDrawObject<TDrawObject>(this ICanvasDataContext canvasDataContext) where TDrawObject : DrawObject {
-
-            if (canvasDataContext == null) {
+        public static IEnumerable<TDrawObject> GetAllVisibleDrawObject<TDrawObject>(this ICanvasDataContext canvasDataContext) where TDrawObject : DrawObject
+        {
+            if (canvasDataContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasDataContext));
             }
 

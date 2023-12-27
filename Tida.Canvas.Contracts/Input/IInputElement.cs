@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Input {
+namespace Tida.Canvas.Input
+{
     /// <summary>
     /// 输入元素契约;
     /// </summary>
-    public interface IInputElement {
-
+    public interface IInputElement
+    {
         /// <summary>
         /// 通知将执行<see cref="IEditTool.OnPreviewMouseDown(ICanvasContextEx, MouseDownEventArgs)"/>动作;
         /// </summary>

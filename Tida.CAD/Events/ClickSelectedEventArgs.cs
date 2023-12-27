@@ -10,7 +10,7 @@ namespace Tida.CAD.Events
     /// </summary>
     public class ClickSelectedEventArgs : EventArgs
     {
-        public ClickSelectedEventArgs(Point position,IList<DrawObject> selectedDrawObjects)
+        public ClickSelectedEventArgs(Point position, IList<DrawObject> selectedDrawObjects)
         {
             this.HitPosition = position;
             this.SelectedDrawObjects = selectedDrawObjects;

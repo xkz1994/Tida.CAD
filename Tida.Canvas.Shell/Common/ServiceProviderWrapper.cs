@@ -4,17 +4,21 @@ using Tida.Canvas.Shell.Contracts.Common;
 using IServiceProvider = Tida.Canvas.Shell.Contracts.Common.IServiceProvider;
 using CommonServiceLocator;
 
-namespace Tida.Canvas.Shell.Common {
+namespace Tida.Canvas.Shell.Common
+{
     /// <summary>
     /// PracticeServiceProvider,本类别连接本地IServiceLocator与Microsoft.Practices.ServiceLocation.IServiceLocator
     /// </summary>
-    public class ServiceProviderWrapper : IServiceProvider {
-        public ServiceProviderWrapper(IServiceLocator serviceLocator) {
-            if (serviceLocator == null) {
+    public class ServiceProviderWrapper : IServiceProvider
+    {
+        public ServiceProviderWrapper(IServiceLocator serviceLocator)
+        {
+            if (serviceLocator == null)
+            {
                 LoggerService.WriteCallerLine("servicelocator can't be null!");
                 throw new InvalidOperationException("servicelocator can't be null!");
             }
-            
+
             _serviceLocator = serviceLocator;
         }
 
@@ -31,7 +35,5 @@ namespace Tida.Canvas.Shell.Common {
         public TService GetInstance<TService>() => _serviceLocator.GetInstance<TService>();
 
         public TService GetInstance<TService>(string key) => _serviceLocator.GetInstance<TService>(key);
-
-      
     }
 }

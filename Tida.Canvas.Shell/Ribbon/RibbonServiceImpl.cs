@@ -12,34 +12,32 @@ using System;
 using Telerik.Windows.Controls.RibbonView;
 using System.Windows;
 using System.Windows.Automation;
-
 using Tida.Canvas.Shell.Contracts.Ribbon.Events;
 using Tida.Canvas.Shell.Contracts.Menu;
 using static Tida.Canvas.Shell.Contracts.Ribbon.Constants;
 using Tida.Canvas.Shell.Contracts.Common;
 
-namespace Tida.Canvas.Shell.Ribbon {
+namespace Tida.Canvas.Shell.Ribbon
+{
     /// <summary>
     /// Ribbon服务实现;
     /// </summary>
     [Export(typeof(IRibbonService))]
-    class RibbonServiceImpl : IRibbonService {
+    class RibbonServiceImpl : IRibbonService
+    {
         [ImportingConstructor]
         public RibbonServiceImpl(
             Views.Ribbon ribbon,
-            [ImportMany]IEnumerable<Lazy<IRibbonTab,IRibbonTabMetaData>> ribbonTabs,
-
-            [ImportMany]IEnumerable<Lazy<IRibbonGroup,IRibbonGroupMetaData>> ribbonGroups,
-            [ImportMany]IEnumerable<Lazy<IRibbonGroupsProvider, IRibbonGroupsProviderMetaData>> ribbonGroupsProviders,
-
-            [ImportMany]IEnumerable<Lazy<IRibbonItem,IRibbonItemMetaData>> ribbonItems,
-            [ImportMany]IEnumerable<Lazy<IRibbonItemsProvider,IRibbonItemsProviderMetaData>> ribbonItemsProvider,
-
-            [ImportMany]IEnumerable<Lazy<IMenuItem,IMenuItemMetaData>> menuItems
-        ) {
-
+            [ImportMany] IEnumerable<Lazy<IRibbonTab, IRibbonTabMetaData>> ribbonTabs,
+            [ImportMany] IEnumerable<Lazy<IRibbonGroup, IRibbonGroupMetaData>> ribbonGroups,
+            [ImportMany] IEnumerable<Lazy<IRibbonGroupsProvider, IRibbonGroupsProviderMetaData>> ribbonGroupsProviders,
+            [ImportMany] IEnumerable<Lazy<IRibbonItem, IRibbonItemMetaData>> ribbonItems,
+            [ImportMany] IEnumerable<Lazy<IRibbonItemsProvider, IRibbonItemsProviderMetaData>> ribbonItemsProvider,
+            [ImportMany] IEnumerable<Lazy<IMenuItem, IMenuItemMetaData>> menuItems
+        )
+        {
             _ribbon = ribbon;
-            
+
             this._mefRibbonTabs = ribbonTabs.ToArray();
 
             this._mefRibbonGroups = ribbonGroups.ToArray();
@@ -51,7 +49,7 @@ namespace Tida.Canvas.Shell.Ribbon {
             this._mefMenuItems = menuItems.Where(p => p.Metadata.OwnerGUID == Menu_CanvasShellRibbon).ToArray();
         }
 
-        
+
         private Views.Ribbon _ribbon;
 
 
@@ -67,29 +65,32 @@ namespace Tida.Canvas.Shell.Ribbon {
 
         private readonly Lazy<IRibbonGroupsProvider, IRibbonGroupsProviderMetaData>[] _mefRibbonGroupsProviders;
 
-        public void Initialize() {
+        public void Initialize()
+        {
             InitializeMenu();
 
             InitializeRibbonTabs();
-            
         }
 
         /// <summary>
         /// 初始化菜单;
         /// </summary>
-        private void InitializeMenu() {
+        private void InitializeMenu()
+        {
             _ribbon.AppMenu.Items.Clear();
-            
+
             //初始化顶级菜单;
-            foreach (var menuItem in _mefMenuItems.OrderBy(p => p.Metadata.Order)) {
-                
+            foreach (var menuItem in _mefMenuItems.OrderBy(p => p.Metadata.Order))
+            {
                 var header = LanguageService.FindResourceString(menuItem.Metadata.HeaderLanguageKey);
-                var radMenuItem = new RadMenuItem {
+                var radMenuItem = new RadMenuItem
+                {
                     Command = menuItem.Value.Command,
                     Header = header
                 };
 
-                if(!string.IsNullOrEmpty(menuItem.Metadata.Icon)) {
+                if (!string.IsNullOrEmpty(menuItem.Metadata.Icon))
+                {
                     try
                     {
                         radMenuItem.Icon = new Image
@@ -99,7 +100,7 @@ namespace Tida.Canvas.Shell.Ribbon {
                             Height = Constants.MenuIconHeight
                         };
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         LoggerService.WriteException(ex);
                     }
@@ -111,7 +112,8 @@ namespace Tida.Canvas.Shell.Ribbon {
                 AutomationProperties.SetAutomationId(radMenuItem, menuItem.Metadata.GUID);
                 AutomationProperties.SetName(radMenuItem, header);
 
-                if (menuItem.Metadata.Key != Key.None) {
+                if (menuItem.Metadata.Key != Key.None)
+                {
                     ShellService.Current.AddKeyBinding(menuItem.Value.Command, menuItem.Metadata.Key, menuItem.Metadata.ModifierKeys);
                 }
             }
@@ -120,23 +122,26 @@ namespace Tida.Canvas.Shell.Ribbon {
         /// <summary>
         /// 初始化所有的RibbonTab;
         /// </summary>
-        private void InitializeRibbonTabs() {
+        private void InitializeRibbonTabs()
+        {
             _ribbon.RibbonMenu.Items.Clear();
             _ribbon.RibbonMenu.SelectionChanged += RibbonMenu_SelectionChanged;
 
-            foreach (var ribbonTab in _mefRibbonTabs.OrderBy(p => p.Metadata.Order)) {
+            foreach (var ribbonTab in _mefRibbonTabs.OrderBy(p => p.Metadata.Order))
+            {
                 var header = LanguageService.FindResourceString(ribbonTab.Metadata.TextLangaugeKey);
-                var ribbonTabItem = new RadRibbonTab {
+                var ribbonTabItem = new RadRibbonTab
+                {
                     Header = header,
-                    DataContext = new RibbonTabDataContext(ribbonTab.Value,ribbonTab.Metadata)
+                    DataContext = new RibbonTabDataContext(ribbonTab.Value, ribbonTab.Metadata)
                 };
 
                 ///设定UI自动化测试相关属性;
-                AutomationProperties.SetAutomationId(ribbonTabItem,ribbonTab.Metadata.GUID);
+                AutomationProperties.SetAutomationId(ribbonTabItem, ribbonTab.Metadata.GUID);
                 AutomationProperties.SetName(ribbonTabItem, header);
 
                 InitializeRibbonTab(ribbonTabItem);
-                
+
                 _ribbon.RibbonMenu.Items.Add(ribbonTabItem);
             }
         }
@@ -146,12 +151,15 @@ namespace Tida.Canvas.Shell.Ribbon {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void RibbonMenu_SelectionChanged(object sender, RadSelectionChangedEventArgs e) {
-            if(e.AddedItems.Count == 0) {
+        private void RibbonMenu_SelectionChanged(object sender, RadSelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count == 0)
+            {
                 return;
             }
 
-            if(!((e.AddedItems[0] as RadRibbonTab)?.DataContext is RibbonTabDataContext ribbonTabDataContext)){
+            if (!((e.AddedItems[0] as RadRibbonTab)?.DataContext is RibbonTabDataContext ribbonTabDataContext))
+            {
                 return;
             }
 
@@ -160,21 +168,22 @@ namespace Tida.Canvas.Shell.Ribbon {
             CommonEventHelper.PublishEventToHandlers<ISelectedRibbonTabChangedEventHandler, SelectedRibbonTabChangedEventArgs>(args);
         }
 
-        private void InitializeRibbonTab(RadRibbonTab ribbonTabControl) {
+        private void InitializeRibbonTab(RadRibbonTab ribbonTabControl)
+        {
             var ribbonTab = ribbonTabControl.DataContext as RibbonTabDataContext;
             var ribbonGroupTuples = GetAllRibbonGroups();
 
-            foreach (var createdRibbonGroup in ribbonGroupTuples.
-                Where(p => p.RibbonGroupMetaData.ParentGUID == ribbonTab.RibbonTabMetaData.GUID)) {
-
+            foreach (var createdRibbonGroup in ribbonGroupTuples.Where(p => p.RibbonGroupMetaData.ParentGUID == ribbonTab.RibbonTabMetaData.GUID))
+            {
                 var header = LanguageService.FindResourceString(createdRibbonGroup.RibbonGroupMetaData.HeaderLanguageKey);
-                var groupBox = new RadRibbonGroup {
+                var groupBox = new RadRibbonGroup
+                {
                     Header = header,
                     DataContext = createdRibbonGroup
                 };
 
                 ///设定UI自动化测试相关属性;
-                AutomationProperties.SetAutomationId(groupBox,createdRibbonGroup.RibbonGroupMetaData.GUID);
+                AutomationProperties.SetAutomationId(groupBox, createdRibbonGroup.RibbonGroupMetaData.GUID);
                 AutomationProperties.SetName(groupBox, header);
 
                 InitializeRibbonGroup(groupBox);
@@ -182,32 +191,40 @@ namespace Tida.Canvas.Shell.Ribbon {
                 ribbonTabControl.Items.Add(groupBox);
             }
         }
-        
+
         /// <summary>
         /// 获取所有的Ribbon组;
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<CreatedRibbonGroup> GetAllRibbonGroups() {
-            var ribbonGroupObjects = _mefRibbonGroupsProviders.Union<object>(_mefRibbonGroups).
-                OrderBy(p => {
-                    if(p is Lazy<IRibbonGroup,IRibbonGroupMetaData> ribbonGroupTuple) {
-                        return ribbonGroupTuple.Metadata.Order;
-                    }
-                    else if(p is Lazy<IRibbonGroupsProvider,IRibbonGroupsProviderMetaData> ribbonGroupsProviderTuple) {
-                        return ribbonGroupsProviderTuple.Metadata.Order;
-                    }
-                    else {
-                        return int.MaxValue;
-                    }
-                });
+        private IEnumerable<CreatedRibbonGroup> GetAllRibbonGroups()
+        {
+            var ribbonGroupObjects = _mefRibbonGroupsProviders.Union<object>(_mefRibbonGroups).OrderBy(p =>
+            {
+                if (p is Lazy<IRibbonGroup, IRibbonGroupMetaData> ribbonGroupTuple)
+                {
+                    return ribbonGroupTuple.Metadata.Order;
+                }
+                else if (p is Lazy<IRibbonGroupsProvider, IRibbonGroupsProviderMetaData> ribbonGroupsProviderTuple)
+                {
+                    return ribbonGroupsProviderTuple.Metadata.Order;
+                }
+                else
+                {
+                    return int.MaxValue;
+                }
+            });
 
-            foreach (var ribbonGroupObject in ribbonGroupObjects) {
-                if(ribbonGroupObject is Lazy<IRibbonGroupsProvider, IRibbonGroupsProviderMetaData> groupProviderTuple) {
-                    foreach (var ribbonGroup in groupProviderTuple.Value.Groups.OrderBy(p => p.RibbonGroupMetaData.Order)) {
-                        yield return new CreatedRibbonGroup(ribbonGroup.RibbonGroup,ribbonGroup.RibbonGroupMetaData);
+            foreach (var ribbonGroupObject in ribbonGroupObjects)
+            {
+                if (ribbonGroupObject is Lazy<IRibbonGroupsProvider, IRibbonGroupsProviderMetaData> groupProviderTuple)
+                {
+                    foreach (var ribbonGroup in groupProviderTuple.Value.Groups.OrderBy(p => p.RibbonGroupMetaData.Order))
+                    {
+                        yield return new CreatedRibbonGroup(ribbonGroup.RibbonGroup, ribbonGroup.RibbonGroupMetaData);
                     }
                 }
-                else if(ribbonGroupObject is Lazy<IRibbonGroup, IRibbonGroupMetaData> groupTuple) {
+                else if (ribbonGroupObject is Lazy<IRibbonGroup, IRibbonGroupMetaData> groupTuple)
+                {
                     yield return new CreatedRibbonGroup(groupTuple.Value, groupTuple.Metadata);
                 }
             }
@@ -217,47 +234,58 @@ namespace Tida.Canvas.Shell.Ribbon {
         /// 获取所有的Ribbon项;
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<CreatedRibbonItem> GetAllRibbonItems() {
-            var ribbonItemsObjects = _mefRibbonItems.Union<object>(_mefRibbonItemsProviders).OrderBy(p => {
-                if(p is Lazy<IRibbonItemsProvider,IRibbonItemsProviderMetaData> ribbonItemsProviderTuple) {
+        private IEnumerable<CreatedRibbonItem> GetAllRibbonItems()
+        {
+            var ribbonItemsObjects = _mefRibbonItems.Union<object>(_mefRibbonItemsProviders).OrderBy(p =>
+            {
+                if (p is Lazy<IRibbonItemsProvider, IRibbonItemsProviderMetaData> ribbonItemsProviderTuple)
+                {
                     return ribbonItemsProviderTuple.Metadata.Order;
                 }
-                else if(p is Lazy<IRibbonItem,IRibbonItemMetaData> ribbonItemTuple) {
+                else if (p is Lazy<IRibbonItem, IRibbonItemMetaData> ribbonItemTuple)
+                {
                     return ribbonItemTuple.Metadata.Order;
                 }
-                else {
+                else
+                {
                     return int.MaxValue;
                 }
             });
 
-            foreach (var ribbonItemObject in ribbonItemsObjects) {
-                if (ribbonItemObject is Lazy<IRibbonItemsProvider,IRibbonItemsProviderMetaData> itemsProviderTuple) {
-                    foreach (var innerRibbonItem in itemsProviderTuple.Value.Items) {
+            foreach (var ribbonItemObject in ribbonItemsObjects)
+            {
+                if (ribbonItemObject is Lazy<IRibbonItemsProvider, IRibbonItemsProviderMetaData> itemsProviderTuple)
+                {
+                    foreach (var innerRibbonItem in itemsProviderTuple.Value.Items)
+                    {
                         yield return innerRibbonItem;
                     }
+
                     continue;
                 }
-                else if(ribbonItemObject is Lazy<IRibbonItem,IRibbonItemMetaData> itemTuple){
-                    yield return new CreatedRibbonItem(itemTuple.Value,itemTuple.Metadata);
+                else if (ribbonItemObject is Lazy<IRibbonItem, IRibbonItemMetaData> itemTuple)
+                {
+                    yield return new CreatedRibbonItem(itemTuple.Value, itemTuple.Metadata);
                 }
             }
         }
 
-        private void InitializeRibbonGroup(RadRibbonGroup ribbonGroupControl) {
+        private void InitializeRibbonGroup(RadRibbonGroup ribbonGroupControl)
+        {
             var ribbonGroup = ribbonGroupControl.DataContext as CreatedRibbonGroup;
 
             var allRibbonGroups = GetAllRibbonGroups();
             var allRibbonItems = GetAllRibbonItems();
 
-            foreach (var innerRibbonGroup in allRibbonGroups.
-                Where(p => p.RibbonGroupMetaData.ParentGUID == ribbonGroup.RibbonGroupMetaData.GUID)) {
-
+            foreach (var innerRibbonGroup in allRibbonGroups.Where(p => p.RibbonGroupMetaData.ParentGUID == ribbonGroup.RibbonGroupMetaData.GUID))
+            {
                 var icon = innerRibbonGroup.RibbonGroupMetaData.Icon;
                 var text = LanguageService.FindResourceString(innerRibbonGroup.RibbonGroupMetaData.HeaderLanguageKey);
 
-                var dropDownButton = new RadRibbonDropDownButton {
+                var dropDownButton = new RadRibbonDropDownButton
+                {
                     DataContext = innerRibbonGroup,
-                    SmallImage = !string.IsNullOrEmpty(icon) ?  new BitmapImage(new Uri(icon)):null,
+                    SmallImage = !string.IsNullOrEmpty(icon) ? new BitmapImage(new Uri(icon)) : null,
                     Size = ButtonSize.Large,
                     Text = text
                 };
@@ -270,14 +298,15 @@ namespace Tida.Canvas.Shell.Ribbon {
                 ribbonGroupControl.Items.Add(dropDownButton);
             }
 
-            foreach (var ribbonItem in allRibbonItems.
-                Where(p => p.RibbonItemMetaData.GroupGUID == ribbonGroup.RibbonGroupMetaData.GUID)) {
-                
-                if (ribbonItem.RibbonItem is IRibbonButtonItem buttonItem) {
+            foreach (var ribbonItem in allRibbonItems.Where(p => p.RibbonItemMetaData.GroupGUID == ribbonGroup.RibbonGroupMetaData.GUID))
+            {
+                if (ribbonItem.RibbonItem is IRibbonButtonItem buttonItem)
+                {
                     var bitmapImage = !string.IsNullOrEmpty(buttonItem.Icon) ? new BitmapImage(new Uri(buttonItem.Icon, UriKind.RelativeOrAbsolute)) : null;
                     var text = LanguageService.FindResourceString(buttonItem.HeaderLanguageKey);
 
-                    var ribbonButton = new RadRibbonButton {
+                    var ribbonButton = new RadRibbonButton
+                    {
                         Command = buttonItem.Command,
                         Text = text,
                         LargeImage = bitmapImage,
@@ -287,40 +316,42 @@ namespace Tida.Canvas.Shell.Ribbon {
 
 
                     ///设定UI自动化测试相关属性;
-                    AutomationProperties.SetAutomationId(ribbonButton, ribbonItem.RibbonItemMetaData.GUID??string.Empty);
-                    AutomationProperties.SetName(ribbonButton, text??string.Empty);
+                    AutomationProperties.SetAutomationId(ribbonButton, ribbonItem.RibbonItemMetaData.GUID ?? string.Empty);
+                    AutomationProperties.SetName(ribbonButton, text ?? string.Empty);
 
                     ribbonGroupControl.Items.Add(ribbonButton);
                 }
-                else if (ribbonItem.RibbonItem is IRibbonObjectItem objectItem) {
+                else if (ribbonItem.RibbonItem is IRibbonObjectItem objectItem)
+                {
                     try
                     {
                         ribbonGroupControl.Items.Add(objectItem.UIObject);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         LoggerService.WriteLine($"ribbon add error {nameof(ribbonItem.RibbonItemMetaData.GUID)}:{ribbonItem.RibbonItemMetaData.GUID}");
                         LoggerService.WriteException(ex);
                     }
-                    
                 }
             }
         }
 
-        private void InitializeDropDownButton(RadRibbonDropDownButton dropDownButton) {
+        private void InitializeDropDownButton(RadRibbonDropDownButton dropDownButton)
+        {
             var ribbonGroupContext = dropDownButton.DataContext as CreatedRibbonGroup;
             var ribbonItems = GetAllRibbonItems();
 
             var contextMenu = new RadContextMenu();
 
-            foreach (var ribbonItem in ribbonItems.
-                Where(p => p.RibbonItemMetaData.GroupGUID == ribbonGroupContext.RibbonGroupMetaData.GUID)) {
-
-                if(ribbonItem.RibbonItem is IRibbonButtonItem buttonItem) {
+            foreach (var ribbonItem in ribbonItems.Where(p => p.RibbonItemMetaData.GroupGUID == ribbonGroupContext.RibbonGroupMetaData.GUID))
+            {
+                if (ribbonItem.RibbonItem is IRibbonButtonItem buttonItem)
+                {
                     var bitMapImage = !string.IsNullOrEmpty(buttonItem.Icon) ? new BitmapImage(new Uri(buttonItem.Icon, UriKind.RelativeOrAbsolute)) : null;
-                    var image = bitMapImage != null ? new Image { Source = bitMapImage }:null;
+                    var image = bitMapImage != null ? new Image { Source = bitMapImage } : null;
                     var header = LanguageService.FindResourceString(buttonItem.HeaderLanguageKey);
-                    var menuItem = new RadMenuItem {
+                    var menuItem = new RadMenuItem
+                    {
                         Header = header,
                         Icon = image,
                         Command = buttonItem.Command
@@ -333,23 +364,22 @@ namespace Tida.Canvas.Shell.Ribbon {
                     contextMenu.Items.Add(menuItem);
                 }
             }
-            
+
             dropDownButton.DropDownContent = contextMenu;
         }
-        
     }
 
-    class RibbonTabDataContext {
+    class RibbonTabDataContext
+    {
         public IRibbonTab RibbonTab { get; }
 
         public IRibbonTabMetaData RibbonTabMetaData { get; }
 
-        public RibbonTabDataContext(IRibbonTab ribbonTab, IRibbonTabMetaData ribbonTabMetaData) {
-
+        public RibbonTabDataContext(IRibbonTab ribbonTab, IRibbonTabMetaData ribbonTabMetaData)
+        {
             RibbonTab = ribbonTab ?? throw new ArgumentNullException(nameof(ribbonTab));
 
             RibbonTabMetaData = ribbonTabMetaData ?? throw new ArgumentNullException(nameof(ribbonTabMetaData));
-
         }
     }
 }

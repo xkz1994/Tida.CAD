@@ -6,14 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.CanvasExport {
+namespace Tida.Canvas.Shell.Contracts.CanvasExport
+{
     /// <summary>
     /// 导出为图像设定;
     /// </summary>
-    public sealed class ExportImgSetting {
-        public ExportImgSetting(Stream exportStream) {
+    public sealed class ExportImgSetting
+    {
+        public ExportImgSetting(Stream exportStream)
+        {
             this.ExportStream = exportStream ?? throw new ArgumentNullException(nameof(exportStream));
-            if (!exportStream.CanWrite) {
+            if (!exportStream.CanWrite)
+            {
                 throw new ArgumentException($"{nameof(exportStream)} should be writable.");
             }
         }
@@ -22,13 +26,17 @@ namespace Tida.Canvas.Shell.Contracts.CanvasExport {
         public const int DefaultHeight = 768;
 
         private int _width = DefaultWidth;
+
         /// <summary>
         /// 宽度;
         /// </summary>
-        public int Width {
+        public int Width
+        {
             get => _width;
-            set {
-                if(value <= 0) {
+            set
+            {
+                if (value <= 0)
+                {
                     throw new ArgumentException($"{nameof(value)} can't be less than zero.");
                 }
 
@@ -37,20 +45,24 @@ namespace Tida.Canvas.Shell.Contracts.CanvasExport {
         }
 
         private int _height = DefaultHeight;
+
         /// <summary>
         /// 高度;
         /// </summary>
-        public int Height {
+        public int Height
+        {
             get => _height;
-            set {
-                if(value <= 0) {
+            set
+            {
+                if (value <= 0)
+                {
                     throw new ArgumentException($"{nameof(value)} can't be less than zero.");
                 }
 
                 _height = value;
             }
-        } 
-        
+        }
+
         /// <summary>
         /// 被写入的流;
         /// </summary>

@@ -17,7 +17,7 @@ namespace Tida.Canvas.Shell.Canvas
         }
 
         public static readonly DependencyProperty CanvasProxyProperty =
-            DependencyProperty.Register(nameof(CanvasProxy), typeof(ICanvasScreenConvertable), typeof(CanvasControlBehavior), new FrameworkPropertyMetadata(null) { BindsTwoWayByDefault = true});
+            DependencyProperty.Register(nameof(CanvasProxy), typeof(ICanvasScreenConvertable), typeof(CanvasControlBehavior), new FrameworkPropertyMetadata(null) { BindsTwoWayByDefault = true });
 
 
         protected override void OnAttached()

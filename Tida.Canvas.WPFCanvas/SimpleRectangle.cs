@@ -7,20 +7,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.WPFCanvas {
+namespace Tida.Canvas.WPFCanvas
+{
     /// <summary>
     /// 矩形绘制对象的简单实现,将用于用作拖放选择等;
     /// </summary>
-    class SimpleRectangle : IDrawable {
+    class SimpleRectangle : IDrawable
+    {
         /// <summary>
         /// 矩形数据;
         /// </summary>
         private Rectangle2D2 _rectangle2D;
-        public Rectangle2D2 Rectangle2D {
-            get {
-                return _rectangle2D;
-            }
-            set {
+
+        public Rectangle2D2 Rectangle2D
+        {
+            get { return _rectangle2D; }
+            set
+            {
                 _rectangle2D = value;
                 VisualChanged?.Invoke(this, EventArgs.Empty);
             }
@@ -30,9 +33,12 @@ namespace Tida.Canvas.WPFCanvas {
         /// 填充画刷;
         /// </summary>
         private Brush _fill;
-        public Brush Fill {
+
+        public Brush Fill
+        {
             get { return _fill; }
-            set {
+            set
+            {
                 _fill = value;
                 VisualChanged?.Invoke(this, EventArgs.Empty);
             }
@@ -43,9 +49,11 @@ namespace Tida.Canvas.WPFCanvas {
         /// </summary>
         private Pen _pen;
 
-        public Pen Pen {
+        public Pen Pen
+        {
             get { return _pen; }
-            set {
+            set
+            {
                 _pen = value;
                 VisualChanged?.Invoke(this, EventArgs.Empty);
             }
@@ -54,16 +62,20 @@ namespace Tida.Canvas.WPFCanvas {
 
         public event EventHandler VisualChanged;
 
-        public void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy) {
-            if(Fill == null) {
+        public void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy)
+        {
+            if (Fill == null)
+            {
                 return;
             }
 
-            if(Pen == null) {
+            if (Pen == null)
+            {
                 return;
             }
 
-            if(Rectangle2D == null) {
+            if (Rectangle2D == null)
+            {
                 return;
             }
 

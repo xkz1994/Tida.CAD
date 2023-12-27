@@ -6,14 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.ComponentModel {
-
-
+namespace Tida.Canvas.Shell.Contracts.ComponentModel
+{
     /// <summary>
     /// 值及其对应的语言键名的映射单元;
     /// </summary>
-    public struct StandardValueLanguageInfo<TValue> {
-        public StandardValueLanguageInfo(TValue standardValue, string languageKey) {
+    public struct StandardValueLanguageInfo<TValue>
+    {
+        public StandardValueLanguageInfo(TValue standardValue, string languageKey)
+        {
             StandardValue = standardValue;
             LanguageKey = languageKey;
         }

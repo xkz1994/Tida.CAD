@@ -2,11 +2,13 @@
 using Tida.Canvas.Shell.Contracts.Common;
 using Tida.Canvas.Shell.Contracts.Controls;
 
-namespace Tida.Canvas.Shell.Contracts.Shell {
+namespace Tida.Canvas.Shell.Contracts.Shell
+{
     /// <summary>
     /// Shell服务契约;
     /// </summary>
-    public interface IShellService {
+    public interface IShellService
+    {
         /// <summary>
         /// 初始化;
         /// </summary>
@@ -33,7 +35,7 @@ namespace Tida.Canvas.Shell.Contracts.Shell {
         /// 隐藏;
         /// </summary>
         void Hide();
-        
+
 
         void ChangeLoadState(bool isLoading, string word = null);
 
@@ -72,8 +74,9 @@ namespace Tida.Canvas.Shell.Contracts.Shell {
         object Shell { get; }
     }
 
-    
-    public class ShellService : GenericServiceStaticInstance<IShellService> {
+
+    public class ShellService : GenericServiceStaticInstance<IShellService>
+    {
         ///// <summary>
         ///// 尝试初始化;
         ///// </summary>

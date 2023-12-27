@@ -3,17 +3,20 @@ using Tida.Canvas.Shell.Contracts.Docking;
 using System.ComponentModel.Composition;
 using static Tida.Canvas.Shell.Canvas.Constants;
 
-namespace Tida.Canvas.Shell.Canvas {
+namespace Tida.Canvas.Shell.Canvas
+{
     [Export]
-    class CanvasDocumentPane : DockingPaneBase,IDockingPaneMetaData {
+    class CanvasDocumentPane : DockingPaneBase, IDockingPaneMetaData
+    {
         [ImportingConstructor]
-        public CanvasDocumentPane(Views.CanvasPresenter canvas) {
+        public CanvasDocumentPane(Views.CanvasPresenter canvas)
+        {
             Header = LanguageService.FindResourceString(DocumentPaneHeader_Canvas);
             _canvas = canvas;
         }
 
         public string InitPaneGroupGUID => null;
-        
+
         public string GUID => null;
 
         private readonly Views.CanvasPresenter _canvas;

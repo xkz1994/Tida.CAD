@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.Setting {
+namespace Tida.Canvas.Shell.Contracts.Setting
+{
     /// <summary>
     /// 设定服务;
     /// </summary>
-    public interface ISettingsService {
+    public interface ISettingsService
+    {
         /// <summary>
         /// 初始化;
         /// </summary>
@@ -35,7 +37,8 @@ namespace Tida.Canvas.Shell.Contracts.Setting {
         void RemoveSection(ISettingsSection settingsSection);
     }
 
-    public class SettingsService:GenericServiceStaticInstance<ISettingsService> {
+    public class SettingsService : GenericServiceStaticInstance<ISettingsService>
+    {
         public static ISettingsSection GetOrCreateSection(string guid) => Current?.GetOrCreateSection(guid);
         public static void RemoveSection(ISettingsSection settingsSection) => Current?.RemoveSection(settingsSection);
     }

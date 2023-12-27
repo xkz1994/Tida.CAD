@@ -6,8 +6,10 @@ namespace Tida.CAD.Events
     /// 即将更改值的事件参数;
     /// </summary>
     /// <typeparam name="TValue"></typeparam>
-    public class ValueChangingEventArgs<TValue> : CancelEventArgs {
-        public ValueChangingEventArgs(TValue newValue, TValue oldValue) {
+    public class ValueChangingEventArgs<TValue> : CancelEventArgs
+    {
+        public ValueChangingEventArgs(TValue newValue, TValue oldValue)
+        {
             this.NewValue = newValue;
             this.OldValue = oldValue;
         }

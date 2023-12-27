@@ -9,10 +9,13 @@ using Tida.Canvas.Contracts;
 using Tida.Canvas.Infrastructure.DrawObjects;
 using Tida.Geometry.Primitives;
 
-namespace Tida.Canvas.Shell.DWG {
+namespace Tida.Canvas.Shell.DWG
+{
     [Export(typeof(ICADBaseToDrawObjectConverter))]
-    class CadPointToPointConverter : CADBaseToDrawObjectConverterGenericBase<CadPoint> {
-        protected override DrawObject Convert(CadPoint cadPoint) {
+    class CadPointToPointConverter : CADBaseToDrawObjectConverterGenericBase<CadPoint>
+    {
+        protected override DrawObject Convert(CadPoint cadPoint)
+        {
             return new Point(ConvertUtils.Cad3DPointToVector2D(cadPoint.CenterPoint));
         }
     }

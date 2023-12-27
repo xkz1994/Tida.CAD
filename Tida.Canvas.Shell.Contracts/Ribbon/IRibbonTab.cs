@@ -4,15 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.Ribbon {
+namespace Tida.Canvas.Shell.Contracts.Ribbon
+{
     /// <summary>
     /// Ribbon——Tab;
     /// </summary>
-    public interface IRibbonTab {
-        
+    public interface IRibbonTab
+    {
     }
 
-    public interface IRibbonTabMetaData {
+    public interface IRibbonTabMetaData
+    {
         /// <summary>
         /// 标识;
         /// </summary>

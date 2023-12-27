@@ -1,11 +1,14 @@
 ﻿using System;
 
-namespace Tida.Canvas.Events {
+namespace Tida.Canvas.Events
+{
     /// <summary>
     /// 值发生变化时的事件参数;
     /// </summary>
-    public class ValueChangedEventArgs<TValue> : EventArgs {
-        public ValueChangedEventArgs(TValue newValue, TValue oldValue) {
+    public class ValueChangedEventArgs<TValue> : EventArgs
+    {
+        public ValueChangedEventArgs(TValue newValue, TValue oldValue)
+        {
             this.NewValue = newValue;
             this.OldValue = oldValue;
         }
@@ -21,4 +24,3 @@ namespace Tida.Canvas.Events {
         public TValue NewValue { get; }
     }
 }
- 

@@ -7,18 +7,20 @@ using SystemWindows = System.Windows;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.WPFCanvas.Input {
-
+namespace Tida.Canvas.WPFCanvas.Input
+{
     /// <summary>
     /// 输入设备WPF封装;
     /// </summary>
-    class InputDeviceWrapper : IInputDevice {
-        public InputDeviceWrapper(SystemWindows.IInputElement inputElement) {
+    class InputDeviceWrapper : IInputDevice
+    {
+        public InputDeviceWrapper(SystemWindows.IInputElement inputElement)
+        {
             _inputElement = inputElement ?? throw new ArgumentNullException(nameof(inputElement));
         }
 
         private SystemWindows.IInputElement _inputElement;
-        
+
         ///// <summary>
         ///// 静态实例;
         ///// </summary>
@@ -28,8 +30,6 @@ namespace Tida.Canvas.WPFCanvas.Input {
         public IKeyBoard KeyBoard => KeyBoardWrapper.StaticInstance;
 
         private IMouse _mouse;
-        public IMouse Mouse => _mouse??(_mouse = new MouseWrapper(_inputElement));
-
-        
+        public IMouse Mouse => _mouse ?? (_mouse = new MouseWrapper(_inputElement));
     }
 }

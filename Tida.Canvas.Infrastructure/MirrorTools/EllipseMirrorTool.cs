@@ -3,7 +3,8 @@ using Tida.Canvas.Infrastructure.MirrorTools;
 using Tida.Geometry.Alternation;
 using Tida.Geometry.Primitives;
 
-namespace Tida.Canvas.Infrastructure.MirrorTools {
+namespace Tida.Canvas.Infrastructure.MirrorTools
+{
     public class EllipseMirrorTool : DrawObjectMirroToolBase<Ellipse>, IDrawObjectMirrorTool
     {
         protected override void OnMirror(Ellipse drawObject, Line2D axis)

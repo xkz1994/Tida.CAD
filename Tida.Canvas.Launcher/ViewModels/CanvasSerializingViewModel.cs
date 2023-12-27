@@ -1,6 +1,4 @@
-﻿
-using Tida.Canvas.Shell.Contracts.App;
-
+﻿using Tida.Canvas.Shell.Contracts.App;
 using Tida.Canvas.Shell.Contracts.Canvas;
 using Tida.Canvas.Shell.Contracts.Shell;
 using Prism.Commands;
@@ -16,16 +14,19 @@ using System.Xml.Linq;
 using Tida.Canvas.Shell.Contracts.Serializing;
 using Tida.Canvas.Shell.Contracts.Common;
 
-namespace Tida.Canvas.Launcher.ViewModels {
+namespace Tida.Canvas.Launcher.ViewModels
+{
     /// <summary>
     /// 画布状态持久化部分的逻辑;
     /// </summary>
     [Export]
-    class CanvasSerializingViewModel {
+    class CanvasSerializingViewModel
+    {
         [ImportingConstructor]
         public CanvasSerializingViewModel(
-            [ImportMany]IEnumerable<IDrawObjectXmlSerializer> drawObjectXmlSerializers
-        ) {
+            [ImportMany] IEnumerable<IDrawObjectXmlSerializer> drawObjectXmlSerializers
+        )
+        {
             //添加绘制对象序列化器集合;
             _serializers.AddRange(drawObjectXmlSerializers);
         }
@@ -47,80 +48,94 @@ namespace Tida.Canvas.Launcher.ViewModels {
         /// 保存命令;
         /// </summary>
         private DelegateCommand _saveCommand;
-        public DelegateCommand SaveCommand => _saveCommand ??
-            (_saveCommand = new DelegateCommand(
-                () => {
-                    //检查当前是否加载了文件,如若否,则另存为;
-                    if (string.IsNullOrEmpty(_currentDocFileName)) {
-                        SaveAsCommand.Execute();
-                        return;
-                    }
 
-                    SaveCurrentDoc(_currentDocFileName);
-                }
-            ));
+        public DelegateCommand SaveCommand => _saveCommand ??
+                                              (_saveCommand = new DelegateCommand(
+                                                  () =>
+                                                  {
+                                                      //检查当前是否加载了文件,如若否,则另存为;
+                                                      if (string.IsNullOrEmpty(_currentDocFileName))
+                                                      {
+                                                          SaveAsCommand.Execute();
+                                                          return;
+                                                      }
+
+                                                      SaveCurrentDoc(_currentDocFileName);
+                                                  }
+                                              ));
 
         /// <summary>
         /// 另存为命令;
         /// </summary>
         private DelegateCommand _saveAsCommand;
-        public DelegateCommand SaveAsCommand => _saveAsCommand ??
-            (_saveAsCommand = new DelegateCommand(
-                () => {
-                    var fileName = DialogService.GetSaveFilePath();
-                    if (string.IsNullOrEmpty(fileName)) {
-                        return;
-                    }
 
-                    SaveCurrentDoc(fileName);
-                    _currentDocFileName = fileName;
-                    ShellService.Current.SetTitle(Path.GetFileName(fileName));
-                }
-            ));
+        public DelegateCommand SaveAsCommand => _saveAsCommand ??
+                                                (_saveAsCommand = new DelegateCommand(
+                                                    () =>
+                                                    {
+                                                        var fileName = DialogService.GetSaveFilePath();
+                                                        if (string.IsNullOrEmpty(fileName))
+                                                        {
+                                                            return;
+                                                        }
+
+                                                        SaveCurrentDoc(fileName);
+                                                        _currentDocFileName = fileName;
+                                                        ShellService.Current.SetTitle(Path.GetFileName(fileName));
+                                                    }
+                                                ));
 
         /// <summary>
         /// 打开文件命令;
         /// </summary>
         private DelegateCommand _openDocCommand;
+
         public DelegateCommand OpenDocCommand => _openDocCommand ??
-            (_openDocCommand = new DelegateCommand(
-                () => {
+                                                 (_openDocCommand = new DelegateCommand(
+                                                     () =>
+                                                     {
+                                                         var fileName = DialogService.OpenFile();
+                                                         if (string.IsNullOrEmpty(fileName))
+                                                         {
+                                                             return;
+                                                         }
 
-                    var fileName = DialogService.OpenFile();
-                    if (string.IsNullOrEmpty(fileName)) {
-                        return;
-                    }
+                                                         //保存已加载的文件;
+                                                         if (_currentDocFileName != null)
+                                                         {
+                                                             SaveCurrentDoc(_currentDocFileName);
+                                                         }
 
-                    //保存已加载的文件;
-                    if (_currentDocFileName != null) {
-                        SaveCurrentDoc(_currentDocFileName);
-                    }
+                                                         OpenDoc(fileName);
 
-                    OpenDoc(fileName);
-
-                    _currentDocFileName = fileName;
-                    ShellService.Current.SetTitle(_currentDocFileName);
-                }
-            ));
+                                                         _currentDocFileName = fileName;
+                                                         ShellService.Current.SetTitle(_currentDocFileName);
+                                                     }
+                                                 ));
 
         /// <summary>
         /// 将当前文档保存到指定位置;
         /// </summary>
         /// <param name="fileName"></param>
-        private void SaveCurrentDoc(string fileName) {
+        private void SaveCurrentDoc(string fileName)
+        {
             var xDoc = new XDocument();
             xDoc.Add(new XElement(Constants.XElemName_CanvasDataModel));
 
             //遍历存储图层集合;
-            foreach (var layer in CanvasDataContext.Layers) {
+            foreach (var layer in CanvasDataContext.Layers)
+            {
                 var layerElem = new XElement(Constants.XElemName_Layer);
                 layerElem.SetAttributeValue(Constants.XPropName_LayerGUID, layer.GUID);
                 layerElem.SetAttributeValue(Constants.XPropName_LayerName, layer.LayerName);
 
-                foreach (var drawObject in layer.DrawObjects) {
-                    foreach (var serializer in _serializers) {
+                foreach (var drawObject in layer.DrawObjects)
+                {
+                    foreach (var serializer in _serializers)
+                    {
                         var drawObjectElem = serializer.Serialize(drawObject);
-                        if (drawObjectElem == null) {
+                        if (drawObjectElem == null)
+                        {
                             continue;
                         }
 
@@ -137,35 +152,44 @@ namespace Tida.Canvas.Launcher.ViewModels {
 
 
         private DelegateCommand _createNewCommand;
-        public DelegateCommand CreateNewCommand => _createNewCommand ??
-            (_createNewCommand = new DelegateCommand(
-                () => {
-                    if(_currentDocFileName != null) {
-                        SaveCurrentDoc(_currentDocFileName);
-                        _currentDocFileName = null;
-                    }
 
-                    var canvasDataContext = ServiceProvider.GetInstance<ICanvasService>()?.CanvasDataContext;
-                    if (canvasDataContext == null) {
-                        return;
-                    }
-                    canvasDataContext.ClearTransactions();
-                    canvasDataContext.ResetLayers();
-                    
-                    ShellService.Current.SetTitle(string.Empty);
-                }
-            ));
+        public DelegateCommand CreateNewCommand => _createNewCommand ??
+                                                   (_createNewCommand = new DelegateCommand(
+                                                       () =>
+                                                       {
+                                                           if (_currentDocFileName != null)
+                                                           {
+                                                               SaveCurrentDoc(_currentDocFileName);
+                                                               _currentDocFileName = null;
+                                                           }
+
+                                                           var canvasDataContext = ServiceProvider.GetInstance<ICanvasService>()?.CanvasDataContext;
+                                                           if (canvasDataContext == null)
+                                                           {
+                                                               return;
+                                                           }
+
+                                                           canvasDataContext.ClearTransactions();
+                                                           canvasDataContext.ResetLayers();
+
+                                                           ShellService.Current.SetTitle(string.Empty);
+                                                       }
+                                                   ));
 
 
         /// <summary>
         /// 指定位置的文档打开并加载;
         /// </summary>
         /// <param name="fileName"></param>
-        private void OpenDoc(string fileName) {
-            if (string.IsNullOrEmpty(fileName)) {
+        private void OpenDoc(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+            {
                 throw new ArgumentNullException(nameof(fileName));
             }
-            if (!File.Exists(fileName)) {
+
+            if (!File.Exists(fileName))
+            {
                 throw new FileNotFoundException();
             }
 
@@ -178,29 +202,35 @@ namespace Tida.Canvas.Launcher.ViewModels {
             var xDoc = XDocument.Load(fileName);
             var layerElems = xDoc.Root.Elements(Constants.XElemName_Layer);
 
-            foreach (var layerElem in layerElems) {
-
-                var layer = new CanvasLayerEx(layerElem.Attribute(Constants.XPropName_LayerGUID)?.Value) {
+            foreach (var layerElem in layerElems)
+            {
+                var layer = new CanvasLayerEx(layerElem.Attribute(Constants.XPropName_LayerGUID)?.Value)
+                {
                     LayerName = layerElem.Attribute(Constants.XPropName_LayerName)?.Value
                 };
 
                 //遍历图层内的绘制对象元素,反序列化为绘制对象后添加到图层中;
-                foreach (var dwElem in layerElem.Elements()) {
+                foreach (var dwElem in layerElem.Elements())
+                {
                     //遍历序列器;
-                    foreach (var serializer in _serializers) {
-                        try {
+                    foreach (var serializer in _serializers)
+                    {
+                        try
+                        {
                             //反序列化,直到返回结果不为空为止;
                             var drawObject = serializer.Deserialize(dwElem);
-                            if (drawObject == null) {
+                            if (drawObject == null)
+                            {
                                 continue;
                             }
+
                             layer.AddDrawObject(drawObject);
                         }
-                        catch (Exception ex) {
+                        catch (Exception ex)
+                        {
                             LoggerService.WriteException(ex);
                         }
                     }
-
                 }
 
 
@@ -211,10 +241,10 @@ namespace Tida.Canvas.Launcher.ViewModels {
             CanvasDataContext.ClearTransactions();
 
             CanvasDataContext.Layers.AddRange(layers);
-            if (layers.Count != 0) {
+            if (layers.Count != 0)
+            {
                 CanvasDataContext.ActiveLayer = layers[0];
             }
-
         }
     }
 }

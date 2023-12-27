@@ -28,7 +28,6 @@
 //        
 //        
 
-        
 
 //        
 //        
@@ -48,11 +47,11 @@
 //        //        base.RemovePane(pane);
 //        //        return;
 //        //    }
-           
+
 //        //    //寻找DockGroup是否已经存在;
 //        //    var paneGroupControl =  radDocking.SplitItems.Select(p => p as RadPaneGroup).Where(p => p != null).
 //        //        FirstOrDefault(g => g.Tag is IDockingPaneGroup group && group.GUID == dockingPane.InitPaneGroupGUID);
-            
+
 //        //    //若存在,直接加入新的Pane;
 //        //    if (paneGroupControl != null) {
 //        //        paneGroupControl.RemovePane(pane);
@@ -80,3 +79,4 @@
 //        }
 //    }
 //}
+

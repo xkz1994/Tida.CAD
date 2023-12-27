@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace Tida.Canvas.Infrastructure.NativePresentation {
+namespace Tida.Canvas.Infrastructure.NativePresentation
+{
     /// <summary>
     /// 数字输入框容器;
     /// </summary>
-    public interface INumberBoxContainer:IDisposable {
+    public interface INumberBoxContainer : IDisposable
+    {
         /// <summary>
         /// UI元素;
         /// </summary>
@@ -16,7 +18,7 @@ namespace Tida.Canvas.Infrastructure.NativePresentation {
         /// 所有输入框;
         /// </summary>
         IReadOnlyList<INumberBox> NumberBoxes { get; }
-        
+
         /// <summary>
         /// 是否在输入;
         /// </summary>
@@ -43,7 +45,5 @@ namespace Tida.Canvas.Infrastructure.NativePresentation {
         /// 复位;
         /// </summary>
         void Reset();
-
-        
     }
 }

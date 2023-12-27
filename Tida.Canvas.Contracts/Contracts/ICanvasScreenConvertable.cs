@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Contracts {
-    
+namespace Tida.Canvas.Contracts
+{
     /// <summary>
     /// 可以在视图坐标和工程数学坐标间进行转化的契约;
     /// </summary>
-    public interface ICanvasScreenConvertable {
-
+    public interface ICanvasScreenConvertable
+    {
         /// <summary>
         /// 实际视图宽度;
         /// </summary>
@@ -21,13 +21,13 @@ namespace Tida.Canvas.Contracts {
         /// 实际视图高度;
         /// </summary>
         double ActualHeight { get; }
-        
+
         /// <summary>
         /// 将工程数学坐标转化为视图(以左上为原点)坐标;
         /// </summary>
         /// <param name="unitpoint"></param>
         /// <returns></returns>
-        void ToScreen(Vector2D unitpoint,Vector2D screenPoint);
+        void ToScreen(Vector2D unitpoint, Vector2D screenPoint);
 
         /// <summary>
         /// 将工程数学长度转化为视图长度;
@@ -48,37 +48,41 @@ namespace Tida.Canvas.Contracts {
         /// </summary>
         /// <param name="screenPoint"></param>
         /// <returns></returns>
-        void ToUnit(Vector2D screenPoint,Vector2D unitPoint);
+        void ToUnit(Vector2D screenPoint, Vector2D unitPoint);
 
         /// <summary>
         /// 获取单个字符在视图上的单位大小;
         /// </summary>
         /// <param name="ch"></param>
         /// <returns></returns>
-        Size GetCharScreenSize(char ch); 
+        Size GetCharScreenSize(char ch);
 
 
         /// <summary>
         /// 当前缩放比例;
         /// </summary>
-        double Zoom { get;  }
+        double Zoom { get; }
     }
 
     /// <summary>
     /// <see cref="ICanvasScreenConvertable"/>拓展;
     /// </summary>
-    public static class CanvasScreenConvertableExtension {
-        public static Vector2D GetBottomRightUnitPoint(this ICanvasScreenConvertable canvasProxy) {
-
-            if (canvasProxy == null) {
+    public static class CanvasScreenConvertableExtension
+    {
+        public static Vector2D GetBottomRightUnitPoint(this ICanvasScreenConvertable canvasProxy)
+        {
+            if (canvasProxy == null)
+            {
                 throw new ArgumentNullException(nameof(canvasProxy));
             }
 
             return canvasProxy.ToUnit(new Vector2D(canvasProxy.ActualWidth, canvasProxy.ActualHeight));
         }
 
-        public static Vector2D GetTopLeftUnitPoint(this ICanvasScreenConvertable canvasProxy) {
-            if (canvasProxy == null) {
+        public static Vector2D GetTopLeftUnitPoint(this ICanvasScreenConvertable canvasProxy)
+        {
+            if (canvasProxy == null)
+            {
                 throw new ArgumentNullException(nameof(canvasProxy));
             }
 
@@ -90,12 +94,15 @@ namespace Tida.Canvas.Contracts {
         /// </summary>
         /// <param name="unitPoint"></param>
         /// <returns></returns>
-        public static Vector2D ToScreen(this ICanvasScreenConvertable canvasProxy,Vector2D unitPoint) {
-            if (canvasProxy == null) {
+        public static Vector2D ToScreen(this ICanvasScreenConvertable canvasProxy, Vector2D unitPoint)
+        {
+            if (canvasProxy == null)
+            {
                 throw new ArgumentNullException(nameof(canvasProxy));
             }
 
-            if (unitPoint == null) {
+            if (unitPoint == null)
+            {
                 throw new ArgumentNullException(nameof(unitPoint));
             }
 
@@ -109,12 +116,15 @@ namespace Tida.Canvas.Contracts {
         /// </summary>
         /// <param name="screenPoint"></param>
         /// <returns></returns>
-        public static Vector2D ToUnit(this ICanvasScreenConvertable canvasProxy,Vector2D screenPoint) {
-            if (canvasProxy == null) {
+        public static Vector2D ToUnit(this ICanvasScreenConvertable canvasProxy, Vector2D screenPoint)
+        {
+            if (canvasProxy == null)
+            {
                 throw new ArgumentNullException(nameof(canvasProxy));
             }
 
-            if (screenPoint == null) {
+            if (screenPoint == null)
+            {
                 throw new ArgumentNullException(nameof(screenPoint));
             }
 

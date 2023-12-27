@@ -7,14 +7,15 @@ using Tida.CAD.Extensions;
 using System.Windows.Media;
 using Tida.CAD.Input;
 
-namespace Tida.CAD.DrawObjects {
+namespace Tida.CAD.DrawObjects
+{
     /// <summary>
     /// The base drawobject of lines;
     /// </summary>
-    public abstract class LineBase : DrawObject 
+    public abstract class LineBase : DrawObject
     {
-        
         private Point _start;
+
         public Point Start
         {
             get => _start;
@@ -26,6 +27,7 @@ namespace Tida.CAD.DrawObjects {
         }
 
         private Point _end;
+
         public Point End
         {
             get => _end;
@@ -36,23 +38,23 @@ namespace Tida.CAD.DrawObjects {
             }
         }
 
-        public override CADRect? GetBoundingRect() 
+        public override CADRect? GetBoundingRect()
         {
             var bottomLeft = new Point(Math.Min(Start.X, End.X), Math.Min(Start.Y, End.Y));
             var width = Math.Abs(Start.X - End.X);
             var height = Math.Abs(Start.Y - End.Y);
-            return new CADRect(bottomLeft,new Size(width,height));
+            return new CADRect(bottomLeft, new Size(width, height));
         }
 
         public override bool PointInObject(Point point, ICADScreenConverter cadScreenConverter)
         {
-            if(Pen == null)
+            if (Pen == null)
             {
                 return false;
             }
 
             var penThicknessInCAD = cadScreenConverter.ToCAD(Pen.Thickness);
-            
+
             return base.PointInObject(point, cadScreenConverter);
         }
 
@@ -65,37 +67,33 @@ namespace Tida.CAD.DrawObjects {
             }
             //or if anypoint is true,check the line is interesecting with any border of the rect;
             else if (anyPoint)
-            {               
-                return rect.GetBorders()?.Any(p => GeometryExtensions.GetIntersectPoint(p.Start,p.End,Start,End) != null) ?? false;
+            {
+                return rect.GetBorders()?.Any(p => GeometryExtensions.GetIntersectPoint(p.Start, p.End, Start, End) != null) ?? false;
             }
 
             return false;
         }
-        
 
-        public override void Draw(ICanvas canvas) 
+
+        public override void Draw(ICanvas canvas)
         {
-           
             //Draw main line;
-            canvas.DrawLine(Pen, Start,End);
+            canvas.DrawLine(Pen, Start, End);
         }
 
         private Pen _pen;
+
         /// <summary>
         /// The pen used when drawing the line;
         /// </summary>
-        public Pen Pen 
+        public Pen Pen
         {
             get => _pen;
-            set 
+            set
             {
                 _pen = value;
                 RaiseVisualChanged();
             }
         }
-
-
-       
-
     }
 }

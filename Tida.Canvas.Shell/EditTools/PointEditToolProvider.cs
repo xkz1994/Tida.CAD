@@ -2,7 +2,8 @@
 using Tida.Canvas.Shell.Contracts.EditTools;
 using static Tida.Canvas.Shell.Contracts.EditTools.Constants;
 
-namespace Tida.Canvas.Shell.EditTools {
+namespace Tida.Canvas.Shell.EditTools
+{
     [ExportEditToolProvider(
         GroupGUID = EditToolGroup_BasicEditor,
         EditToolLanguageKey = Constants.EditToolName_Point,
@@ -11,7 +12,8 @@ namespace Tida.Canvas.Shell.EditTools {
         Key = System.Windows.Input.Key.P,
         Order = 8
     )]
-    public class PointEditToolProvider : EditToolProviderGenericBase<PointEditTool>,IEditToolProvider {
+    public class PointEditToolProvider : EditToolProviderGenericBase<PointEditTool>, IEditToolProvider
+    {
         protected override PointEditTool OnCreateEditTool() => new PointEditTool();
     }
 }

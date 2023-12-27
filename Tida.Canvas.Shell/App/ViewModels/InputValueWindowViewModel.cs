@@ -10,80 +10,96 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.App.ViewModels {
+namespace Tida.Canvas.Shell.App.ViewModels
+{
     /// <summary>
     /// 输入值对话框窗体模型;
     /// </summary>
-    class InputValueWindowViewModel:BindableBase {
-        public InputValueWindowViewModel(IInputChecker inputChecker = null) {
+    class InputValueWindowViewModel : BindableBase
+    {
+        public InputValueWindowViewModel(IInputChecker inputChecker = null)
+        {
             this._inputChecker = inputChecker;
         }
+
         private readonly IInputChecker _inputChecker;
         private string _title;
+
         /// <summary>
         /// 对话框标题;
         /// </summary>
-        public string Title {
+        public string Title
+        {
             get { return _title; }
             set { SetProperty(ref _title, value); }
         }
 
 
-
         private string _val;
-        public string Val {
+
+        public string Val
+        {
             get { return _val; }
             set { SetProperty(ref _val, value); }
         }
 
 
         private string _desc;
-        public string Desc {
+
+        public string Desc
+        {
             get { return _desc; }
             set { SetProperty(ref _desc, value); }
         }
 
 
         private DelegateCommand _confirmCommand;
+
         public DelegateCommand ConfirmCommand => _confirmCommand ??
-            (_confirmCommand = new DelegateCommand(
-                () => {
-                    if(_inputChecker != null) {
-                        try {
-                            var res = _inputChecker.Check(Val);
-                            if(res == null) {
-                                throw new InvalidOperationException($"{nameof(res)} can not be null.");
-                            }
+                                                 (_confirmCommand = new DelegateCommand(
+                                                     () =>
+                                                     {
+                                                         if (_inputChecker != null)
+                                                         {
+                                                             try
+                                                             {
+                                                                 var res = _inputChecker.Check(Val);
+                                                                 if (res == null)
+                                                                 {
+                                                                     throw new InvalidOperationException($"{nameof(res)} can not be null.");
+                                                                 }
 
-                            if (!res.IsValid) {
-                                MsgBoxService.Show(res.ErrorMessage);
-                                return;
-                            }
+                                                                 if (!res.IsValid)
+                                                                 {
+                                                                     MsgBoxService.Show(res.ErrorMessage);
+                                                                     return;
+                                                                 }
+                                                             }
+                                                             catch (Exception ex)
+                                                             {
+                                                                 LoggerService.WriteException(ex);
+                                                                 MsgBoxService.ShowError(ex.Message);
 
-                            
-                        }
-                        catch(Exception ex) {
-                            LoggerService.WriteException(ex);
-                            MsgBoxService.ShowError(ex.Message);
+                                                                 return;
+                                                             }
+                                                         }
 
-                            return;
-                        }
-                    }
-
-                    Confirmed = true;
-                    ClosedRequest?.Invoke(this, EventArgs.Empty);
-                }
-            ));
+                                                         Confirmed = true;
+                                                         ClosedRequest?.Invoke(this, EventArgs.Empty);
+                                                     }
+                                                 ));
 
 
         private DelegateCommand _cancelCommand;
+
         public DelegateCommand CancelCommand => _cancelCommand ??
-            (_cancelCommand = new DelegateCommand(
-                () => {
-                    Confirmed = false;
-                    ClosedRequest?.Invoke(this, EventArgs.Empty);
-                }
-            ));
+                                                (_cancelCommand = new DelegateCommand(
+                                                    () =>
+                                                    {
+                                                        Confirmed = false;
+                                                        ClosedRequest?.Invoke(this, EventArgs.Empty);
+                                                    }
+                                                ));
 
 
         /// <summary>

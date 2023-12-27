@@ -1,5 +1,4 @@
-﻿
-using Tida.Canvas.Shell.Contracts.Controls;
+﻿using Tida.Canvas.Shell.Contracts.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Tida.Canvas.Shell.Contracts.Common;
 
-namespace Tida.Canvas.Shell.Contracts.StatusBar {
+namespace Tida.Canvas.Shell.Contracts.StatusBar
+{
     /// <summary>
     /// 状态栏服务;
     /// </summary>
-    public interface IStatusBarService {
+    public interface IStatusBarService
+    {
         /// <summary>
         /// 常规显示文字;
         /// </summary>
@@ -24,15 +25,18 @@ namespace Tida.Canvas.Shell.Contracts.StatusBar {
         /// <param name="item"></param>
         /// <param name="statusBarItemGUID"></param>
         void AddStatusBarItem(IStatusBarItem item);
+
         /// <summary>
         /// 移除状态栏项;
         /// </summary>
         /// <param name="item"></param>
         void RemoveStatusBarItem(IStatusBarItem item);
+
         /// <summary>
         /// 所有状态栏项;
         /// </summary>
         IEnumerable<IStatusBarItem> StatusBarItems { get; }
+
         /// <summary>
         /// 初始化;
         /// </summary>
@@ -53,18 +57,23 @@ namespace Tida.Canvas.Shell.Contracts.StatusBar {
         //IStatusBarTextItem CreateStatusBarTextItem(string guid);
     }
 
-    public class StatusBarService : GenericServiceStaticInstance<IStatusBarService> {
-        public static void Report(string text, string statusBarItemGUID = null) {
-            if(Current == null) {
+    public class StatusBarService : GenericServiceStaticInstance<IStatusBarService>
+    {
+        public static void Report(string text, string statusBarItemGUID = null)
+        {
+            if (Current == null)
+            {
                 return;
             }
 
-            if (statusBarItemGUID == null) {
+            if (statusBarItemGUID == null)
+            {
                 statusBarItemGUID = Constants.StatusBarItem_Default;
             }
 
             var textItem = Current.StatusBarItems.FirstOrDefault(p => p.GUID == statusBarItemGUID) as StatusBarTextItem;
-            if (textItem != null) {
+            if (textItem != null)
+            {
                 textItem.Text = text;
             }
         }

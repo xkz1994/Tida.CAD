@@ -10,6 +10,7 @@ namespace Tida.CAD.Extensions
     {
         public const double PI_DEG = 180;
         public const double SMALL_NUMBER = 1e-5;
+
         /// <summary>
         /// Convert angle in rad into angle in degree;
         /// </summary>
@@ -40,22 +41,22 @@ namespace Tida.CAD.Extensions
         /// <param name="isSegement"></param>
         /// <param name="espilon"></param>
         /// <returns></returns>
-        public static Point? GetIntersectPoint(Point point1,Point point2,Point point3,Point point4,bool isSegement = true, double espilon = SMALL_NUMBER)
+        public static Point? GetIntersectPoint(Point point1, Point point2, Point point3, Point point4, bool isSegement = true, double espilon = SMALL_NUMBER)
         {
             espilon = espilon < 0 ? SMALL_NUMBER : espilon;
-            var rxs = Vector.CrossProduct(point2 - point1,point4 - point3);
+            var rxs = Vector.CrossProduct(point2 - point1, point4 - point3);
             if (Math.Abs(rxs) < espilon) return null;
-            var r = Vector.CrossProduct(point3 - point1,point4 - point3) / rxs;
-            var point = Evaluate(point1,point2,r);
+            var r = Vector.CrossProduct(point3 - point1, point4 - point3) / rxs;
+            var point = Evaluate(point1, point2, r);
             if (!isSegement) return point;
-            var t = ClosestParameter(point1,point2,point);
-            var u = ClosestParameter(point3,point4,point);
+            var t = ClosestParameter(point1, point2, point);
+            var u = ClosestParameter(point3, point4, point);
             var isOnline = t >= -espilon && t <= 1 + espilon && u >= -espilon && u <= 1 + espilon;
             if (isOnline) return point;
             return null;
         }
 
-        private static double ClosestParameter(Point point1,Point point2,Point testPoint)
+        private static double ClosestParameter(Point point1, Point point2, Point testPoint)
         {
             var v = point2 - point1;
             var ls = v.GetLengthSquared();
@@ -68,6 +69,7 @@ namespace Tida.CAD.Extensions
                     result = v1 * v / ls;
                 else result = 1 + v2 * v / ls;
             }
+
             return result;
         }
 
@@ -76,7 +78,7 @@ namespace Tida.CAD.Extensions
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
-        public static Point Evaluate(Point start,Point end,double ratio)
+        public static Point Evaluate(Point start, Point end, double ratio)
         {
             return (end - start) * ratio + start;
         }

@@ -3,18 +3,19 @@ using System.Xml.Linq;
 using Tida.Geometry.Primitives;
 using Tida.Canvas.Infrastructure.DrawObjects;
 using Tida.Canvas.Shell.Contracts.Serializing;
-
 using System.ComponentModel.Composition;
 using Tida.Canvas.Shell.Contracts.Common;
 
-namespace Tida.Canvas.Shell.Serializing {
+namespace Tida.Canvas.Shell.Serializing
+{
     /// <summary>
     /// 线段的序列化器;
     /// </summary>
     [Export(typeof(IDrawObjectXmlSerializer))]
-    public class LineXmlSerializer : DrawObjectXmlSerializerBase<Line> {
-        public LineXmlSerializer():base(XElemName_Line) {
-
+    public class LineXmlSerializer : DrawObjectXmlSerializerBase<Line>
+    {
+        public LineXmlSerializer() : base(XElemName_Line)
+        {
         }
 
         private const string XElemName_Line = "line";
@@ -23,9 +24,11 @@ namespace Tida.Canvas.Shell.Serializing {
         private const string XElemName_End = "End";
         private const string XPropName_X = "X";
         private const string XPropName_Y = "Y";
-        
-        protected override Line OnDeserialize(XElement xElem) {
-            try {
+
+        protected override Line OnDeserialize(XElement xElem)
+        {
+            try
+            {
                 var startElem = xElem.Element(XElemName_Start);
                 var endElem = xElem.Element(XElemName_End);
 
@@ -38,14 +41,16 @@ namespace Tida.Canvas.Shell.Serializing {
 
                 return new Line(line2D);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 LoggerService.WriteException(ex);
             }
 
             return null;
         }
 
-        protected override void OnSerialize(Line line, XElement xElem) {
+        protected override void OnSerialize(Line line, XElement xElem)
+        {
             var startElem = new XElement(XElemName_Start);
             var endElem = new XElement(XElemName_End);
 

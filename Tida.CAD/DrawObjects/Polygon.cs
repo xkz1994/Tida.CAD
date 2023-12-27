@@ -9,11 +9,12 @@ namespace Tida.CAD.DrawObjects
     /// <summary>
     /// A draw object that draws a polygon;
     /// </summary>
-    public class Polygon:DrawObject
+    public class Polygon : DrawObject
     {
         private IEnumerable<Point> _points;
-        public IEnumerable<Point> Points 
-        { 
+
+        public IEnumerable<Point> Points
+        {
             get => _points;
             set
             {
@@ -23,6 +24,7 @@ namespace Tida.CAD.DrawObjects
         }
 
         private Pen _pen;
+
         public Pen Pen
         {
             get => _pen;
@@ -38,8 +40,8 @@ namespace Tida.CAD.DrawObjects
         public Brush Brush
         {
             get { return _brush; }
-            set 
-            { 
+            set
+            {
                 _brush = value;
                 RaiseVisualChanged();
             }
@@ -48,12 +50,13 @@ namespace Tida.CAD.DrawObjects
 
         public override void Draw(ICanvas canvas)
         {
-            if(Points == null)
+            if (Points == null)
             {
                 return;
             }
+
             canvas.DrawPolygon(Points, Brush, Pen);
-            base.Draw(canvas);  
+            base.Draw(canvas);
         }
     }
 }

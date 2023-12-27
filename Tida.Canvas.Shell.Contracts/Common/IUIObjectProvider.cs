@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.Common {
+namespace Tida.Canvas.Shell.Contracts.Common
+{
     /// <summary>
     /// UI元素提供者;
     /// </summary>
-    public interface IUIObjectProvider {
+    public interface IUIObjectProvider
+    {
         /// <summary>
         /// UI元素;
         /// </summary>
@@ -19,7 +21,8 @@ namespace Tida.Canvas.Shell.Contracts.Common {
     /// <summary>
     /// UI元素提供者工厂;
     /// </summary>
-    public interface IUIObjectProviderFactory {
+    public interface IUIObjectProviderFactory
+    {
         /// <summary>
         /// 根据一个UI元素创建一个UI元素提供者;
         /// </summary>
@@ -28,7 +31,8 @@ namespace Tida.Canvas.Shell.Contracts.Common {
         IUIObjectProvider CreateNew(object uiObject);
     }
 
-    public class UIObjectProviderFactory : GenericServiceStaticInstance<IUIObjectProviderFactory> {
+    public class UIObjectProviderFactory : GenericServiceStaticInstance<IUIObjectProviderFactory>
+    {
         public static IUIObjectProvider CreateNew(object uiObject) => Current.CreateNew(uiObject);
     }
 }

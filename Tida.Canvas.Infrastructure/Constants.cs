@@ -1,12 +1,12 @@
 ﻿using Tida.Canvas.Media;
 
-namespace Tida.Canvas.Infrastructure {
-
+namespace Tida.Canvas.Infrastructure
+{
     /// <summary>
     /// 媒体相关(画刷,笔,长度，字体等);
     /// </summary>
-    public static partial class Constants {
-
+    public static partial class Constants
+    {
         /// <summary>
         /// 线段的默认笔;
         /// </summary>
@@ -25,15 +25,17 @@ namespace Tida.Canvas.Infrastructure {
         /// 鼠标上次按下位置到鼠标当前位置的辅助线的笔;
         /// </summary>
         public static readonly Pen LastMouseDownToCurrentMouseLinePen = Pen.CreateFrozenPen(
-            new SolidColorBrush {
+            new SolidColorBrush
+            {
                 Color = Color.FromRgb(0xDCC590)
-            },1.0
+            }, 1.0
         );
 
         /// <summary>
         /// 用于表示绘制对象正在编辑中的方块的画刷;
         /// </summary>
-        public static readonly Brush NodeBrush = new SolidColorBrush {
+        public static readonly Brush NodeBrush = new SolidColorBrush
+        {
             Color = Color.FromRgb(0xFFFFFF)
         };
 
@@ -41,11 +43,14 @@ namespace Tida.Canvas.Infrastructure {
         /// 高亮的方块边长/填充画刷,将用于编辑,辅助;
         /// </summary>
         public const double HighLightRectLength = 8.0D;
-        public static readonly Brush HighLightRectColorBrush = new SolidColorBrush {
+
+        public static readonly Brush HighLightRectColorBrush = new SolidColorBrush
+        {
             Color = Color.FromRgb(0x007FFF)
         };
 
         #region 椭圆(圆)相关
+
         public static readonly Brush NormalEllipseColorBrush = null;
         //new SolidColorBrush {
         //    Color = new Color {
@@ -63,11 +68,10 @@ namespace Tida.Canvas.Infrastructure {
         #endregion
 
         #region 矩形相关;
+
         public static readonly Brush NormalRectColorBrush = null;
 
         public static readonly Pen NormalRectPen = Pen.CreateFrozenPen(SolidColorBrush.CreateFrozenBrush(Color.FromRgb(0xFFFFFF)), 1);
-
-
 
         #endregion
 
@@ -82,7 +86,6 @@ namespace Tida.Canvas.Infrastructure {
         /// 表示点的圆的视图半径;
         /// </summary>
         public const double PointEllipseScreenRadius = 4.0D;
-
 
 
         /// <summary>
@@ -104,8 +107,9 @@ namespace Tida.Canvas.Infrastructure {
 
         public static readonly Pen LineEditingTipPen = Pen.CreateFrozenPen(
             SolidColorBrush.CreateFrozenBrush(Color.FromRgb(0xFFFFFF)),
-            1.2, 
-            new DashStyle {
+            1.2,
+            new DashStyle
+            {
                 Dashes = new double[] { 5, 2.5 }
             }
         );
@@ -142,7 +146,8 @@ namespace Tida.Canvas.Infrastructure {
     /// <summary>
     /// 图层相关常量;
     /// </summary>
-    public static partial class Constants {
+    public static partial class Constants
+    {
         //默认图层;
         public const string CanvasLayerGUID_Default = nameof(CanvasLayerGUID_Default);
 
@@ -150,6 +155,5 @@ namespace Tida.Canvas.Infrastructure {
         /// 编辑组-基本处理(复制、移动等);
         /// </summary>
         public const string EditToolGroup_EditBase = nameof(EditToolGroup_EditBase);
-
     }
 }

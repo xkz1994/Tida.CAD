@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Input {
+namespace Tida.Canvas.Input
+{
     /// <summary>
     /// 鼠标封装;
     /// </summary>
-    public interface IMouse {
+    public interface IMouse
+    {
         //
         // Summary:
         //     Gets the state of the first extended button.
@@ -33,6 +35,7 @@ namespace Tida.Canvas.Input {
         // Returns:
         //     The state of the middle mouse button.
         MouseButtonState MiddleButton { get; }
+
         //
         // Summary:
         //     Gets the state of the right button.
@@ -40,6 +43,7 @@ namespace Tida.Canvas.Input {
         // Returns:
         //     The state of the right mouse button.
         MouseButtonState RightButton { get; }
+
         //
         // Summary:
         //     Gets the state of the left button of the mouse.
@@ -53,7 +57,5 @@ namespace Tida.Canvas.Input {
         /// </summary>
         /// <returns></returns>
         Vector2D GetNativePosition();
-
-
     }
 }

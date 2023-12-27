@@ -6,7 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Prism.Mef.Modularity;
 
-namespace Tida.Canvas.Launcher {
+namespace Tida.Canvas.Launcher
+{
     ///// <summary>
     ///// 用于测试的代码模块;
     ///// </summary>

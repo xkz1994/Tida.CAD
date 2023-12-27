@@ -3,13 +3,16 @@ using Tida.Canvas.Shell.Contracts.ComponentModel;
 using static Tida.Canvas.Shell.Contracts.ComponentModel.Constants;
 using static Tida.Canvas.Shell.ComponentModel.Constants;
 
-namespace Tida.Canvas.Shell.ComponentModel {
+namespace Tida.Canvas.Shell.ComponentModel
+{
     /// <summary>
     /// 绘制对象属性——可见性;
     /// </summary>
     [ExportPropertyDescriptor(Inheritable = true, CategoryNameKey = CategoryName_Appearance, DescriptionNameKey = DescriptionName_IsVisible, DisplayNameKey = DisplayName_IsVisible)]
-    class IsVisiblePropertyDescriptor : PropertyDescriptor, IPropertyDescriptor {
-        public IsVisiblePropertyDescriptor() : base(typeof(DrawObject),nameof(DrawObject.IsVisible)) {
+    class IsVisiblePropertyDescriptor : PropertyDescriptor, IPropertyDescriptor
+    {
+        public IsVisiblePropertyDescriptor() : base(typeof(DrawObject), nameof(DrawObject.IsVisible))
+        {
         }
     }
 
@@ -29,15 +32,14 @@ namespace Tida.Canvas.Shell.ComponentModel {
     /// 3.选中
     /// </summary>
     [ExportIgnoredPropertyDescriptor(Inheritable = true)]
-    class IsEditingIgnoredPropertyDescriptor : IgnoredPropertyDescriptor {  
+    class IsEditingIgnoredPropertyDescriptor : IgnoredPropertyDescriptor
+    {
         public IsEditingIgnoredPropertyDescriptor() : base(typeof(DrawObject),
             nameof(DrawObject.IsEditing),
-            nameof(DrawObject.Parent), 
+            nameof(DrawObject.Parent),
             nameof(DrawObject.IsSelected)
-            ) {
-
+        )
+        {
         }
     }
-
-    
 }

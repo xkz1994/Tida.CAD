@@ -9,7 +9,7 @@ namespace Tida.CAD.Input
     /// <summary>
     /// CADMouseButtonEventArgs;
     /// </summary>
-    public class CADMouseButtonEventArgs:CADRoutedEventArgs
+    public class CADMouseButtonEventArgs : CADRoutedEventArgs
     {
         public CADMouseButtonEventArgs(Point position)
         {

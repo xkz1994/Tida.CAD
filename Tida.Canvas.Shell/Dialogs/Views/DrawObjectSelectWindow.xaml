@@ -6,19 +6,20 @@
         xmlns:local="clr-namespace:Tida.Canvas.Shell.Dialogs.Views"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d" SizeToContent="WidthAndHeight" MinWidth="240" x:Name="window"
-        Title="{Binding Title,FallbackValue=选择集}" >
+        Title="{Binding Title,FallbackValue=选择集}">
     <DockPanel>
         <StackPanel DockPanel.Dock="Bottom" HorizontalAlignment="Center" Orientation="Horizontal">
             <StackPanel.Resources>
                 <Style TargetType="Button">
-                    <Setter Property="Margin" Value="12,3"/>
-                    <Setter Property="Padding" Value="12,6"/>
+                    <Setter Property="Margin" Value="12,3" />
+                    <Setter Property="Padding" Value="12,6" />
                 </Style>
             </StackPanel.Resources>
-            <Button Content="{DynamicResource MsgBtnText_OK}" Command="{Binding ConfirmCommand}"/>
-            <Button Content="{DynamicResource MsgBtnText_Cancel}" Command="{Binding CancelCommand}"/>
+            <Button Content="{DynamicResource MsgBtnText_OK}" Command="{Binding ConfirmCommand}" />
+            <Button Content="{DynamicResource MsgBtnText_Cancel}" Command="{Binding CancelCommand}" />
         </StackPanel>
-        <ListBox ItemsSource="{Binding DrawObjectModels}" MinHeight="120" SelectedItem="{Binding SelectedDrawObjectModel}">
+        <ListBox ItemsSource="{Binding DrawObjectModels}" MinHeight="120"
+                 SelectedItem="{Binding SelectedDrawObjectModel}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding TypeName}" />
@@ -26,5 +27,5 @@
             </ListBox.ItemTemplate>
         </ListBox>
     </DockPanel>
-    
+
 </Window>

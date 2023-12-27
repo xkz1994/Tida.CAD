@@ -7,20 +7,27 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Tida.Canvas.Shell.ComponentModel.Views {
-    class StandardInputTextBox : TextBox {
+namespace Tida.Canvas.Shell.ComponentModel.Views
+{
+    class StandardInputTextBox : TextBox
+    {
         private bool _textChanged;
-        protected override void OnTextChanged(TextChangedEventArgs e) {
+
+        protected override void OnTextChanged(TextChangedEventArgs e)
+        {
             _textChanged = true;
             base.OnTextChanged(e);
         }
 
-        protected override void OnKeyDown(KeyEventArgs e) {
-            if (e.Key != Key.Enter) {
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter)
+            {
                 return;
             }
 
-            if (_textChanged) {
+            if (_textChanged)
+            {
                 TextInputChanged?.Invoke(this, EventArgs.Empty);
             }
 
@@ -31,8 +38,10 @@ namespace Tida.Canvas.Shell.ComponentModel.Views {
 
         public event EventHandler TextInputChanged;
 
-        protected override void OnLostFocus(RoutedEventArgs e) {
-            if (_textChanged) {
+        protected override void OnLostFocus(RoutedEventArgs e)
+        {
+            if (_textChanged)
+            {
                 TextInputChanged?.Invoke(this, EventArgs.Empty);
             }
 
@@ -40,5 +49,4 @@ namespace Tida.Canvas.Shell.ComponentModel.Views {
             base.OnLostFocus(e);
         }
     }
-
 }

@@ -1,4 +1,6 @@
-﻿namespace Tida.Canvas.Infrastructure.Snaping.Rules {
-    class LineAndRoundCircleRule {
+﻿namespace Tida.Canvas.Infrastructure.Snaping.Rules
+{
+    class LineAndRoundCircleRule
+    {
     }
 }

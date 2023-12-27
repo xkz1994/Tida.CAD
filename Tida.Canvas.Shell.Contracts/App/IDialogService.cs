@@ -1,11 +1,13 @@
 ﻿using Tida.Canvas.Shell.Contracts.App.Input;
 using Tida.Canvas.Shell.Contracts.Common;
 
-namespace Tida.Canvas.Shell.Contracts.App {
+namespace Tida.Canvas.Shell.Contracts.App
+{
     /// <summary>
     /// 基础对话框服务契约;
     /// </summary>
-    public interface IDialogService {
+    public interface IDialogService
+    {
         /// <summary>
         /// 获得文件路径;
         /// </summary>6
@@ -42,13 +44,11 @@ namespace Tida.Canvas.Shell.Contracts.App {
         /// <param name="getInputValueSetting">获取输入设定</param>
         /// <returns>输入值</returns>
         string GetInputValue(GetInputValueSetting getInputValueSetting = null);
-
-        
     }
 
-   
 
-    public class DialogService:GenericServiceStaticInstance<IDialogService> {
+    public class DialogService : GenericServiceStaticInstance<IDialogService>
+    {
         /// <summary>
         /// 获得保存文件路径;
         /// </summary>
@@ -59,5 +59,4 @@ namespace Tida.Canvas.Shell.Contracts.App {
 
         public static string OpenDirect() => Current?.OpenDirect();
     }
-
 }

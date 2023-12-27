@@ -5,16 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using SystemInput = System.Windows.Input;
 
-namespace Tida.Canvas.WPFCanvas.Input {
-    static class MouseButtonAdapter {
-
+namespace Tida.Canvas.WPFCanvas.Input
+{
+    static class MouseButtonAdapter
+    {
         /// <summary>
         /// 从<see cref="SystemInput.MouseButton"/>转换至<see cref="Canvas.Input.MouseButton"/>
         /// </summary>
         /// <param name="sysMouseButton"></param>
         /// <returns></returns>
-        public static Canvas.Input.MouseButton ConvertToMouseButton(this SystemInput.MouseButton sysMouseButton) {
-            switch (sysMouseButton) {
+        public static Canvas.Input.MouseButton ConvertToMouseButton(this SystemInput.MouseButton sysMouseButton)
+        {
+            switch (sysMouseButton)
+            {
                 case SystemInput.MouseButton.Left:
                     return Canvas.Input.MouseButton.Left;
                 case SystemInput.MouseButton.Middle:
@@ -28,7 +31,6 @@ namespace Tida.Canvas.WPFCanvas.Input {
                 default:
                     return Canvas.Input.MouseButton.UnKnown;
             }
-
         }
     }
 }

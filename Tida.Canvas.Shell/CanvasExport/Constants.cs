@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.CanvasExport {
-    static class Constants {
+namespace Tida.Canvas.Shell.CanvasExport
+{
+    static class Constants
+    {
         private const string Prefix = "pack://application:,,,/Tida.Canvas.Shell;component/Resources/";
 
         public const string MenuItemSaveAsImg = nameof(MenuItemSaveAsImg);
@@ -18,6 +20,5 @@ namespace Tida.Canvas.Shell.CanvasExport {
 
 
         public const string MsgText_ConfirmToShowExportedDirectory = nameof(MsgText_ConfirmToShowExportedDirectory);
-
     }
 }

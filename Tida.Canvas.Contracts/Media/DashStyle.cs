@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Media {
+namespace Tida.Canvas.Media
+{
     /// <summary>
     /// 笔的线段样式;(未实现);
     /// </summary>
-    public class DashStyle {
+    public class DashStyle
+    {
         /// <summary>
         /// 偏移;
         /// </summary>
@@ -18,6 +20,5 @@ namespace Tida.Canvas.Media {
         /// 虚线点分布;
         /// </summary>
         public IEnumerable<double> Dashes { get; set; }
-
     }
 }

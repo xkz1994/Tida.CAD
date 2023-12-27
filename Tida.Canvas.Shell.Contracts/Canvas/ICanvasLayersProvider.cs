@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 
-namespace Tida.Canvas.Shell.Contracts.Canvas {
+namespace Tida.Canvas.Shell.Contracts.Canvas
+{
     /// <summary>
     /// 图层提供者;
     /// </summary>
-    public interface ICanvasLayersProvider {
+    public interface ICanvasLayersProvider
+    {
         /// <summary>
         /// 创建图层集合;
         /// </summary>
@@ -14,9 +16,10 @@ namespace Tida.Canvas.Shell.Contracts.Canvas {
     }
 
     [MetadataAttribute, AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public sealed class ExportCanvasLayersProviderAttribute : ExportAttribute , ICanvasLayersProviderMetadata {
-        public ExportCanvasLayersProviderAttribute():base(typeof(ICanvasLayersProvider)) {
-
+    public sealed class ExportCanvasLayersProviderAttribute : ExportAttribute, ICanvasLayersProviderMetadata
+    {
+        public ExportCanvasLayersProviderAttribute() : base(typeof(ICanvasLayersProvider))
+        {
         }
 
         public int Priority { get; set; }
@@ -25,7 +28,8 @@ namespace Tida.Canvas.Shell.Contracts.Canvas {
     /// <summary>
     /// <see cref="ICanvasLayersProvider"/>的相关元数据;
     /// </summary>
-    public interface ICanvasLayersProviderMetadata {
+    public interface ICanvasLayersProviderMetadata
+    {
         /// <summary>
         /// 优先级;
         /// </summary>

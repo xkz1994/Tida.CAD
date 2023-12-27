@@ -6,18 +6,24 @@ using System.Text;
 using System.Threading.Tasks;
 using SystemInput = System.Windows.Input;
 
-namespace Tida.Canvas.WPFCanvas.Input {
+namespace Tida.Canvas.WPFCanvas.Input
+{
     /// <summary>
     /// WPF键盘服务封装;
     /// </summary>
-    class KeyBoardWrapper : IKeyBoard {
+    class KeyBoardWrapper : IKeyBoard
+    {
         /// <summary>
         /// 静态实例;
         /// </summary>
         private static KeyBoardWrapper _staticInstance;
+
         public static KeyBoardWrapper StaticInstance => _staticInstance ?? (_staticInstance = new KeyBoardWrapper());
 
-        private KeyBoardWrapper() {}
+        private KeyBoardWrapper()
+        {
+        }
+
         public ModifierKeys ModifierKeys => KeyAdapter.ConvertToModifierKeys(SystemInput.Keyboard.Modifiers);
 
         public bool IsKeyDown(Key key) => SystemInput.Keyboard.IsKeyDown(KeyAdapter.ConvertToSystemKey(key));
@@ -41,7 +47,5 @@ namespace Tida.Canvas.WPFCanvas.Input {
         /// 输入事件;
         /// </summary>
         public event EventHandler<TextInputEventArgs> PreviewTextInput;
-
-
     }
 }

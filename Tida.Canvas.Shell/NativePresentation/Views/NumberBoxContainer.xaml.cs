@@ -8,46 +8,56 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows;
 
-namespace Tida.Canvas.Shell.NativePresentation.Views {
+namespace Tida.Canvas.Shell.NativePresentation.Views
+{
     /// <summary>
     /// Interaction logic for NumberBoxContainer.xaml
     /// </summary>
-    public partial class NumberBoxContainer : ContentControl, INumberBoxContainer {
-        public NumberBoxContainer() {
+    public partial class NumberBoxContainer : ContentControl, INumberBoxContainer
+    {
+        public NumberBoxContainer()
+        {
             InitializeComponent();
-            
-            if (System.Windows.Application.Current.MainWindow != null) {
+
+            if (System.Windows.Application.Current.MainWindow != null)
+            {
                 TextCompositionManager.AddPreviewTextInputHandler(System.Windows.Application.Current.MainWindow, MainWindow_PreviewTextInput);
             }
-            
         }
 
-        private void MainWindow_PreviewTextInput(object sender, TextCompositionEventArgs e) {
+        private void MainWindow_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
             var numberBox = GetCurrentWritableNumberBox();
-            if(numberBox == null) {
+            if (numberBox == null)
+            {
                 return;
             }
-            
-            
-            if (numberBox.IsFocused) {
+
+
+            if (numberBox.IsFocused)
+            {
                 return;
             }
+
             numberBox.Focus();
 
-            if (!numberBox.IsFocused) {
+            if (!numberBox.IsFocused)
+            {
                 return;
             }
-            
+
             numberBox.RaisePreviewText(e);
             e.Handled = true;
         }
-        
+
         /// <summary>
         /// 输入文字时将正在编辑的输入框聚焦;
         /// </summary>
         /// <param name="e"></param>
-        protected override void OnPreviewTextInput(TextCompositionEventArgs e) {
-            if (IsInputing) {
+        protected override void OnPreviewTextInput(TextCompositionEventArgs e)
+        {
+            if (IsInputing)
+            {
                 base.OnPreviewTextInput(e);
                 return;
             }
@@ -55,19 +65,23 @@ namespace Tida.Canvas.Shell.NativePresentation.Views {
             e.Handled = true;
 
             var currentWritableNumberBox = GetCurrentWritableNumberBox();
-            if(currentWritableNumberBox == null) {
+            if (currentWritableNumberBox == null)
+            {
                 return;
             }
 
-            if (e.Text == "\b") {
+            if (e.Text == "\b")
+            {
                 return;
             }
-            else {
+            else
+            {
                 SetIsInputingState(true);
-                
+
                 currentWritableNumberBox.Text = e.Text;
 
-                if (string.IsNullOrEmpty(e.Text)) {
+                if (string.IsNullOrEmpty(e.Text))
+                {
                     return;
                 }
 
@@ -81,17 +95,22 @@ namespace Tida.Canvas.Shell.NativePresentation.Views {
         /// <returns></returns>
         private NumberBoxModel GetCurrentWritableNumberBox() => _numberBoxes.FirstOrDefault(p => p.IsReadOnly == false);
 
-        protected override void OnPreviewKeyDown(KeyEventArgs e) {
-            if(e.Key == Key.Tab) {
+        protected override void OnPreviewKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.Tab)
+            {
                 e.Handled = OnTabKeyDown();
             }
-            else if(e.Key == Key.Enter) {
+            else if (e.Key == Key.Enter)
+            {
                 e.Handled = OnEnterKeyDown();
             }
-            else if(e.Key == Key.Left) {
+            else if (e.Key == Key.Left)
+            {
                 e.Handled = OnLeftKeyDown();
             }
-            else if(e.Key == Key.Right) {
+            else if (e.Key == Key.Right)
+            {
                 e.Handled = OnRightKeyDown();
             }
 
@@ -102,34 +121,39 @@ namespace Tida.Canvas.Shell.NativePresentation.Views {
         /// <summary>
         /// Tab键按下时的响应;
         /// </summary>
-        private bool OnTabKeyDown() {
+        private bool OnTabKeyDown()
+        {
             var currentWritableNumberBox = GetCurrentWritableNumberBox();
-            if (currentWritableNumberBox?.Number == null) {
+            if (currentWritableNumberBox?.Number == null)
+            {
                 return true;
             }
 
             var index = _numberBoxes.IndexOf(currentWritableNumberBox);
             NumberBoxModel nextNumberBox = null;
 
-            if (index == _numberBoxes.Count - 1) {
+            if (index == _numberBoxes.Count - 1)
+            {
                 nextNumberBox = _numberBoxes[0];
             }
-            else {
+            else
+            {
                 nextNumberBox = _numberBoxes[index + 1];
             }
 
             currentWritableNumberBox.IsReadOnly = true;
-            
-            if (IsInputing) {
+
+            if (IsInputing)
+            {
                 IsInputing = false;
                 currentWritableNumberBox.TabConfirm();
             }
-            
+
             nextNumberBox.IsReadOnly = false;
 
             nextNumberBox.SelectAll();
             nextNumberBox.Focus();
-            
+
             return true;
         }
 
@@ -137,9 +161,11 @@ namespace Tida.Canvas.Shell.NativePresentation.Views {
         /// 回车键按下时的响应;
         /// </summary>
         /// <returns>是否已处理</returns>
-        private bool OnEnterKeyDown() {
+        private bool OnEnterKeyDown()
+        {
             var currentWritableNumberBox = GetCurrentWritableNumberBox();
-            if (currentWritableNumberBox?.Number == null) {
+            if (currentWritableNumberBox?.Number == null)
+            {
                 return false;
             }
 
@@ -150,17 +176,20 @@ namespace Tida.Canvas.Shell.NativePresentation.Views {
         /// <summary>
         /// 方向左键按下时的响应;
         /// </summary>
-        private bool OnLeftKeyDown() {
+        private bool OnLeftKeyDown()
+        {
             var currentWritableNumberBox = GetCurrentWritableNumberBox();
-            if (currentWritableNumberBox?.Number == null) {
-                return false;
-            }
-            
-            if (IsInputing) {
+            if (currentWritableNumberBox?.Number == null)
+            {
                 return false;
             }
 
-            
+            if (IsInputing)
+            {
+                return false;
+            }
+
+
             currentWritableNumberBox.Focus();
             currentWritableNumberBox.Select(0, 0);
             currentWritableNumberBox.SetCaretIndex(0);
@@ -169,20 +198,23 @@ namespace Tida.Canvas.Shell.NativePresentation.Views {
 
             return true;
         }
-        
+
         /// <summary>
         /// 方向右键按下时的响应;
         /// </summary>
-        private bool OnRightKeyDown() {
+        private bool OnRightKeyDown()
+        {
             var currentWritableNumberBox = GetCurrentWritableNumberBox();
-            if (currentWritableNumberBox?.Number == null) {
+            if (currentWritableNumberBox?.Number == null)
+            {
                 return false;
             }
 
-            if (IsInputing) {
+            if (IsInputing)
+            {
                 return false;
             }
-           
+
             currentWritableNumberBox.Focus();
             currentWritableNumberBox.Select(0, 0);
             currentWritableNumberBox.SetCaretIndex(currentWritableNumberBox.Text.Length);
@@ -201,12 +233,17 @@ namespace Tida.Canvas.Shell.NativePresentation.Views {
         public object UIObject => this;
 
         private bool _isInputing;
-        public bool IsInputing {
+
+        public bool IsInputing
+        {
             get => _isInputing;
-            private set {
-                if(_isInputing == value) {
+            private set
+            {
+                if (_isInputing == value)
+                {
                     return;
                 }
+
                 _isInputing = value;
                 IsInputingChanged?.Invoke(this, new ValueChangedEventArgs<bool>(_isInputing, !_isInputing));
             }
@@ -216,17 +253,21 @@ namespace Tida.Canvas.Shell.NativePresentation.Views {
         /// 设定是否为正在输入状态;
         /// </summary>
         /// <param name="isInputing"></param>
-        private void SetIsInputingState(bool isInputing) {
+        private void SetIsInputingState(bool isInputing)
+        {
             var currentWritableNumberBox = GetCurrentWritableNumberBox();
-            if (currentWritableNumberBox?.Number == null) {
+            if (currentWritableNumberBox?.Number == null)
+            {
                 return;
             }
 
-            if (isInputing) {
+            if (isInputing)
+            {
                 currentWritableNumberBox.Focus();
                 IsInputing = true;
             }
-            else {
+            else
+            {
                 currentWritableNumberBox.Focus();
                 currentWritableNumberBox.SelectAll();
                 this.Focus();
@@ -234,22 +275,27 @@ namespace Tida.Canvas.Shell.NativePresentation.Views {
             }
         }
 
-        public void AddNumberBox(INumberBox numberBox) {
-            if (!(numberBox is Models.NumberBoxModel model)) {
+        public void AddNumberBox(INumberBox numberBox)
+        {
+            if (!(numberBox is Models.NumberBoxModel model))
+            {
                 throw new InvalidCastException(nameof(numberBox));
             }
 
             _numberBoxes.Add(model);
             model.FocusOnParent = FocusInternal;
-            grid.Children.Add(new NumberBox {
+            grid.Children.Add(new NumberBox
+            {
                 DataContext = numberBox
             });
         }
 
         private void FocusInternal() => Focus();
 
-        public void RemoveNumberBox(INumberBox numberBox) {
-            if (!(numberBox is Models.NumberBoxModel model)) {
+        public void RemoveNumberBox(INumberBox numberBox)
+        {
+            if (!(numberBox is Models.NumberBoxModel model))
+            {
                 throw new InvalidCastException(nameof(numberBox));
             }
 
@@ -257,14 +303,17 @@ namespace Tida.Canvas.Shell.NativePresentation.Views {
             model.FocusOnParent = null;
 
             NumberBox numberBoxView = null;
-            foreach (var child in grid.Children) {
-                if(child is NumberBox thisNumberBoxView && thisNumberBoxView.DataContext == numberBox) {
+            foreach (var child in grid.Children)
+            {
+                if (child is NumberBox thisNumberBoxView && thisNumberBoxView.DataContext == numberBox)
+                {
                     numberBoxView = thisNumberBoxView;
                     break;
                 }
             }
 
-            if(numberBoxView == null) {
+            if (numberBoxView == null)
+            {
                 return;
             }
 
@@ -274,27 +323,31 @@ namespace Tida.Canvas.Shell.NativePresentation.Views {
         /// <summary>
         /// 复位;
         /// </summary>
-        public void Reset() {
+        public void Reset()
+        {
             _numberBoxes.ForEach(p => p.IsReadOnly = true);
 
-            if (_numberBoxes.Count == 0) {
+            if (_numberBoxes.Count == 0)
+            {
                 return;
             }
-            
+
             _numberBoxes[0].IsReadOnly = false;
 
             SetIsInputingState(false);
         }
 
-        public void Dispose() {
-            if (System.Windows.Application.Current.MainWindow != null) {
+        public void Dispose()
+        {
+            if (System.Windows.Application.Current.MainWindow != null)
+            {
                 TextCompositionManager.RemovePreviewTextInputHandler(System.Windows.Application.Current.MainWindow, MainWindow_PreviewTextInput);
             }
         }
 
 #if DEBUG
-        ~NumberBoxContainer() {
-
+        ~NumberBoxContainer()
+        {
         }
 #endif
     }

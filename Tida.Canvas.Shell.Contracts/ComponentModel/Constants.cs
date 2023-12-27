@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.ComponentModel {
+namespace Tida.Canvas.Shell.Contracts.ComponentModel
+{
     /// <summary>
     /// 相关标识;
     /// </summary>
-    public static class Constants {
-
+    public static class Constants
+    {
         /// <summary>
         /// 分类-外观;
         /// </summary>
@@ -19,7 +20,7 @@ namespace Tida.Canvas.Shell.Contracts.ComponentModel {
         /// 分类-状态;
         /// </summary>
         public const string CategoryName_State = nameof(CategoryName_State);
-        
+
         /// <summary>
         /// 分类-几何;
         /// </summary>
@@ -53,6 +54,5 @@ namespace Tida.Canvas.Shell.Contracts.ComponentModel {
 
 
         public const string EditorTargetProperty_StandardValues_SelectedValue = "SelectedValue";
-
     }
 }

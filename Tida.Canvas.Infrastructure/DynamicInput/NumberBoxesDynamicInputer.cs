@@ -9,33 +9,37 @@ using System.Linq;
 using Tida.Canvas.Input;
 using Tida.Canvas.Infrastructure.DynamicInput.Events;
 
-namespace Tida.Canvas.Infrastructure.DynamicInput {
+namespace Tida.Canvas.Infrastructure.DynamicInput
+{
     /// <summary>
     /// 本类适用于设定多个NumberBox的动态输入情况;
     /// </summary>
     public partial class NumberBoxesDynamicInputer :
-        CanvasControlDynamicInputerBase {
-
+        CanvasControlDynamicInputerBase
+    {
         public NumberBoxesDynamicInputer(
             NumberBoxInteractionHandlerContainer numberBoxInteractionHandler,
             ICanvasControl canvasControl,
             INumberBoxService numberBoxService
-        ) : base(canvasControl) {
+        ) : base(canvasControl)
+        {
             _numberBoxService = numberBoxService ?? throw new ArgumentNullException(nameof(numberBoxService));
             _numberBoxContainer = _numberBoxService.CreateContainer();
-            
+
             NumberBoxInteractionHandlerContainer = numberBoxInteractionHandler ?? throw new ArgumentNullException(nameof(numberBoxInteractionHandler));
 
             Initialize();
         }
 
         private readonly INumberBoxService _numberBoxService;
+
         /// <summary>
         /// NumberBox交互容器;
         /// </summary>
         public NumberBoxInteractionHandlerContainer NumberBoxInteractionHandlerContainer { get; }
+
         private readonly List<NumberBoxCell> _numberBoxCells = new List<NumberBoxCell>();
-        
+
         /// <summary>
         /// 指示是否内部正在产生变化,
         /// 防止在<see cref="INumberBox.NumberChanged"/>的处理中,
@@ -51,7 +55,8 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
         /// <summary>
         /// 初始化;
         /// </summary>
-        private void Initialize() {
+        private void Initialize()
+        {
             InitializeNumberBoxes();
             InitializeNumberInteractionHandlers();
 
@@ -62,10 +67,11 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
         /// <summary>
         /// 初始化数字交互容器;
         /// </summary>
-        private void InitializeNumberInteractionHandlers() {
+        private void InitializeNumberInteractionHandlers()
+        {
             foreach (var numberBoxInteractionHandler in
-                NumberBoxInteractionHandlerContainer.NumberBoxInteractionHandlers.Distinct()) {
-
+                     NumberBoxInteractionHandlerContainer.NumberBoxInteractionHandlers.Distinct())
+            {
                 numberBoxInteractionHandler.NumberChanged += NumberboxInteractionHandler_NumberChanged;
                 numberBoxInteractionHandler.ScreenPositionChanged += NumberBoxInteractionHandler_ScreenPositionChanged;
             }
@@ -73,30 +79,34 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
             NumberBoxInteractionHandlerContainer.VisualChanged += NumberBoxInteractionHandlerContainer_VisualChanged;
         }
 
-        private void UnInitializeNumberInteractionHandlers() {
+        private void UnInitializeNumberInteractionHandlers()
+        {
             foreach (var numberBoxInteractionHandler in
-                NumberBoxInteractionHandlerContainer.NumberBoxInteractionHandlers.Distinct()) {
-
+                     NumberBoxInteractionHandlerContainer.NumberBoxInteractionHandlers.Distinct())
+            {
                 numberBoxInteractionHandler.NumberChanged -= NumberboxInteractionHandler_NumberChanged;
                 numberBoxInteractionHandler.ScreenPositionChanged -= NumberBoxInteractionHandler_ScreenPositionChanged;
-
             }
 
             NumberBoxInteractionHandlerContainer.VisualChanged -= NumberBoxInteractionHandlerContainer_VisualChanged;
         }
 
-        private void NumberBoxInteractionHandlerContainer_VisualChanged(object sender, EventArgs e) {
+        private void NumberBoxInteractionHandlerContainer_VisualChanged(object sender, EventArgs e)
+        {
             this.RaiseVisualChanged();
         }
 
 
-        private void NumberBoxInteractionHandler_ScreenPositionChanged(object sender, ValueChangedEventArgs<Vector2D> e) {
-            if (!(sender is NumberBoxInteractionHandler numberBoxInteractionHandler)) {
+        private void NumberBoxInteractionHandler_ScreenPositionChanged(object sender, ValueChangedEventArgs<Vector2D> e)
+        {
+            if (!(sender is NumberBoxInteractionHandler numberBoxInteractionHandler))
+            {
                 return;
             }
 
             var numberBox = _numberBoxCells.FirstOrDefault(p => p.NumberBoxInteractionHandler == numberBoxInteractionHandler)?.NumberBox;
-            if(numberBox == null) {
+            if (numberBox == null)
+            {
                 return;
             }
 
@@ -104,16 +114,17 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
 
             SetPropertyInternal(
                 e.NewValue,
-                pos => {
-                    numberBox.Position = pos;
-                }
+                pos => { numberBox.Position = pos; }
             );
         }
 
-        private void NumberboxInteractionHandler_NumberChanged(object sender, ValueChangedEventArgs<double?> e) {
-            if (!(sender is NumberBoxInteractionHandler numberBoxInteractionHandler)) {
+        private void NumberboxInteractionHandler_NumberChanged(object sender, ValueChangedEventArgs<double?> e)
+        {
+            if (!(sender is NumberBoxInteractionHandler numberBoxInteractionHandler))
+            {
                 return;
             }
+
             UpdateNumberBoxWithNumberboxInteractionHandler(numberBoxInteractionHandler);
         }
 
@@ -121,10 +132,11 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
         /// 将<paramref name="numberBoxInteractionHandler"/>的数据同步到对应的<see cref="INumberBox"/>
         /// </summary>
         /// <param name="numberBoxInteractionHandler"></param>
-        private void UpdateNumberBoxWithNumberboxInteractionHandler(NumberBoxInteractionHandler numberBoxInteractionHandler) {
-
+        private void UpdateNumberBoxWithNumberboxInteractionHandler(NumberBoxInteractionHandler numberBoxInteractionHandler)
+        {
             var numberBox = _numberBoxCells.FirstOrDefault(p => p.NumberBoxInteractionHandler == numberBoxInteractionHandler)?.NumberBox;
-            if (numberBox == null) {
+            if (numberBox == null)
+            {
                 return;
             }
 
@@ -132,7 +144,8 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
 
             SetPropertyInternal(
                 numberBoxInteractionHandler.Number,
-                number => {
+                number =>
+                {
                     numberBox.Number = number;
                     numberBox.Visible = true;
                 }
@@ -145,25 +158,29 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
         /// <typeparam name="T"></typeparam>
         /// <param name="setAct"></param>
         /// <param name="value"></param>
-        private void SetPropertyInternal<T>(T value, Action<T> setAct) {
-            if (_internalChanging) {
+        private void SetPropertyInternal<T>(T value, Action<T> setAct)
+        {
+            if (_internalChanging)
+            {
                 return;
             }
 
-            if (value == null) {
+            if (value == null)
+            {
                 return;
             }
-            else {
+            else
+            {
                 _internalChanging = true;
 
                 setAct(value);
 
                 _internalChanging = false;
             }
-
         }
 
-        protected override void OnDispose() {
+        protected override void OnDispose()
+        {
             UnInitializeNumberBoxes();
             UnInitializeNumberInteractionHandlers();
 
@@ -173,18 +190,19 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
             base.OnDispose();
         }
 
-        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy) {
-
+        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy)
+        {
             NumberBoxInteractionHandlerContainer.Draw(canvas, canvasProxy);
-            
-            
+
+
             base.Draw(canvas, canvasProxy);
         }
 
         /// <summary>
         /// 复位,清除所有输入状态;
         /// </summary>
-        private void Reset() {
+        private void Reset()
+        {
             _numberBoxContainer.Reset();
 
             _numberBoxCells.ForEach(pair => pair.NumberBox.Visible = false);
@@ -194,31 +212,33 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
     /// <summary>
     /// 文本框交互部分;
     /// </summary>
-    public partial class NumberBoxesDynamicInputer {
-
+    public partial class NumberBoxesDynamicInputer
+    {
         /// <summary>
         /// 初始化文本框;
         /// </summary>
-        private void InitializeNumberBoxes() {
-            if (_numberBoxContainer == null) {
+        private void InitializeNumberBoxes()
+        {
+            if (_numberBoxContainer == null)
+            {
                 return;
             }
-            
-            
+
+
             CanvasControl.AddUIObject(_numberBoxContainer);
 
-            foreach (var numberBoxInteractionHandler in 
-                NumberBoxInteractionHandlerContainer.NumberBoxInteractionHandlers.Distinct()) {
-
+            foreach (var numberBoxInteractionHandler in
+                     NumberBoxInteractionHandlerContainer.NumberBoxInteractionHandlers.Distinct())
+            {
                 var numberBox = GetNumberBoxByNumberBoxInteractionHandler(numberBoxInteractionHandler);
 
                 _numberBoxCells.Add(
-                    new NumberBoxCell( numberBoxInteractionHandler,  numberBox )
+                    new NumberBoxCell(numberBoxInteractionHandler, numberBox)
                 );
-                
             }
 
-            _numberBoxCells.ForEach(cell => {
+            _numberBoxCells.ForEach(cell =>
+            {
                 _numberBoxContainer.AddNumberBox(cell.NumberBox);
 
                 cell.NumberBox.TabConfirmed += NumberBox_TabConfirmed;
@@ -232,14 +252,17 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
             CanvasControl.CanvasPreviewKeyDown += CanvasControl_CanvasPreviewKeyDown;
         }
 
-        private void UnInitializeNumberBoxes() {
-            if (_numberBoxContainer == null) {
+        private void UnInitializeNumberBoxes()
+        {
+            if (_numberBoxContainer == null)
+            {
                 return;
             }
 
             CanvasControl.RemoveUIObject(_numberBoxContainer);
 
-            _numberBoxCells.ForEach(cell => {
+            _numberBoxCells.ForEach(cell =>
+            {
                 _numberBoxContainer.RemoveNumberBox(cell.NumberBox);
 
                 cell.NumberBox.TabConfirmed -= NumberBox_TabConfirmed;
@@ -255,20 +278,25 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
             CanvasControl.CanvasPreviewKeyDown -= CanvasControl_CanvasPreviewKeyDown;
         }
 
-        private void NumberBox_TabConfirmed(object sender, EventArgs e) {
-            if(!(sender is INumberBox numberBox)) {
+        private void NumberBox_TabConfirmed(object sender, EventArgs e)
+        {
+            if (!(sender is INumberBox numberBox))
+            {
                 return;
             }
 
             UpdateNumberBoxInteractionHandlerWithNumberbox(numberBox);
         }
 
-        private void NumberBox_EnterConfirmed(object sender, EventArgs e) {
-            if (_numberBoxCells.Any(p => p.NumberBoxInteractionHandler.Number == null)) {
+        private void NumberBox_EnterConfirmed(object sender, EventArgs e)
+        {
+            if (_numberBoxCells.Any(p => p.NumberBoxInteractionHandler.Number == null))
+            {
                 return;
             }
 
-            if(!(sender is INumberBox numberBox)) {
+            if (!(sender is INumberBox numberBox))
+            {
                 return;
             }
 
@@ -282,27 +310,31 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
         /// <summary>
         /// 将<paramref name="numberBox"/>的数据同步到对应的<see cref="NumberBoxInteractionHandler"/>
         /// </summary>
-        private void UpdateNumberBoxInteractionHandlerWithNumberbox(INumberBox numberBox) {
-
-            if (numberBox == null) {
+        private void UpdateNumberBoxInteractionHandlerWithNumberbox(INumberBox numberBox)
+        {
+            if (numberBox == null)
+            {
                 throw new ArgumentNullException(nameof(numberBox));
             }
 
             var numberBoxInteractionHandler = _numberBoxCells.FirstOrDefault(p => p.NumberBox == numberBox)?.NumberBoxInteractionHandler;
-            if (numberBoxInteractionHandler == null) {
+            if (numberBoxInteractionHandler == null)
+            {
                 return;
             }
 
             SetPropertyInternal(
                 numberBox.Number,
-                number => {
+                number =>
+                {
                     numberBoxInteractionHandler.Reset();
                     numberBoxInteractionHandler.CommitNumber(number.Value);
                 }
             );
         }
-        
-        private void NumberBoxContainer_IsInputingChanged(object sender, ValueChangedEventArgs<bool> e) {
+
+        private void NumberBoxContainer_IsInputingChanged(object sender, ValueChangedEventArgs<bool> e)
+        {
             NumberBoxInteractionHandlerContainer.IsInputing = e.NewValue;
         }
 
@@ -311,7 +343,8 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CanvasControl_CanvasPreviewKeyDown(object sender, KeyDownEventArgs e) {
+        private void CanvasControl_CanvasPreviewKeyDown(object sender, KeyDownEventArgs e)
+        {
             //if (e.Key == Key.Escape && NumberBoxInteractionHandlerContainer.IsInputing) {
             //    var cell = _numberBoxCells.FirstOrDefault(p => p.NumberBox.IsReadOnly);
             //    if(cell == null) {
@@ -323,34 +356,36 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
             //    e.Handled = true;
             //}
         }
-        
     }
 
     /// <summary>
     /// 状态部分;
     /// </summary>
-    public partial class NumberBoxesDynamicInputer {
+    public partial class NumberBoxesDynamicInputer
+    {
         /// <summary>
         /// 存储数字输入呈现于对应交互对应状态的单元;
         /// </summary>
-        class NumberBoxCell {
-            public NumberBoxCell(NumberBoxInteractionHandler numberBoxInteractionHandler,INumberBox numberBox) {
-
+        class NumberBoxCell
+        {
+            public NumberBoxCell(NumberBoxInteractionHandler numberBoxInteractionHandler, INumberBox numberBox)
+            {
                 NumberBox = numberBox ?? throw new ArgumentNullException(nameof(numberBox));
 
                 NumberBoxInteractionHandler = numberBoxInteractionHandler ?? throw new ArgumentNullException(nameof(numberBoxInteractionHandler));
-
             }
+
             public NumberBoxInteractionHandler NumberBoxInteractionHandler { get; }
             public INumberBox NumberBox { get; }
         }
 
-        private INumberBox GetNumberBoxByNumberBoxInteractionHandler(NumberBoxInteractionHandler numberBoxInteractionHandler) {
-
-            if (numberBoxInteractionHandler == null) {
+        private INumberBox GetNumberBoxByNumberBoxInteractionHandler(NumberBoxInteractionHandler numberBoxInteractionHandler)
+        {
+            if (numberBoxInteractionHandler == null)
+            {
                 throw new ArgumentNullException(nameof(numberBoxInteractionHandler));
             }
-            
+
             var numberBox = _numberBoxService.CreateNumberBox();
             numberBox.SavedBits = numberBoxInteractionHandler.SavedBits;
             return numberBox;
@@ -360,30 +395,37 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
     /// <summary>
     /// 与<see cref="INumberBox"/>的交互器;
     /// </summary>
-    public class NumberBoxInteractionHandler : CanvasElement, IDrawable, IDisposable {
+    public class NumberBoxInteractionHandler : CanvasElement, IDrawable, IDisposable
+    {
         private double? _number;
+
         /// <summary>
         /// 当前数值;
         /// </summary>
-        public double? Number {
+        public double? Number
+        {
             get => _number;
-            set {
-                if (IsNumberCommited) {
+            set
+            {
+                if (IsNumberCommited)
+                {
                     throw new InvalidOperationException($"The number can't be modified while {nameof(IsNumberCommited)} is set to true,please invoke {nameof(Reset)} first.");
                 }
 
                 SetNumberCore(value);
             }
         }
-        
-        private void SetNumberCore(double? number) {
-            if (_number == number) {
+
+        private void SetNumberCore(double? number)
+        {
+            if (_number == number)
+            {
                 return;
             }
 
             var oldValue = _number;
             _number = number;
-            
+
             var changedArgs = new ValueChangedEventArgs<double?>(_number, oldValue);
             OnNumberChanged(changedArgs);
 
@@ -395,17 +437,19 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
         /// 应用数字的更改;
         /// </summary>
         /// <param name="number">数字值</param>
-        public void CommitNumber(double number) {
+        public void CommitNumber(double number)
+        {
             IsNumberCommited = true;
             SetNumberCore(number);
-            
+
             NumberCommited?.Invoke(this, new NumberCommitedEventArgs(Number));
         }
 
         /// <summary>
         /// 指定当前值的更改;
         /// </summary>
-        public void CommitNumber() {
+        public void CommitNumber()
+        {
             IsNumberCommited = true;
             NumberCommited?.Invoke(this, new NumberCommitedEventArgs(Number));
         }
@@ -414,16 +458,20 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
         /// 当前数字更改是否被呈递;
         /// </summary>
         public bool IsNumberCommited { get; private set; }
-        
+
         private const int DefaultSaveBits = 4;
         private int _saveBits = DefaultSaveBits;
+
         ///<summary>
         /// 保留小数点小数的位数;
         /// </summary>
-        public int SavedBits {
+        public int SavedBits
+        {
             get => _saveBits;
-            set {
-                if (value < 0) {
+            set
+            {
+                if (value < 0)
+                {
                     throw new ArgumentOutOfRangeException($"{nameof(value)} can't be less than zero.");
                 }
 
@@ -435,32 +483,33 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
         /// 当数字发生变化时发生;
         /// </summary>
         /// <param name="args"></param>
-        protected virtual void OnNumberChanged(ValueChangedEventArgs<double?> args) {
-
+        protected virtual void OnNumberChanged(ValueChangedEventArgs<double?> args)
+        {
         }
 
         /// <summary>
         /// 复位;解除冻结状态,属性重置;
         /// </summary>
-        public void Reset() {
+        public void Reset()
+        {
             IsNumberCommited = false;
             SetNumberCore(null);
             OnReset();
         }
-        
-        protected virtual void OnReset() {
 
+        protected virtual void OnReset()
+        {
         }
 
-        public void Dispose() {
-
+        public void Dispose()
+        {
         }
 
-        protected virtual void OnDispose() {
-
+        protected virtual void OnDispose()
+        {
         }
 
-        
+
         /// <summary>
         /// 数字已经发生变化;
         /// </summary>
@@ -472,12 +521,15 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
         public event EventHandler<NumberCommitedEventArgs> NumberCommited;
 
         private Vector2D _screenPosition;
+
         /// <summary>
         /// 屏幕位置;
         /// </summary>
-        public Vector2D ScreenPosition {
+        public Vector2D ScreenPosition
+        {
             get => _screenPosition;
-            set {
+            set
+            {
                 var oldValue = _screenPosition;
                 _screenPosition = value;
                 ScreenPositionChanged?.Invoke(this, new ValueChangedEventArgs<Vector2D>(_screenPosition, oldValue));
@@ -488,22 +540,24 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
         /// 屏幕位置变化事件;
         /// </summary>
         public event EventHandler<ValueChangedEventArgs<Vector2D>> ScreenPositionChanged;
-        
     }
 
-    public static class NumberBoxInteractionHandlerExtension {
+    public static class NumberBoxInteractionHandlerExtension
+    {
         /// <summary>
         /// 获取<see cref="NumberBoxInteractionHandler"/> 确定更改的数字;
         /// </summary>
         /// <param name="numberBoxInteractionHandler"></param>
         /// <returns></returns>
-        public static double? GetCommitedNumber(this NumberBoxInteractionHandler numberBoxInteractionHandler) {
-
-            if (numberBoxInteractionHandler == null) {
+        public static double? GetCommitedNumber(this NumberBoxInteractionHandler numberBoxInteractionHandler)
+        {
+            if (numberBoxInteractionHandler == null)
+            {
                 throw new ArgumentNullException(nameof(numberBoxInteractionHandler));
             }
 
-            if (!numberBoxInteractionHandler.IsNumberCommited) {
+            if (!numberBoxInteractionHandler.IsNumberCommited)
+            {
                 return null;
             }
 
@@ -514,27 +568,34 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
     /// <summary>
     /// 长度与角度交互器;
     /// </summary>
-    public abstract class NumberBoxInteractionHandlerContainer:CanvasElement,IDisposable {
-        public NumberBoxInteractionHandlerContainer(IEnumerable<NumberBoxInteractionHandler> numberBoxInteractionHandlers) {
+    public abstract class NumberBoxInteractionHandlerContainer : CanvasElement, IDisposable
+    {
+        public NumberBoxInteractionHandlerContainer(IEnumerable<NumberBoxInteractionHandler> numberBoxInteractionHandlers)
+        {
             this.NumberBoxInteractionHandlers = numberBoxInteractionHandlers ??
-                throw new ArgumentNullException(nameof(numberBoxInteractionHandlers));
+                                                throw new ArgumentNullException(nameof(numberBoxInteractionHandlers));
 
             Initialize();
         }
-        
-        private void Initialize() {
-            foreach (var handler in NumberBoxInteractionHandlers) {
+
+        private void Initialize()
+        {
+            foreach (var handler in NumberBoxInteractionHandlers)
+            {
                 handler.VisualChanged += Handler_VisualChanged;
             }
         }
-        
-        private void Uninitialize() {
-            foreach (var handler in NumberBoxInteractionHandlers) {
+
+        private void Uninitialize()
+        {
+            foreach (var handler in NumberBoxInteractionHandlers)
+            {
                 handler.VisualChanged -= Handler_VisualChanged;
             }
         }
 
-        private void Handler_VisualChanged(object sender, EventArgs e) {
+        private void Handler_VisualChanged(object sender, EventArgs e)
+        {
             RaiseVisualChanged();
         }
 
@@ -545,12 +606,15 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
         /// </summary>
         public abstract void Commit();
 
-        public void Dispose() {
+        public void Dispose()
+        {
             Uninitialize();
             OnDispose();
         }
 
-        protected virtual void OnDispose() { }
+        protected virtual void OnDispose()
+        {
+        }
 
 
         /// <summary>
@@ -558,10 +622,13 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
         /// </summary>
         public bool IsInputing { get; set; }
 
-        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy) {
-            foreach (var interactionHandler in NumberBoxInteractionHandlers) {
+        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy)
+        {
+            foreach (var interactionHandler in NumberBoxInteractionHandlers)
+            {
                 interactionHandler.Draw(canvas, canvasProxy);
             }
+
             base.Draw(canvas, canvasProxy);
         }
     }

@@ -1,11 +1,13 @@
 ﻿using Tida.Canvas.Contracts;
 using Tida.Geometry.Primitives;
 
-namespace Tida.Canvas.Infrastructure.MoveTools {
+namespace Tida.Canvas.Infrastructure.MoveTools
+{
     /// <summary>
     /// 绘制对象移动工具,对指定类型的绘制对象移动同步等操作;
     /// </summary>
-    public interface IDrawObjectMoveTool {
+    public interface IDrawObjectMoveTool
+    {
         /// <summary>
         /// 检查是否为可移动的绘制对象类型;
         /// </summary>
@@ -19,6 +21,5 @@ namespace Tida.Canvas.Infrastructure.MoveTools {
         /// <param name="drawObject"></param>
         /// <param name="offset"></param>
         void Move(DrawObject drawObject, Vector2D offset);
-
     }
 }

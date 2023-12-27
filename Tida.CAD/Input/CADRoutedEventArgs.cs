@@ -11,8 +11,8 @@ namespace Tida.CAD.Input
     {
         public CADRoutedEventArgs()
         {
-            
         }
+
         /// <summary>
         /// Gets or sets a value that indicates the present state of the event handling for
         ///     a routed event as it travels the route.

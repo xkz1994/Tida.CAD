@@ -4,23 +4,27 @@ using Tida.Geometry.Primitives;
 using Tida.Canvas.Infrastructure.Utils;
 using static Tida.Canvas.Infrastructure.Constants;
 
-namespace Tida.Canvas.Infrastructure.EditTools {
+namespace Tida.Canvas.Infrastructure.EditTools
+{
     /// <summary>
     /// 单次绘制的线性编辑工具泛型基类;
     /// </summary>
     /// <typeparam name="TLine"></typeparam>
-    public abstract class SingleLineEditToolGenericBase<TLine>:MouseInteractableEditToolGenericBase<TLine> where TLine:LineBase {
-        protected override void OnApplyMouseDownPosition(Vector2D thisMouseDownPosition) {
-
+    public abstract class SingleLineEditToolGenericBase<TLine> : MouseInteractableEditToolGenericBase<TLine> where TLine : LineBase
+    {
+        protected override void OnApplyMouseDownPosition(Vector2D thisMouseDownPosition)
+        {
             //若上一次鼠标按下的位置不为空,则不是第一次按下鼠标,需添加线段对象;
-            if (MousePositionTracker.LastMouseDownPosition != null) {
+            if (MousePositionTracker.LastMouseDownPosition != null)
+            {
                 var line = OnCreateDrawObject(MousePositionTracker.LastMouseDownPosition, thisMouseDownPosition);
 
                 MousePositionTracker.LastMouseDownPosition = null;
 
                 AddDrawObjectToUndoStack(line);
             }
-            else {
+            else
+            {
                 MousePositionTracker.LastMouseDownPosition = thisMouseDownPosition;
             }
         }
@@ -33,11 +37,13 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         /// <returns></returns>
         protected abstract TLine OnCreateDrawObject(Vector2D lastDownPosition, Vector2D thisMouseDownPosition);
 
-        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy) {
+        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy)
+        {
             base.Draw(canvas, canvasProxy);
 
             //检查两个关键位置是否为空;
-            if (MousePositionTracker.LastMouseDownPosition == null || MousePositionTracker.CurrentHoverPosition == null) {
+            if (MousePositionTracker.LastMouseDownPosition == null || MousePositionTracker.CurrentHoverPosition == null)
+            {
                 return;
             }
 
@@ -59,7 +65,8 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         /// </summary>
         /// <param name="canvas"></param>
         /// <param name="canvasProxy"></param>
-        private void DrawEditingLineState(ICanvas canvas, ICanvasScreenConvertable canvasProxy) {
+        private void DrawEditingLineState(ICanvas canvas, ICanvasScreenConvertable canvasProxy)
+        {
             //绘制未完成状态;
             var editingLine = new Line2D(MousePositionTracker.LastMouseDownPosition, MousePositionTracker.CurrentHoverPosition);
             LineDrawExtensions.DrawEditingLine(canvas, canvasProxy, editingLine);

@@ -1,8 +1,10 @@
-﻿namespace Tida.Canvas.Shell.StatusBar {
+﻿namespace Tida.Canvas.Shell.StatusBar
+{
     /// <summary>
     /// 状态栏相关常量;
     /// </summary>
-    static partial class Constants {
+    static partial class Constants
+    {
         public const string StatusBarItem_Zoom = nameof(StatusBarItem_Zoom);
 
         public const string StatusBarItem_CurrentEditTool = nameof(StatusBarItem_CurrentEditTool);
@@ -23,15 +25,13 @@
         public const string StatusBarItem_IsReadOnly = nameof(StatusBarItem_IsReadOnly);
 
         public const string CanvasLayersStatusBarItem = nameof(CanvasLayersStatusBarItem);
-
-
     }
 
     /// <summary>
     /// 语言部分;
     /// </summary>
-    static partial class Constants {
-
+    static partial class Constants
+    {
         public const string StatusBarBrandText = nameof(StatusBarBrandText);
 
 

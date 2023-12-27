@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.Ribbon {
+namespace Tida.Canvas.Shell.Contracts.Ribbon
+{
     /// <summary>
     /// Ribbon服务;
     /// </summary>
-    public interface IRibbonService {
+    public interface IRibbonService
+    {
         /// <summary>
         /// 所有菜单项;
         /// </summary>
@@ -28,7 +30,7 @@ namespace Tida.Canvas.Shell.Contracts.Ribbon {
         /// 所有Ribbon项;
         /// </summary>
         //IEnumerable<IRibbonItem> RibbonItems { get; }
-        
+
 
         /// <summary>
         /// 初始化;

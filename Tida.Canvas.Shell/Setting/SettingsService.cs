@@ -10,10 +10,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Setting {
+namespace Tida.Canvas.Shell.Setting
+{
     [Export(typeof(ISettingsService))]
-    public class SettingsService : ISettingsService {
+    public class SettingsService : ISettingsService
+    {
         private readonly List<ISettingsSection> _sections = new List<ISettingsSection>();
+
         /// <summary>
         /// 控制多线程安全的锁对象;
         /// </summary>
@@ -21,38 +24,43 @@ namespace Tida.Canvas.Shell.Setting {
 
         public IEnumerable<ISettingsSection> Sections => _sections;
 
-        public ISettingsSection GetOrCreateSection(string guid) {
-            if (guid == null) {
+        public ISettingsSection GetOrCreateSection(string guid)
+        {
+            if (guid == null)
+            {
                 throw new ArgumentNullException(nameof(guid));
             }
-            
-            
+
+
             var section = _sections.FirstOrDefault(p => p.GUID == guid);
 
-            if(section == null) {
+            if (section == null)
+            {
                 section = new SettingsSection(guid);
-                
+
                 _sections.Add(section);
-                
             }
 
             return section;
         }
 
-        public void Initialize() {
+        public void Initialize()
+        {
             var dir = AppDomainService.ExecutingAssemblyDirectory;
-            try {
-                CommonEventHelper.Publish<SettingsServiceInitializeEvent,ISettingsService>(this);
-                CommonEventHelper.PublishEventToHandlers<ISettingsServiceInitializeEventHandler,ISettingsService>(this);
+            try
+            {
+                CommonEventHelper.Publish<SettingsServiceInitializeEvent, ISettingsService>(this);
+                CommonEventHelper.PublishEventToHandlers<ISettingsServiceInitializeEventHandler, ISettingsService>(this);
             }
-            catch(Exception ex) {
-
+            catch (Exception ex)
+            {
             }
         }
 
-        public void RemoveSection(ISettingsSection settingsSection) {
-
-            if (settingsSection == null) {
+        public void RemoveSection(ISettingsSection settingsSection)
+        {
+            if (settingsSection == null)
+            {
                 throw new ArgumentNullException(nameof(settingsSection));
             }
 

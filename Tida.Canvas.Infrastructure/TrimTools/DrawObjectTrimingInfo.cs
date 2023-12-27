@@ -1,11 +1,13 @@
 ﻿using Tida.Canvas.Contracts;
 using Tida.Geometry.Primitives;
 
-namespace Tida.Canvas.Infrastructure.TrimTools {
+namespace Tida.Canvas.Infrastructure.TrimTools
+{
     /// <summary>
     /// 进行裁剪所需的信息;
     /// </summary>
-    public class DrawObjectTrimingInfo {
+    public class DrawObjectTrimingInfo
+    {
         /// <summary>
         /// 将要被裁剪的绘制对象;
         /// </summary>

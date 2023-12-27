@@ -1,8 +1,10 @@
-﻿namespace Tida.Canvas.Shell.ComponentModel {
+﻿namespace Tida.Canvas.Shell.ComponentModel
+{
     /// <summary>
     /// 属性相关;
     /// </summary>
-    public static partial class Constants {
+    public static partial class Constants
+    {
         public const string DisplayName_IsVisible = nameof(DisplayName_IsVisible);
         public const string DisplayName_IsSelected = nameof(DisplayName_IsSelected);
         public const string DisplayName_PointPosition = nameof(DisplayName_PointPosition);
@@ -22,18 +24,16 @@
         public const string DescriptionName_Ellipse2D = nameof(DescriptionName_Ellipse2D);
 
 
-
         public const string DisplayName_EllipseRadiusX = nameof(DisplayName_EllipseRadiusX);
 
         public const string DisplayName_EllipseRadiusY = nameof(DisplayName_EllipseRadiusY);
-
     }
 
     /// <summary>
     /// 编辑器相关;
     /// </summary>
-    public static partial class Constants {
-
+    public static partial class Constants
+    {
         public const string InputInstruction_Line2DStart = nameof(InputInstruction_Line2DStart);
 
         public const string InputInstruction_Line2DEnd = nameof(InputInstruction_Line2DEnd);
@@ -43,6 +43,5 @@
 
 
         public const string InputInstruction_Y = nameof(InputInstruction_Y);
-
     }
 }

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Tida.Canvas.Infrastructure {
+namespace Tida.Canvas.Infrastructure
+{
 #if NETSTANDARD1_0
-
     /// <summary>
     /// 此类用于补充.NetStandard1.0中缺失的<see cref="List{T}"/>部分;
     /// </summary>

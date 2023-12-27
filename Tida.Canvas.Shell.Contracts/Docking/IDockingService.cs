@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.Docking {
+namespace Tida.Canvas.Shell.Contracts.Docking
+{
     /// <summary>
     /// 文档停靠服务;本单位不唯一;
     /// </summary>
-    public interface IDockingService {
-        
+    public interface IDockingService
+    {
         /// <summary>
         /// 停靠区域集合;
         /// </summary>
@@ -24,7 +25,7 @@ namespace Tida.Canvas.Shell.Contracts.Docking {
         /// 停靠容器集合;
         /// </summary>
         IEnumerable<CreatedDockingContainer> DockingContainers { get; }
-        
+
         /// <summary>
         /// 添加停靠区域;
         /// </summary>
@@ -49,6 +50,4 @@ namespace Tida.Canvas.Shell.Contracts.Docking {
         /// <param name="pane"></param>
         void RemovePaneFromDocument(CreatedDockingPane pane);
     }
-
-    
 }

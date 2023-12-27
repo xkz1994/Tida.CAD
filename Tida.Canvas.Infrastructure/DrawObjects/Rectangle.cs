@@ -6,23 +6,32 @@ using Tida.Geometry.External.Util;
 using Tida.Canvas.Infrastructure.Utils;
 using static Tida.Canvas.Infrastructure.Constants;
 
-namespace Tida.Canvas.Infrastructure.DrawObjects {
+namespace Tida.Canvas.Infrastructure.DrawObjects
+{
     /// <summary>
     /// 绘制对象——矩形;
     /// </summary>
-    public class Rectangle : DrawObject {
-        public Rectangle(Rectangle2D2 rectangle2D) {
-            if(rectangle2D == null) {
+    public class Rectangle : DrawObject
+    {
+        public Rectangle(Rectangle2D2 rectangle2D)
+        {
+            if (rectangle2D == null)
+            {
                 throw new ArgumentNullException(nameof(rectangle2D));
             }
+
             this.Rectangle2D = rectangle2D;
         }
+
         private Rectangle2D2 _rectangle2D;
 
-        public Rectangle2D2 Rectangle2D {
+        public Rectangle2D2 Rectangle2D
+        {
             get { return _rectangle2D; }
-            set {
-                if(value == null) {
+            set
+            {
+                if (value == null)
+                {
                     throw new ArgumentNullException(nameof(value));
                 }
 
@@ -41,51 +50,64 @@ namespace Tida.Canvas.Infrastructure.DrawObjects {
         /// 设定矩形数据核心;
         /// </summary>
         /// <param name="rectangle2D"></param>
-        private void SetRetangle2DCore(Rectangle2D2 rectangle2D) {
-            if (rectangle2D == null) {
+        private void SetRetangle2DCore(Rectangle2D2 rectangle2D)
+        {
+            if (rectangle2D == null)
+            {
                 throw new ArgumentNullException(nameof(rectangle2D));
             }
 
             _rectangle2D = rectangle2D;
             RaiseVisualChanged();
         }
-        
-        public override Rectangle2D2 GetBoundingRect() {
-            if (Rectangle2D == null) {
+
+        public override Rectangle2D2 GetBoundingRect()
+        {
+            if (Rectangle2D == null)
+            {
                 return null;
             }
 
             return Rectangle2D;
         }
 
-        public override bool ObjectInRectangle(Rectangle2D2 rect, ICanvasScreenConvertable canvasProxy, bool anyPoint) {
-            if(rect == null) {
+        public override bool ObjectInRectangle(Rectangle2D2 rect, ICanvasScreenConvertable canvasProxy, bool anyPoint)
+        {
+            if (rect == null)
+            {
                 throw new ArgumentNullException(nameof(rect));
             }
 
-            if(Rectangle2D == null) {
+            if (Rectangle2D == null)
+            {
                 return false;
             }
 
             //根据四个顶点的位置判断与指定矩形的包含关系;
-            if (anyPoint) {
+            if (anyPoint)
+            {
                 return Rectangle2D.GetVertexes()?.Any(p => rect.Contains(p)) ?? false;
             }
-            else {
+            else
+            {
                 return Rectangle2D.GetVertexes()?.All(p => rect.Contains(p)) ?? false;
             }
         }
 
-        public override bool PointInObject(Vector2D point, ICanvasScreenConvertable canvasProxy) {
-            if(point == null) {
+        public override bool PointInObject(Vector2D point, ICanvasScreenConvertable canvasProxy)
+        {
+            if (point == null)
+            {
                 throw new ArgumentNullException(nameof(point));
             }
 
-            if(canvasProxy == null) {
+            if (canvasProxy == null)
+            {
                 throw new ArgumentNullException(nameof(canvasProxy));
             }
 
-            if(Rectangle2D == null) {
+            if (Rectangle2D == null)
+            {
                 return false;
             }
 
@@ -94,12 +116,13 @@ namespace Tida.Canvas.Infrastructure.DrawObjects {
             //判断与中心的关系;
             var centerScreenPoint = canvasProxy.ToScreen(Rectangle2D.Center);
             var screenRect = Tida.Canvas.Infrastructure.Utils.NativeGeometryExtensions.GetNativeSuroundingScreenRect(
-                centerScreenPoint, 
+                centerScreenPoint,
                 TolerantedScreenLength,
                 TolerantedScreenLength
             );
 
-            if (screenRect.Contains(screenPoint)) {
+            if (screenRect.Contains(screenPoint))
+            {
                 return true;
             }
 
@@ -108,13 +131,15 @@ namespace Tida.Canvas.Infrastructure.DrawObjects {
             var screenStartPoint = new Vector2D();
             var screenEndPoint = new Vector2D();
 
-            foreach (var line in lines) {
+            foreach (var line in lines)
+            {
                 canvasProxy.ToScreen(line.Start, screenStartPoint);
                 canvasProxy.ToScreen(line.End, screenEndPoint);
                 var screenLine2D = new Line2D(
-                    screenStartPoint,screenEndPoint
+                    screenStartPoint, screenEndPoint
                 );
-                if(screenLine2D.Distance(screenPoint) < TolerantedScreenLength) {
+                if (screenLine2D.Distance(screenPoint) < TolerantedScreenLength)
+                {
                     return true;
                 }
             }
@@ -122,19 +147,24 @@ namespace Tida.Canvas.Infrastructure.DrawObjects {
             return false;
         }
 
-        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy) {
-            if (canvas == null) {
+        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy)
+        {
+            if (canvas == null)
+            {
                 throw new ArgumentNullException(nameof(canvas));
             }
 
-            if (canvasProxy == null) {
+            if (canvasProxy == null)
+            {
                 throw new ArgumentNullException(nameof(canvasProxy));
             }
 
             //绘制自身;
-            if(Rectangle2D == null) {
+            if (Rectangle2D == null)
+            {
                 return;
             }
+
             canvas.DrawRectangle(Rectangle2D, NormalRectColorBrush, NormalRectPen);
 
             //绘制选择状态;
@@ -148,12 +178,15 @@ namespace Tida.Canvas.Infrastructure.DrawObjects {
         /// </summary>
         /// <param name="canvas"></param>
         /// <param name="canvasProxy"></param>
-        private void DrawSelectedState(ICanvas canvas,ICanvasScreenConvertable canvasProxy) {
-            if (!IsSelected) {
+        private void DrawSelectedState(ICanvas canvas, ICanvasScreenConvertable canvasProxy)
+        {
+            if (!IsSelected)
+            {
                 return;
             }
 
-            if(Rectangle2D == null) {
+            if (Rectangle2D == null)
+            {
                 return;
             }
 
@@ -162,7 +195,8 @@ namespace Tida.Canvas.Infrastructure.DrawObjects {
 
             var rectLength = TolerantedScreenLength;
 
-            foreach (var line in lines) {
+            foreach (var line in lines)
+            {
                 var point = line.MiddlePoint;
                 var rect = NativeGeometryExtensions.GetNativeSuroundingScreenRect(canvasProxy.ToScreen(point), rectLength, rectLength);
                 canvas.NativeDrawRectangle(rect, HighLightEllipseColorBrush, HighLightLinePen);
@@ -171,7 +205,7 @@ namespace Tida.Canvas.Infrastructure.DrawObjects {
             //绘制中心;
             var centerPointX = Rectangle2D.GetVertexes().Average(p => p.X);
             var centerPointY = Rectangle2D.GetVertexes().Average(p => p.Y);
-           
+
             var centerScreenPoint = canvasProxy.ToScreen(new Vector2D(centerPointX, centerPointY));
             var centerRect = NativeGeometryExtensions.GetNativeSuroundingScreenRect(centerScreenPoint, rectLength, rectLength);
             canvas.NativeDrawRectangle(centerRect, HighLightEllipseColorBrush, HighLightLinePen);

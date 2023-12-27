@@ -23,10 +23,11 @@ namespace Tida.CAD.WPF.SimpleSample.Views
         {
             InitializeComponent();
             _cadLayer = new CADLayer();
-            cadControl.Layers = new CADLayer[] { _cadLayer };   
+            cadControl.Layers = new CADLayer[] { _cadLayer };
         }
 
         private readonly CADLayer _cadLayer;
+
         private void Addline_Click(object sender, RoutedEventArgs e)
         {
             var line = new Line { Start = new Point(0, 0), End = new Point(10, 10) };
@@ -58,7 +59,7 @@ namespace Tida.CAD.WPF.SimpleSample.Views
 
         private void ChangeLayerBackground_Click(object sender, RoutedEventArgs e)
         {
-            if(_cadLayer.Background == null)
+            if (_cadLayer.Background == null)
             {
                 _cadLayer.Background = Brushes.Blue;
             }
@@ -74,17 +75,17 @@ namespace Tida.CAD.WPF.SimpleSample.Views
             {
                 Points = new[]
                 {
-                    new Point(2,0),
-                    new Point(4,0),
-                    new Point(6,2),
-                    new Point(6,4),
-                    new Point(4,6),
-                    new Point(2,6),
-                    new Point(0,4),
-                    new Point(0,2),
-                    new Point(2,0)
+                    new Point(2, 0),
+                    new Point(4, 0),
+                    new Point(6, 2),
+                    new Point(6, 4),
+                    new Point(4, 6),
+                    new Point(2, 6),
+                    new Point(0, 4),
+                    new Point(0, 2),
+                    new Point(2, 0)
                 },
-                Pen = new Pen(Brushes.White,2),
+                Pen = new Pen(Brushes.White, 2),
                 Brush = null
             };
             _cadLayer.AddDrawObject(polygon);

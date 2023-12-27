@@ -7,25 +7,30 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.App {
+namespace Tida.Canvas.Shell.App
+{
     /// <summary>
     /// 线程调用者实现器;
     /// </summary>
     [Export(typeof(IThreadInvoker))]
-    class ThreadInvokerImpl : IThreadInvoker {
-        public void BackInvoke(Action act) {
-            if (act == null) {
+    class ThreadInvokerImpl : IThreadInvoker
+    {
+        public void BackInvoke(Action act)
+        {
+            if (act == null)
+            {
                 throw new ArgumentNullException(nameof(act));
             }
-            
-            ThreadPool.QueueUserWorkItem(cb => {
-                act.Invoke();
-            });
+
+            ThreadPool.QueueUserWorkItem(cb => { act.Invoke(); });
         }
 
         private readonly AutoResetEvent evt = new AutoResetEvent(false);
-        public void UIInvoke(Action act) {
-            if (act == null) {
+
+        public void UIInvoke(Action act)
+        {
+            if (act == null)
+            {
                 throw new ArgumentNullException(nameof(act));
             }
 

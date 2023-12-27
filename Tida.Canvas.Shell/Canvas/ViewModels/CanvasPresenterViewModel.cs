@@ -1,5 +1,4 @@
-﻿
-using Tida.Canvas.Contracts;
+﻿using Tida.Canvas.Contracts;
 using Tida.Canvas.Events;
 using Tida.Canvas.Shell.Contracts.Canvas;
 using Tida.Canvas.Shell.Contracts.Canvas.Events;
@@ -23,22 +22,21 @@ using Prism.Ioc;
 using Tida.Canvas.Shell.Canvas.IViews;
 using CommonServiceLocator;
 
-namespace Tida.Canvas.Shell.Canvas.ViewModels {
+namespace Tida.Canvas.Shell.Canvas.ViewModels
+{
     /// <summary>
     /// 主视图模型;
     /// </summary>
     [Export]
     public partial class CanvasPresenterViewModel : ExtensibleBindableBase, ICanvasDataContext
     {
-
         [ImportingConstructor]
         public CanvasPresenterViewModel(
-            [ImportMany]IEnumerable<Lazy<ISnapShapeRule, ISnapShapeRuleMetaData>> snapShapeRules,
-            [ImportMany]IEnumerable<Lazy<ISnapShapeRuleProvider, ISnapShapeRuleProviderMetaData>> snapShapeRuleProviders,
-            [ImportMany]IEnumerable<Lazy<ICanvasInteractionHandlerProvider, ICanvasInteractionHandlerProviderMetaData>> interactionHandlers,
-            [ImportMany]IEnumerable<Lazy<ICanvasLayersProvider, ICanvasLayersProviderMetadata>> canvasLayersProviders,
-
-            [ImportMany]IEnumerable<Lazy<IMenuItem, IMenuItemMetaData>> menuItems
+            [ImportMany] IEnumerable<Lazy<ISnapShapeRule, ISnapShapeRuleMetaData>> snapShapeRules,
+            [ImportMany] IEnumerable<Lazy<ISnapShapeRuleProvider, ISnapShapeRuleProviderMetaData>> snapShapeRuleProviders,
+            [ImportMany] IEnumerable<Lazy<ICanvasInteractionHandlerProvider, ICanvasInteractionHandlerProviderMetaData>> interactionHandlers,
+            [ImportMany] IEnumerable<Lazy<ICanvasLayersProvider, ICanvasLayersProviderMetadata>> canvasLayersProviders,
+            [ImportMany] IEnumerable<Lazy<IMenuItem, IMenuItemMetaData>> menuItems
         )
         {
             this._mefSnapShapeRuleProviders = snapShapeRuleProviders;
@@ -48,7 +46,7 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
             InteractionHandlers.AddRange(interactionHandlers.OrderBy(p => p.Metadata.Order).Select(p => p.Value).Select(p => p.CreateHandler()));
 
             this._mefMenuItems = menuItems.Where(p => p.Metadata.OwnerGUID == Menu_CanvasContextMenu).OrderBy(p => p.Metadata.Order).ToArray();
-            
+
 
             Initialize();
         }
@@ -58,7 +56,7 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
         private readonly IEnumerable<Lazy<ICanvasLayersProvider, ICanvasLayersProviderMetadata>> _mefCanvasLayersProviders;
 
         private readonly Lazy<IMenuItem, IMenuItemMetaData>[] _mefMenuItems;
-        private ICanvasPresenter GetCanvasPresenter() => ServiceProvider.GetInstance<ICanvasPresenter>()??throw new InvalidOperationException($"The {nameof(ServiceProvider)} doesn't contain a instance of type {nameof(ICanvasPresenter)}");
+        private ICanvasPresenter GetCanvasPresenter() => ServiceProvider.GetInstance<ICanvasPresenter>() ?? throw new InvalidOperationException($"The {nameof(ServiceProvider)} doesn't contain a instance of type {nameof(ICanvasPresenter)}");
 
         private void Initialize()
         {
@@ -75,22 +73,21 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
         {
             SnapShapeRules.Clear();
 
-            var snapRuleItems = _mefSnapShapeRuleProviders.
-                Union<object>(_mefSnapShapeRules).OrderBy(p =>
+            var snapRuleItems = _mefSnapShapeRuleProviders.Union<object>(_mefSnapShapeRules).OrderBy(p =>
+            {
+                if (p is Lazy<ISnapShapeRule, ISnapShapeRuleMetaData> snapShapeTuple)
                 {
-                    if (p is Lazy<ISnapShapeRule, ISnapShapeRuleMetaData> snapShapeTuple)
-                    {
-                        return snapShapeTuple.Metadata.Order;
-                    }
-                    else if (p is Lazy<ISnapShapeRuleProvider, ISnapShapeRuleProviderMetaData> snapShapeProviderTuple)
-                    {
-                        return snapShapeProviderTuple.Metadata.Order;
-                    }
-                    else
-                    {
-                        return int.MaxValue;
-                    }
-                });
+                    return snapShapeTuple.Metadata.Order;
+                }
+                else if (p is Lazy<ISnapShapeRuleProvider, ISnapShapeRuleProviderMetaData> snapShapeProviderTuple)
+                {
+                    return snapShapeProviderTuple.Metadata.Order;
+                }
+                else
+                {
+                    return int.MaxValue;
+                }
+            });
 
             foreach (var snapRuleItem in snapRuleItems)
             {
@@ -111,7 +108,6 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
         /// 位置预处理器集合;
         /// </summary>
         public ObservableCollection<CanvasInteractionHandler> InteractionHandlers { get; } = new ObservableCollection<CanvasInteractionHandler>();
-
     }
 
     /// <summary>
@@ -119,31 +115,28 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
     /// </summary>
     public partial class CanvasPresenterViewModel
     {
-
         private DelegateCommand<SizeChangedEventArgs> _sizeChangedCommand;
+
         public DelegateCommand<SizeChangedEventArgs> SizeChangedCommand => _sizeChangedCommand ??
-            (_sizeChangedCommand = new DelegateCommand<SizeChangedEventArgs>(
-                e =>
-                {
-                    try
-                    {
-                        CommonEventHelper.GetEvent<CanvasSizeChangedEvent>().Publish(this);
-                        CommonEventHelper.PublishEventToHandlers<ICanvasSizeChangedEventHandler, ICanvasDataContext>(this);
-                    }
-                    catch (Exception ex)
-                    {
-                        LoggerService.WriteException(ex);
-                    }
-                }
-            ));
+                                                                           (_sizeChangedCommand = new DelegateCommand<SizeChangedEventArgs>(
+                                                                               e =>
+                                                                               {
+                                                                                   try
+                                                                                   {
+                                                                                       CommonEventHelper.GetEvent<CanvasSizeChangedEvent>().Publish(this);
+                                                                                       CommonEventHelper.PublishEventToHandlers<ICanvasSizeChangedEventHandler, ICanvasDataContext>(this);
+                                                                                   }
+                                                                                   catch (Exception ex)
+                                                                                   {
+                                                                                       LoggerService.WriteException(ex);
+                                                                                   }
+                                                                               }
+                                                                           ));
 
         /// <summary>
         /// 画布坐标转化器;
         /// </summary>
-        public ICanvasScreenConvertable CanvasProxy { 
-            get; 
-            set; 
-        }
+        public ICanvasScreenConvertable CanvasProxy { get; set; }
     }
 
     /// <summary>
@@ -155,12 +148,12 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
         /// 是否只读;
         /// </summary>
         private bool _isReadOnly;
+
         public bool IsReadOnly
         {
             get { return _isReadOnly; }
             set { SetProperty(ref _isReadOnly, value); }
         }
-
     }
 
     /// <summary>
@@ -168,7 +161,6 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
     /// </summary>
     public partial class CanvasPresenterViewModel
     {
-
         public Vector2D CurrentMousePosition { get; private set; }
 
         //public event EventHandler CurrentMousePositionChanged;
@@ -178,44 +170,45 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
         /// 鼠标当前位置发生变化时;
         /// </summary>
         private DelegateCommand<ValueChangedEventArgs<Vector2D>> _currentMousePositionChangedCommand;
+
         public DelegateCommand<ValueChangedEventArgs<Vector2D>> CurrentMousePositionChangedCommand => _currentMousePositionChangedCommand ??
-            (_currentMousePositionChangedCommand = new DelegateCommand<ValueChangedEventArgs<Vector2D>>(
-                e =>
-                {
-                    if (e == null)
-                    {
-                        return;
-                    }
+                                                                                                      (_currentMousePositionChangedCommand = new DelegateCommand<ValueChangedEventArgs<Vector2D>>(
+                                                                                                          e =>
+                                                                                                          {
+                                                                                                              if (e == null)
+                                                                                                              {
+                                                                                                                  return;
+                                                                                                              }
 
 
-                    CurrentMousePosition = e.NewValue;
-                    CommonEventHelper.GetEvent<CanvasCurrentMousePositionChangedEvent>().Publish(this);
-                }
-            ));
+                                                                                                              CurrentMousePosition = e.NewValue;
+                                                                                                              CommonEventHelper.GetEvent<CanvasCurrentMousePositionChangedEvent>().Publish(this);
+                                                                                                          }
+                                                                                                      ));
 
         /// <summary>
         /// 当前活跃辅助图形发生变化时;
         /// </summary>
         private DelegateCommand<ValueChangedEventArgs<ISnapShape>> _MouseHoverSnapShapeChangedCommand;
-        public DelegateCommand<ValueChangedEventArgs<ISnapShape>> MouseHoverSnapShapeChangedCommand => _MouseHoverSnapShapeChangedCommand ??
-            (_MouseHoverSnapShapeChangedCommand = new DelegateCommand<ValueChangedEventArgs<ISnapShape>>(
-                e =>
-                {
-                    if (e == null)
-                    {
-                        return;
-                    }
 
-                    MouseHoverSnapShape = e.NewValue;
-                    CommonEventHelper.GetEvent<CanvasMouseHoverSnapShapeChangedEvent>().Publish(this);
-                }
-            ));
+        public DelegateCommand<ValueChangedEventArgs<ISnapShape>> MouseHoverSnapShapeChangedCommand => _MouseHoverSnapShapeChangedCommand ??
+                                                                                                       (_MouseHoverSnapShapeChangedCommand = new DelegateCommand<ValueChangedEventArgs<ISnapShape>>(
+                                                                                                           e =>
+                                                                                                           {
+                                                                                                               if (e == null)
+                                                                                                               {
+                                                                                                                   return;
+                                                                                                               }
+
+                                                                                                               MouseHoverSnapShape = e.NewValue;
+                                                                                                               CommonEventHelper.GetEvent<CanvasMouseHoverSnapShapeChangedEvent>().Publish(this);
+                                                                                                           }
+                                                                                                       ));
 
 
         public ISnapShape MouseHoverSnapShape { get; private set; }
 
         //public event EventHandler MouseHoverSnapShapeChanged;
-
     }
 
     /// <summary>
@@ -223,7 +216,6 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
     /// </summary>
     public partial class CanvasPresenterViewModel
     {
-
         /// <summary>
         /// 编辑事务被呈递事件;
         /// </summary>
@@ -238,11 +230,11 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
         //public InteractionRequest<Notification> ClearTransactionsRequest { get; } = new InteractionRequest<Notification>();
 
 
-
         /// <summary>
         /// 当前的编辑工具;
         /// </summary>
         private EditTool _currentEditTool;
+
         public EditTool CurrentEditTool
         {
             get => _currentEditTool;
@@ -269,15 +261,12 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
         /// 当前编辑工具发生了变化;
         /// </summary>
         //public event EventHandler CurrentEditToolChanged;
-
         private DelegateCommand _selectCommand;
+
         public DelegateCommand SelectCommand => _selectCommand ??
-            (_selectCommand = new DelegateCommand(
-                () =>
-                {
-                    CurrentEditTool = null;
-                }
-            ));
+                                                (_selectCommand = new DelegateCommand(
+                                                    () => { CurrentEditTool = null; }
+                                                ));
 
 
         /// <summary>
@@ -288,10 +277,7 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
         public CanvasLayerEx ActiveLayer
         {
             get => _activeLayer;
-            set
-            {
-                SetProperty(ref _activeLayer, value);
-            }
+            set { SetProperty(ref _activeLayer, value); }
         }
 
         /// <summary>
@@ -307,15 +293,16 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
 
 
         private DelegateCommand<ValueChangedEventArgs<CanvasLayer>> _activeLayerChangedCommand;
+
         public DelegateCommand<ValueChangedEventArgs<CanvasLayer>> ActiveLayerChangedCommand => _activeLayerChangedCommand ??
-            (_activeLayerChangedCommand = new DelegateCommand<ValueChangedEventArgs<CanvasLayer>>(
-                e =>
-                {
-                    var args = new CanvasActiveLayerChangedEventArgs(this, e);
-                    CommonEventHelper.GetEvent<CanvasActiveLayerChangedEvent>().Publish(args);
-                    CommonEventHelper.PublishEventToHandlers<ICanvasActiveLayerChangedEventHandler, CanvasActiveLayerChangedEventArgs>(args);
-                }
-            ));
+                                                                                                (_activeLayerChangedCommand = new DelegateCommand<ValueChangedEventArgs<CanvasLayer>>(
+                                                                                                    e =>
+                                                                                                    {
+                                                                                                        var args = new CanvasActiveLayerChangedEventArgs(this, e);
+                                                                                                        CommonEventHelper.GetEvent<CanvasActiveLayerChangedEvent>().Publish(args);
+                                                                                                        CommonEventHelper.PublishEventToHandlers<ICanvasActiveLayerChangedEventHandler, CanvasActiveLayerChangedEventArgs>(args);
+                                                                                                    }
+                                                                                                ));
 
         /// <summary>
         /// 复位图层状态;使得图层集合仅存在默认图层;
@@ -348,8 +335,8 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
         /// <summary>
         /// 当前缩放比例;(放大变大，缩小变小);
         /// </summary>
-
         private double _zoom = 1;
+
         public double Zoom
         {
             get { return _zoom; }
@@ -368,8 +355,8 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
     /// </summary>
     public partial class CanvasPresenterViewModel
     {
-
         private Vector2D _panScreenPosition = null;
+
         /// <summary>
         /// 原点所在的视图坐标;
         /// </summary>
@@ -378,7 +365,6 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
             get { return _panScreenPosition; }
             set { SetProperty(ref _panScreenPosition, value); }
         }
-
     }
 
     /// <summary>
@@ -395,6 +381,7 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
             {
                 return;
             }
+
             GetCanvasPresenter().CanvasControl.Undo();
         }
 
@@ -404,6 +391,7 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
             {
                 return;
             }
+
             GetCanvasPresenter().CanvasControl.Redo();
         }
 
@@ -411,100 +399,106 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
         /// 撤销命令;
         /// </summary>
         private DelegateCommand _undoCommand;
+
         public DelegateCommand UndoCommand => _undoCommand ??
-            (_undoCommand = new DelegateCommand(
-                Undo,
-                () => CanUndo
-            ));
+                                              (_undoCommand = new DelegateCommand(
+                                                  Undo,
+                                                  () => CanUndo
+                                              ));
 
         /// <summary>
         /// 重做命令;
         /// </summary>
         private DelegateCommand _redoCommand;
+
         public DelegateCommand RedoCommand => _redoCommand ??
-            (_redoCommand = new DelegateCommand(
-                Redo,
-                () => CanRedo
-            ));
+                                              (_redoCommand = new DelegateCommand(
+                                                  Redo,
+                                                  () => CanRedo
+                                              ));
 
         /// <summary>
         /// 是否可重做发生了变化;
         /// </summary>
         private DelegateCommand<CanUndoChangedEventArgs> _canUndoChangedCommand;
-        public DelegateCommand<CanUndoChangedEventArgs> CanUndoChangedCommand => _canUndoChangedCommand ??
-            (_canUndoChangedCommand = new DelegateCommand<CanUndoChangedEventArgs>(
-                e =>
-                {
-                    if (e == null)
-                    {
-                        return;
-                    }
-                    if (CanUndo == e.CanUndo)
-                    {
-                        return;
-                    }
 
-                    CanUndo = e.CanUndo;
-                    var args = new CanvasCanUndoChangedEventArgs(this, e);
-                    CommonEventHelper.GetEvent<CanvasCanUndoChangedEvent>().Publish(args);
-                    CommonEventHelper.PublishEventToHandlers<ICanvasCanUndoChangedEventHandler, CanvasCanUndoChangedEventArgs>(args);
-                }
-            ));
+        public DelegateCommand<CanUndoChangedEventArgs> CanUndoChangedCommand => _canUndoChangedCommand ??
+                                                                                 (_canUndoChangedCommand = new DelegateCommand<CanUndoChangedEventArgs>(
+                                                                                     e =>
+                                                                                     {
+                                                                                         if (e == null)
+                                                                                         {
+                                                                                             return;
+                                                                                         }
+
+                                                                                         if (CanUndo == e.CanUndo)
+                                                                                         {
+                                                                                             return;
+                                                                                         }
+
+                                                                                         CanUndo = e.CanUndo;
+                                                                                         var args = new CanvasCanUndoChangedEventArgs(this, e);
+                                                                                         CommonEventHelper.GetEvent<CanvasCanUndoChangedEvent>().Publish(args);
+                                                                                         CommonEventHelper.PublishEventToHandlers<ICanvasCanUndoChangedEventHandler, CanvasCanUndoChangedEventArgs>(args);
+                                                                                     }
+                                                                                 ));
 
         /// <summary>
         /// 是否可重做发生了变化;
         /// </summary>
         private DelegateCommand<CanRedoChangedEventArgs> _canRedoChangedCommand;
+
         public DelegateCommand<CanRedoChangedEventArgs> CanRedoChangedCommand => _canRedoChangedCommand ??
-            (_canRedoChangedCommand = new DelegateCommand<CanRedoChangedEventArgs>(
-                e =>
-                {
-                    if (e == null)
-                    {
-                        return;
-                    }
+                                                                                 (_canRedoChangedCommand = new DelegateCommand<CanRedoChangedEventArgs>(
+                                                                                     e =>
+                                                                                     {
+                                                                                         if (e == null)
+                                                                                         {
+                                                                                             return;
+                                                                                         }
 
-                    if (CanRedo == e.CanRedo)
-                    {
-                        return;
-                    }
+                                                                                         if (CanRedo == e.CanRedo)
+                                                                                         {
+                                                                                             return;
+                                                                                         }
 
-                    CanRedo = e.CanRedo;
-                    var args = new CanvasCanRedoChangedEventArgs(this, e);
-                    CommonEventHelper.GetEvent<CanvasCanRedoChangedEvent>().Publish(args);
-                    CommonEventHelper.PublishEventToHandlers<ICanvasCanRedoChangedEventHandler, CanvasCanRedoChangedEventArgs>(args);
-                }
-            ));
+                                                                                         CanRedo = e.CanRedo;
+                                                                                         var args = new CanvasCanRedoChangedEventArgs(this, e);
+                                                                                         CommonEventHelper.GetEvent<CanvasCanRedoChangedEvent>().Publish(args);
+                                                                                         CommonEventHelper.PublishEventToHandlers<ICanvasCanRedoChangedEventHandler, CanvasCanRedoChangedEventArgs>(args);
+                                                                                     }
+                                                                                 ));
 
         /// <summary>
         /// 执行了撤销事务命令;
         /// </summary>
         private DelegateCommand<EditTransactionUndoneEventArgs> _editTransactionUndoneCommand;
+
         public DelegateCommand<EditTransactionUndoneEventArgs> EditTransactionUndoneCommand => _editTransactionUndoneCommand ??
-            (_editTransactionUndoneCommand = new DelegateCommand<EditTransactionUndoneEventArgs>(
-                e =>
-                {
-                    var args = new CanvasEditTransactionUndoneEventArgs(this, e);
-                    CommonEventHelper.GetEvent<CanvasEditTransactionUndoneEvent>().Publish(args);
-                    CommonEventHelper.PublishEventToHandlers<ICanvasEditTransactionUndoneEventHandler, CanvasEditTransactionUndoneEventArgs>(args);
-                }
-            ));
+                                                                                               (_editTransactionUndoneCommand = new DelegateCommand<EditTransactionUndoneEventArgs>(
+                                                                                                   e =>
+                                                                                                   {
+                                                                                                       var args = new CanvasEditTransactionUndoneEventArgs(this, e);
+                                                                                                       CommonEventHelper.GetEvent<CanvasEditTransactionUndoneEvent>().Publish(args);
+                                                                                                       CommonEventHelper.PublishEventToHandlers<ICanvasEditTransactionUndoneEventHandler, CanvasEditTransactionUndoneEventArgs>(args);
+                                                                                                   }
+                                                                                               ));
 
 
         /// <summary>
         /// 执行了重做事务命令;
         /// </summary>
         private DelegateCommand<EditTransactionRedoneEventArgs> _editTransactionRedoneCommand;
-        public DelegateCommand<EditTransactionRedoneEventArgs> EditTransactionRedoneCommand => _editTransactionRedoneCommand ??
-            (_editTransactionRedoneCommand = new DelegateCommand<EditTransactionRedoneEventArgs>(
-                e =>
-                {
-                    var args = new CanvasEditTransactionRedoneEventArgs(this, e);
-                    CommonEventHelper.GetEvent<CanvasEditTransactionRedoneEvent>().Publish(args);
-                    CommonEventHelper.PublishEventToHandlers<ICanvasEditTransactionRedoneEventHandler, CanvasEditTransactionRedoneEventArgs>(args);
-                }
-            ));
 
+        public DelegateCommand<EditTransactionRedoneEventArgs> EditTransactionRedoneCommand => _editTransactionRedoneCommand ??
+                                                                                               (_editTransactionRedoneCommand = new DelegateCommand<EditTransactionRedoneEventArgs>(
+                                                                                                   e =>
+                                                                                                   {
+                                                                                                       var args = new CanvasEditTransactionRedoneEventArgs(this, e);
+                                                                                                       CommonEventHelper.GetEvent<CanvasEditTransactionRedoneEvent>().Publish(args);
+                                                                                                       CommonEventHelper.PublishEventToHandlers<ICanvasEditTransactionRedoneEventHandler, CanvasEditTransactionRedoneEventArgs>(args);
+                                                                                                   }
+                                                                                               ));
     }
 
     /// <summary>
@@ -523,8 +517,8 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
             {
                 ContextMenuItems.Add(new MenuItemModel(new CreatedMenuItem(menuItem.Value, menuItem.Metadata)));
             }
-
         }
+
         public ObservableCollection<MenuItemModel> ContextMenuItems { get; } = new ObservableCollection<MenuItemModel>();
     }
 
@@ -548,7 +542,6 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
         /// <param name="editTransaction"></param>
         public void CommitTransaction(IEditTransaction editTransaction)
         {
-
             if (editTransaction == null)
             {
                 throw new ArgumentNullException(nameof(editTransaction));
@@ -572,6 +565,7 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
 
 
         private bool _isSnapingEnabled = true;
+
         /// <summary>
         /// 辅助是否可用;
         /// </summary>
@@ -604,16 +598,16 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
         /// 画布内绘制对象选定发生了变化命令;
         /// </summary>
         private DelegateCommand<DrawObjectSelectedChangedEventArgs> _drawObjectIsSelectedChangedCommand;
-        public DelegateCommand<DrawObjectSelectedChangedEventArgs> DrawObjectIsSelectedChangedCommand => _drawObjectIsSelectedChangedCommand ??
-            (_drawObjectIsSelectedChangedCommand = new DelegateCommand<DrawObjectSelectedChangedEventArgs>(
-                e =>
-                {
-                    var args = new CanvasDrawObjectSelectedChangedEventArgs(this, e);
-                    CommonEventHelper.GetEvent<CanvasDrawObjectIsSelectedChangedEvent>().Publish(args);
-                    CommonEventHelper.PublishEventToHandlers<ICanvasDrawObjectIsSelectedChangedEventHandler, CanvasDrawObjectSelectedChangedEventArgs>(args);
-                }
-            ));
 
+        public DelegateCommand<DrawObjectSelectedChangedEventArgs> DrawObjectIsSelectedChangedCommand => _drawObjectIsSelectedChangedCommand ??
+                                                                                                         (_drawObjectIsSelectedChangedCommand = new DelegateCommand<DrawObjectSelectedChangedEventArgs>(
+                                                                                                             e =>
+                                                                                                             {
+                                                                                                                 var args = new CanvasDrawObjectSelectedChangedEventArgs(this, e);
+                                                                                                                 CommonEventHelper.GetEvent<CanvasDrawObjectIsSelectedChangedEvent>().Publish(args);
+                                                                                                                 CommonEventHelper.PublishEventToHandlers<ICanvasDrawObjectIsSelectedChangedEventHandler, CanvasDrawObjectSelectedChangedEventArgs>(args);
+                                                                                                             }
+                                                                                                         ));
     }
 
     /// <summary>
@@ -621,30 +615,29 @@ namespace Tida.Canvas.Shell.Canvas.ViewModels {
     /// </summary>
     public partial class CanvasPresenterViewModel
     {
-
         private DelegateCommand<DrawObjectsRemovedEventArgs> _drawObjectRemovedCommand;
+
         public DelegateCommand<DrawObjectsRemovedEventArgs> DrawObjectRemovedCommand => _drawObjectRemovedCommand ??
-            (_drawObjectRemovedCommand = new DelegateCommand<DrawObjectsRemovedEventArgs>(
-                e =>
-                {
-                    var args = new CanvasDrawObjectsRemovedEventArgs(this, e);
-                    CommonEventHelper.GetEvent<CanvasDrawObjectsRemovedEvent>().Publish(args);
-                    CommonEventHelper.PublishEventToHandlers<ICanvasDrawObjectsRemovedEventHandler, CanvasDrawObjectsRemovedEventArgs>(args);
-                }
-            ));
+                                                                                        (_drawObjectRemovedCommand = new DelegateCommand<DrawObjectsRemovedEventArgs>(
+                                                                                            e =>
+                                                                                            {
+                                                                                                var args = new CanvasDrawObjectsRemovedEventArgs(this, e);
+                                                                                                CommonEventHelper.GetEvent<CanvasDrawObjectsRemovedEvent>().Publish(args);
+                                                                                                CommonEventHelper.PublishEventToHandlers<ICanvasDrawObjectsRemovedEventHandler, CanvasDrawObjectsRemovedEventArgs>(args);
+                                                                                            }
+                                                                                        ));
 
 
         private DelegateCommand<DrawObjectsAddedEventArgs> _drawObjectAddedCommand;
+
         public DelegateCommand<DrawObjectsAddedEventArgs> DrawObjectAddedCommand => _drawObjectAddedCommand ??
-            (_drawObjectAddedCommand = new DelegateCommand<DrawObjectsAddedEventArgs>(
-                e =>
-                {
-                    var args = new CanvasDrawObjectsAddedEventArgs(this, e);
-                    CommonEventHelper.GetEvent<CanvasDrawObjectsAddedEvent>().Publish(args);
-                    CommonEventHelper.PublishEventToHandlers<ICanvasDrawObjectsAddedEventHandler, CanvasDrawObjectsAddedEventArgs>(args);
-                }
-            ));
-
-
+                                                                                    (_drawObjectAddedCommand = new DelegateCommand<DrawObjectsAddedEventArgs>(
+                                                                                        e =>
+                                                                                        {
+                                                                                            var args = new CanvasDrawObjectsAddedEventArgs(this, e);
+                                                                                            CommonEventHelper.GetEvent<CanvasDrawObjectsAddedEvent>().Publish(args);
+                                                                                            CommonEventHelper.PublishEventToHandlers<ICanvasDrawObjectsAddedEventHandler, CanvasDrawObjectsAddedEventArgs>(args);
+                                                                                        }
+                                                                                    ));
     }
 }

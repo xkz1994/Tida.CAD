@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Tida.Canvas.Shell.Contracts.Controls {
-    
-    public static class InputBindingExtensions {
+namespace Tida.Canvas.Shell.Contracts.Controls
+{
+    public static class InputBindingExtensions
+    {
         /// <summary>
         /// /// 添加快捷键绑定;
         /// </summary>
@@ -16,14 +17,17 @@ namespace Tida.Canvas.Shell.Contracts.Controls {
         /// <param name="key">案件</param>
         /// <param name="modifier">修饰键</param>
         /// <param name="commandPara">命令参数</param>
-        public static void AddKeyBinding(object commandTarget,ICommand command, Key key, ModifierKeys modifier = ModifierKeys.None) {
-            var kb = new KeyBinding {
+        public static void AddKeyBinding(object commandTarget, ICommand command, Key key, ModifierKeys modifier = ModifierKeys.None)
+        {
+            var kb = new KeyBinding
+            {
                 Modifiers = modifier,
                 Key = key,
                 Command = command
             };
             var uiElem = commandTarget as UIElement;
-            if (uiElem != null) {
+            if (uiElem != null)
+            {
                 uiElem.InputBindings.Add(kb);
             }
         }

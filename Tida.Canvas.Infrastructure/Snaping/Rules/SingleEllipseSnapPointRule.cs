@@ -8,11 +8,13 @@ using static Tida.Canvas.Infrastructure.Constants;
 using Tida.Canvas.Infrastructure.DrawObjects;
 using Tida.Canvas.Contracts;
 
-namespace Tida.Canvas.Infrastructure.Snaping.Rules {
+namespace Tida.Canvas.Infrastructure.Snaping.Rules
+{
     /// <summary>
     /// 椭圆(圆)的辅助规则;
     /// </summary>
-    public class SingleEllipseSnapPointRule : SingleSnapShapeRuleBase<Ellipse>,ISnapShapeRule {
+    public class SingleEllipseSnapPointRule : SingleSnapShapeRuleBase<Ellipse>, ISnapShapeRule
+    {
         /// <summary>
         /// 本规则判断椭圆(圆)的四个顶点,以及圆心与相关Position的关系;
         /// </summary>
@@ -20,14 +22,16 @@ namespace Tida.Canvas.Infrastructure.Snaping.Rules {
         /// <param name="position"></param>
         /// <param name="canvasContext"></param>
         /// <returns></returns>
-        protected override ISnapShape MatchSnapShape(Ellipse ellipse, Vector2D position, ICanvasContext canvasContext) {
-
-            if (ellipse.Ellipse2D == null) {
+        protected override ISnapShape MatchSnapShape(Ellipse ellipse, Vector2D position, ICanvasContext canvasContext)
+        {
+            if (ellipse.Ellipse2D == null)
+            {
                 return null;
             }
 
             var screenPosition = canvasContext.CanvasProxy.ToScreen(position);
-            var pointsPositions = new Vector2D[] {
+            var pointsPositions = new Vector2D[]
+            {
                 ellipse.Ellipse2D.GetTopPoint(),
                 ellipse.Ellipse2D.GetBottomPoint(),
                 ellipse.Ellipse2D.GetLeftPoint(),
@@ -36,7 +40,8 @@ namespace Tida.Canvas.Infrastructure.Snaping.Rules {
             };
 
             var screenPoint = new Vector2D();
-            foreach (var pointPosition in pointsPositions) {
+            foreach (var pointPosition in pointsPositions)
+            {
                 canvasContext.CanvasProxy.ToScreen(pointPosition, screenPoint);
                 var screenRect = NativeGeometryExtensions.GetNativeSuroundingScreenRect(
                     screenPoint,
@@ -44,7 +49,8 @@ namespace Tida.Canvas.Infrastructure.Snaping.Rules {
                     TolerantedScreenLength
                 );
 
-                if (screenRect.Contains(screenPosition)) {
+                if (screenRect.Contains(screenPosition))
+                {
                     return new StandardSnapPoint(pointPosition);
                 }
             }

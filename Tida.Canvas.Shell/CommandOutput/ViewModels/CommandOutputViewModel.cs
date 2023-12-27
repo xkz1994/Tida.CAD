@@ -5,26 +5,29 @@ using System.ComponentModel.Composition;
 using Tida.Canvas.Shell.CommandOutput.IViews;
 using Tida.Canvas.Shell.Contracts.Common;
 
-namespace Tida.Canvas.Shell.CommandOutput.ViewModels {
+namespace Tida.Canvas.Shell.CommandOutput.ViewModels
+{
     [Export]
-    class CommandOutputViewModel:BindableBase {
+    class CommandOutputViewModel : BindableBase
+    {
         [ImportingConstructor]
         public CommandOutputViewModel(IContainerExtension containerProvider)
         {
             _containerProvider = containerProvider;
         }
+
         private readonly IContainerProvider _containerProvider;
         private string _text;
-        public string Text {
+
+        public string Text
+        {
             get { return _text; }
             set { SetProperty(ref _text, value); }
         }
 
         public void ScrollToEnd()
         {
-           ServiceProvider.GetInstance<ICommandOutput>().ScrollToEnd();
+            ServiceProvider.GetInstance<ICommandOutput>().ScrollToEnd();
         }
-        
-
     }
 }

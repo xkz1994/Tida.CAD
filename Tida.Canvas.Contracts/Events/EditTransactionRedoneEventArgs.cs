@@ -5,12 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Events {
+namespace Tida.Canvas.Events
+{
     /// <summary>
     /// 事务已经重做事件;
     /// </summary>
-    public class EditTransactionRedoneEventArgs:EventArgs {
-        public EditTransactionRedoneEventArgs(IEnumerable<IEditTransaction> editTransactions) {
+    public class EditTransactionRedoneEventArgs : EventArgs
+    {
+        public EditTransactionRedoneEventArgs(IEnumerable<IEditTransaction> editTransactions)
+        {
             EditTransaction = editTransactions ?? throw new ArgumentNullException(nameof(editTransactions));
         }
 

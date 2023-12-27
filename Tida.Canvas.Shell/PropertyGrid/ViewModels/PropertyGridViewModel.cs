@@ -1,5 +1,4 @@
-﻿
-using Tida.Canvas.Shell.Contracts.Canvas;
+﻿using Tida.Canvas.Shell.Contracts.Canvas;
 using Tida.Canvas.Shell.Contracts.Canvas.Events;
 using Tida.Canvas.Shell.Contracts.ComponentModel;
 using Prism.Mvvm;
@@ -11,21 +10,22 @@ using System.Text;
 using System.Threading.Tasks;
 using Tida.Canvas.Shell.Contracts.Common;
 
-namespace Tida.Canvas.Shell.PropertyGrid.ViewModels {
+namespace Tida.Canvas.Shell.PropertyGrid.ViewModels
+{
     [Export]
-    class PropertyGridViewModel:BindableBase {
+    class PropertyGridViewModel : BindableBase
+    {
         [ImportingConstructor]
         public PropertyGridViewModel(MefPropertyGridManager mefPropertyManager,
-            [ImportMany]IEnumerable<Lazy<IObjectTypeDescriptor, IObjectTypeDescriptorMetaData>> mefObjectTypeDescriptors
-            ) {
-
+            [ImportMany] IEnumerable<Lazy<IObjectTypeDescriptor, IObjectTypeDescriptorMetaData>> mefObjectTypeDescriptors
+        )
+        {
             _mefPropertyManager = mefPropertyManager;
             _mefObjectTypeDescriptors = mefObjectTypeDescriptors.Select(p => new CreatedObjectTypeDescriptor(p.Value, p.Metadata)).ToArray();
 
             CommonEventHelper.GetEvent<CanvasDrawObjectIsSelectedChangedEvent>().Subscribe(DrawObject_IsSelectedChanged);
             CommonEventHelper.GetEvent<CanvasDrawObjectsAddedEvent>().Subscribe(DrawObjects_Added);
             CommonEventHelper.GetEvent<CanvasDrawObjectsRemovedEvent>().Subscribe(DrawObjects_Removed);
-
         }
 
         private readonly CreatedObjectTypeDescriptor[] _mefObjectTypeDescriptors;
@@ -36,26 +36,29 @@ namespace Tida.Canvas.Shell.PropertyGrid.ViewModels {
         /// <summary>
         /// 刷新属性项;
         /// </summary>
-        private void RefreshPropertyItem() {
+        private void RefreshPropertyItem()
+        {
             var allSelectedDrawObjects = CanvasService.CanvasDataContext.GetAllDrawObjects().Where(p => p.IsSelected);
             var firstDrawObject = allSelectedDrawObjects.FirstOrDefault();
             var secondDrawOject = allSelectedDrawObjects.Skip(1).FirstOrDefault();
 
             Item = null;
-            if(firstDrawObject == null || secondDrawOject != null) {
+            if (firstDrawObject == null || secondDrawOject != null)
+            {
                 return;
             }
 
             Item = _mefPropertyManager.MakeObject(firstDrawObject);
         }
-        
+
         private object _item;
-        public object Item {
+
+        public object Item
+        {
             get => _item;
             set => SetProperty(ref _item, value);
         }
-        
+
         private readonly MefPropertyGridManager _mefPropertyManager;
-        
     }
 }

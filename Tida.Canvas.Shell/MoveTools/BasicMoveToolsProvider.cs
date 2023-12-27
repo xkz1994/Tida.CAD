@@ -7,15 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.MoveTools {
+namespace Tida.Canvas.Shell.MoveTools
+{
     /// <summary>
     /// 基本移动工具提供器;
     /// </summary>
     [Export(typeof(IMoveToolsProvider))]
-    class BasicMoveToolsProvider : IMoveToolsProvider {
+    class BasicMoveToolsProvider : IMoveToolsProvider
+    {
         private IDrawObjectMoveTool[] _tools;
+
         public IEnumerable<IDrawObjectMoveTool> Tools =>
-            _tools ?? (_tools = new IDrawObjectMoveTool[] {
+            _tools ?? (_tools = new IDrawObjectMoveTool[]
+            {
                 new LineMoveTool(),
                 new EllipseMoveTool(),
                 new PointMoveTool(),

@@ -6,11 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Tida.Canvas.Shell.Contracts.Common;
 
-namespace Tida.Canvas.Shell.Contracts.EditTools {
+namespace Tida.Canvas.Shell.Contracts.EditTools
+{
     /// <summary>
     /// 绘制对象选择器静态封装;
     /// </summary>
-    public class DrawObjectSelectorService:GenericServiceStaticInstance<IDrawObjectSelector> {
-
+    public class DrawObjectSelectorService : GenericServiceStaticInstance<IDrawObjectSelector>
+    {
     }
 }

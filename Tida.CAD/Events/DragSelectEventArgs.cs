@@ -7,13 +7,15 @@ namespace Tida.CAD.Events
     /// <summary>
     /// 拖放选取事件参数;
     /// </summary>
-    public class DragSelectEventArgs:CancelEventArgs {
-        public DragSelectEventArgs(Point position,CADRect rect,DrawObject[] hitedDrawObjects) {
+    public class DragSelectEventArgs : CancelEventArgs
+    {
+        public DragSelectEventArgs(Point position, CADRect rect, DrawObject[] hitedDrawObjects)
+        {
             Position = position;
             Rect = rect;
             HitedDrawObjects = hitedDrawObjects ?? throw new ArgumentNullException(nameof(hitedDrawObjects));
         }
-        
+
         /// <summary>
         /// 鼠标的位置;
         /// </summary>
@@ -28,7 +30,5 @@ namespace Tida.CAD.Events
         /// 被命中的绘制单元;
         /// </summary>
         public DrawObject[] HitedDrawObjects { get; }
-        
     }
-
 }

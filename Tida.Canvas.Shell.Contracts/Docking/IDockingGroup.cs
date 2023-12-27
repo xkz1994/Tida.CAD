@@ -6,18 +6,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.Docking {
+namespace Tida.Canvas.Shell.Contracts.Docking
+{
     /// <summary>
     /// 停靠组;
     /// </summary>
-    public interface IDockingGroup : IDockingItem {
-        
+    public interface IDockingGroup : IDockingItem
+    {
     }
 
     /// <summary>
     /// 停靠组圆数据;
     /// </summary>
-    public interface IDockingGroupMetaData : IDockingItemMetaData,IHaveOrder {
+    public interface IDockingGroupMetaData : IDockingItemMetaData, IHaveOrder
+    {
         /// <summary>
         /// Container 的唯一标识;
         /// </summary>
@@ -28,16 +30,16 @@ namespace Tida.Canvas.Shell.Contracts.Docking {
         /// 是否无样式;
         /// </summary>
         bool NoStyle { get; }
-        
     }
 
     /// <summary>
     /// 导出停靠组注解;
     /// </summary>
-    [MetadataAttribute,AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public sealed class ExportDockingGroupAttribute : ExportAttribute,IDockingGroupMetaData {
-        public ExportDockingGroupAttribute():base(typeof(IDockingGroup)) {
-
+    [MetadataAttribute, AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public sealed class ExportDockingGroupAttribute : ExportAttribute, IDockingGroupMetaData
+    {
+        public ExportDockingGroupAttribute() : base(typeof(IDockingGroup))
+        {
         }
 
         public string ContainerGUID { get; set; }

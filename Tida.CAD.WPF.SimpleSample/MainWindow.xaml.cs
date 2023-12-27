@@ -21,7 +21,6 @@ namespace Tida.CAD.WPF.SimpleSample
     /// </summary>
     public partial class MainWindow : Window
     {
-     
         public MainWindow()
         {
             InitializeComponent();
@@ -46,7 +45,6 @@ namespace Tida.CAD.WPF.SimpleSample
                 };
                 uniformGrid.Children.Add(button);
             }
-
         }
     }
 }

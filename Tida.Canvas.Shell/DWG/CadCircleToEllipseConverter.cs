@@ -9,10 +9,13 @@ using Tida.Canvas.Contracts;
 using Tida.Canvas.Infrastructure.DrawObjects;
 using Tida.Geometry.Primitives;
 
-namespace Tida.Canvas.Shell.DWG {
+namespace Tida.Canvas.Shell.DWG
+{
     [Export(typeof(ICADBaseToDrawObjectConverter))]
-    class CadCircleToEllipseConverter : CADBaseToDrawObjectConverterGenericBase<CadCircle> {
-        protected override DrawObject Convert(CadCircle cadCircle) {
+    class CadCircleToEllipseConverter : CADBaseToDrawObjectConverterGenericBase<CadCircle>
+    {
+        protected override DrawObject Convert(CadCircle cadCircle)
+        {
             return new Ellipse(
                 new Ellipse2D(
                     ConvertUtils.Cad3DPointToVector2D(cadCircle.CenterPoint),

@@ -1,13 +1,15 @@
-﻿namespace Tida.Canvas.Shell.Contracts.EditTools {
+﻿namespace Tida.Canvas.Shell.Contracts.EditTools
+{
     /// <summary>
     /// 编辑工具所需常量;
     /// </summary>
-    public static partial class Constants {
+    public static partial class Constants
+    {
         /// <summary>
         /// 基本图形;
         /// </summary>
         public const string EditToolGroup_BasicEditor = nameof(EditToolGroup_BasicEditor);
-        
+
         /// <summary>
         /// 圆;
         /// </summary>
@@ -58,7 +60,6 @@
         public const string EditTool_RectangleDiagLinePoints = nameof(EditTool_RectangleDiagLinePoints);
 
 
-
         public const string EditTool_MoveTool = nameof(EditTool_MoveTool);
 
 
@@ -78,7 +79,7 @@
         public const string EditTool_MeasureAngle = nameof(EditTool_MeasureAngle);
 
         public const int EditToolGroupOrder_Measure = 450;
-        
+
         public const int EditToolGroupOrder_Basic = 256;
 
         public const int EditToolGroupOrder_Line = 4;
@@ -90,5 +91,4 @@
         //public const int EditToolGroupOrder_Measure = 1024;
         //public const int EditToolGroupOrder_Measure = 1024;
     }
-
 }

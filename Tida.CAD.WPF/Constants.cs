@@ -3,11 +3,11 @@ using Tida.CAD.WPF.Extensions;
 
 namespace Tida.CAD.WPF
 {
-
     /// <summary>
     /// Some constants for wpf cadcontrol;
     /// </summary>
-    public static partial class Constants {
+    public static partial class Constants
+    {
         /// <summary>
         /// The default background for cad control(#ff013939);
         /// </summary>

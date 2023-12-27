@@ -26,7 +26,7 @@ namespace Tida.CAD.WPF.Extensions
             var r = (byte)((argb & 0x00FF0000) >> 16);
             var g = (byte)((argb & 0x0000FF00) >> 8);
             var b = (byte)(argb & 0x000000FF);
-            return CreateFrozenColorBrush(Color.FromArgb(a,r,g,b));
+            return CreateFrozenColorBrush(Color.FromArgb(a, r, g, b));
         }
 
         /// <summary>
@@ -37,11 +37,9 @@ namespace Tida.CAD.WPF.Extensions
         /// <param name="r"></param>
         /// <param name="g"></param>
         /// <returns></returns>
-        public static SolidColorBrush CreateFrozenColorBrush(byte a,byte r,byte g,byte b)
+        public static SolidColorBrush CreateFrozenColorBrush(byte a, byte r, byte g, byte b)
         {
             return CreateFrozenColorBrush(Color.FromArgb(a, r, g, b));
         }
-
-
     }
 }

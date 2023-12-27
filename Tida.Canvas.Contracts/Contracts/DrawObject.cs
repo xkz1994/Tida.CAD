@@ -7,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Contracts {
+namespace Tida.Canvas.Contracts
+{
     /// <summary>
     /// 绘制对象;
     /// </summary>
-    public abstract partial class DrawObject : CanvasElement,ICloneable<DrawObject>,IInputElement {
-
+    public abstract partial class DrawObject : CanvasElement, ICloneable<DrawObject>, IInputElement
+    {
         /// <summary>
         /// 判定某个坐标是否在绘制对象所在范围内;
         /// </summary>
@@ -36,19 +37,22 @@ namespace Tida.Canvas.Contracts {
         /// </summary>
         /// <returns></returns>
         public virtual Rectangle2D2 GetBoundingRect() => null;
-        
+
         private bool _isSelected;
+
         /// <summary>
         /// 是否被选中;
         /// </summary>
-        public bool IsSelected {
-            get {
-                return _isSelected;
-            }
-            set{
-                if(_isSelected == value) {
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set
+            {
+                if (_isSelected == value)
+                {
                     return;
                 }
+
                 _isSelected = value;
 
                 var e = new ValueChangedEventArgs<bool>(_isSelected, !_isSelected);
@@ -59,20 +63,20 @@ namespace Tida.Canvas.Contracts {
                 RaiseVisualChanged();
             }
         }
-        
+
         /// <summary>
         /// 选定状态发生变化的可重载方法;
         /// </summary>
         /// <param name="e"></param>
-        protected virtual void OnSelectedChanged(ValueChangedEventArgs<bool> e) {
-            
+        protected virtual void OnSelectedChanged(ValueChangedEventArgs<bool> e)
+        {
         }
-        
+
         /// <summary>
         /// 选中状态发生变化后事件;
         /// </summary>
         public event EventHandler<ValueChangedEventArgs<bool>> IsSelectedChanged;
-        
+
         /// <summary>
         /// 是否正在被编辑修改;
         /// </summary>
@@ -86,9 +90,10 @@ namespace Tida.Canvas.Contracts {
         /// <summary>
         /// 触发是否正在被编辑变化事件;
         /// </summary>
-        protected void RaiseIsEditingChanged(ValueChangedEventArgs<bool> e) {
-
-            if (e == null) {
+        protected void RaiseIsEditingChanged(ValueChangedEventArgs<bool> e)
+        {
+            if (e == null)
+            {
                 throw new ArgumentNullException(nameof(e));
             }
 
@@ -99,20 +104,23 @@ namespace Tida.Canvas.Contracts {
         /// 父对象;
         /// </summary>
         public CanvasElement Parent => InternalParent;
+
         internal CanvasElement InternalParent { get; set; }
 
         /// <summary>
         /// 本绘制对象的信息发生变更时发生;
         /// </summary>
         public event EventHandler<IEditTransaction> EditTransActionCommited;
-        
+
 
         /// <summary>
         /// 触发绘制对象信息变更事务,由子类调用;
         /// </summary>
         /// <param name="editTransaction"></param>
-        protected void RaiseEditTransActionCommited(IEditTransaction editTransaction) {
-            if(editTransaction == null) {
+        protected void RaiseEditTransActionCommited(IEditTransaction editTransaction)
+        {
+            if (editTransaction == null)
+            {
                 throw new ArgumentNullException(nameof(editTransaction));
             }
 
@@ -124,7 +132,7 @@ namespace Tida.Canvas.Contracts {
         /// </summary>
         /// <returns></returns>
         public virtual DrawObject Clone() => null;
-        
+
         /// <summary>
         /// 设定字段值,
         /// </summary>
@@ -134,49 +142,60 @@ namespace Tida.Canvas.Contracts {
         /// <param name="getField">获取字段值</param>
         /// <param name="setField">设定字段值</param>
         /// <param name="raiseVisualChanged">是否触发视觉变化事件</param>
-        protected void SetProperty<T>(Action<T> setField, Func<T> getField, T value, bool commitTransaction = true,bool raiseVisualChanged = true) {
-            SetProperty(setField, getField, value, new SetPropertySettings {
-                CommitTransaction= commitTransaction,
+        protected void SetProperty<T>(Action<T> setField, Func<T> getField, T value, bool commitTransaction = true, bool raiseVisualChanged = true)
+        {
+            SetProperty(setField, getField, value, new SetPropertySettings
+            {
+                CommitTransaction = commitTransaction,
                 RaiseVisualChanged = raiseVisualChanged
             });
         }
 
-        protected void SetProperty<T>(Action<T> setField, Func<T> getField,T value, SetPropertySettings settings) {
+        protected void SetProperty<T>(Action<T> setField, Func<T> getField, T value, SetPropertySettings settings)
+        {
             var oldValue = getField();
-            if (Equals(oldValue,value)) {
+            if (Equals(oldValue, value))
+            {
                 return;
             }
 
             setField(value);
 
-            if (settings.RaiseVisualChanged) {
+            if (settings.RaiseVisualChanged)
+            {
                 RaiseVisualChanged();
             }
 
-            void Undo() {
+            void Undo()
+            {
                 setField(oldValue);
-                if (settings.RaiseVisualChanged) {
+                if (settings.RaiseVisualChanged)
+                {
                     RaiseVisualChanged();
                 }
             }
 
-            void Redo() {
+            void Redo()
+            {
                 setField(value);
-                if (settings.RaiseVisualChanged) {
+                if (settings.RaiseVisualChanged)
+                {
                     RaiseVisualChanged();
                 }
             }
 
-            if (settings.CommitTransaction) {
+            if (settings.CommitTransaction)
+            {
                 //呈递事务;
                 RaiseEditTransActionCommited(new StandardEditTransaction(Undo, Redo));
             }
         }
-        
+
         /// <summary>
         /// 设定字段值所使用的设定;
         /// </summary>
-        public struct SetPropertySettings {
+        public struct SetPropertySettings
+        {
             /// <summary>
             /// 是否呈递事务;
             /// </summary>
@@ -192,22 +211,27 @@ namespace Tida.Canvas.Contracts {
     /// <summary>
     /// 交互响应(当且仅当<see cref="IsSelected"/>为True时，以下交互动作才可能被调用);
     /// </summary>
-    public abstract partial class DrawObject {
+    public abstract partial class DrawObject
+    {
         /// <summary>
         /// 鼠标移动响应;
         /// </summary>
         /// <param name="canvas"></param>
         /// <param name="point"></param>
-        public void RaisePreviewMouseMove(MouseMoveEventArgs e) {
+        public void RaisePreviewMouseMove(MouseMoveEventArgs e)
+        {
             CanvasPreviewMouseMove?.Invoke(this, e);
-            if (e.Handled) {
+            if (e.Handled)
+            {
                 return;
             }
 
             OnMouseMove(e);
         }
 
-        protected virtual void OnMouseMove(MouseMoveEventArgs e) { }
+        protected virtual void OnMouseMove(MouseMoveEventArgs e)
+        {
+        }
 
         /// <summary>
         /// 鼠标按下响应;
@@ -215,16 +239,20 @@ namespace Tida.Canvas.Contracts {
         /// <param name="canvas"></param>
         /// <param name="point"></param>
         /// <param name="snapShape"></param>
-        public void RaisePreviewMouseDown(MouseDownEventArgs e) {
+        public void RaisePreviewMouseDown(MouseDownEventArgs e)
+        {
             CanvasPreviewMouseDown?.Invoke(this, e);
-            if (e.Handled) {
+            if (e.Handled)
+            {
                 return;
             }
 
             OnMouseDown(e);
         }
 
-        protected virtual void OnMouseDown(MouseDownEventArgs e) { }
+        protected virtual void OnMouseDown(MouseDownEventArgs e)
+        {
+        }
 
         /// <summary>
         /// 鼠标弹起响应;
@@ -232,9 +260,11 @@ namespace Tida.Canvas.Contracts {
         /// <param name="canvas"></param>
         /// <param name="point"></param>
         /// <param name="snapShape"></param>
-        public void RaisePreviewMouseUp(MouseUpEventArgs e) {
+        public void RaisePreviewMouseUp(MouseUpEventArgs e)
+        {
             CanvasPreviewMouseUp?.Invoke(this, e);
-            if(e.Handled) {
+            if (e.Handled)
+            {
                 return;
             }
 
@@ -242,51 +272,60 @@ namespace Tida.Canvas.Contracts {
         }
 
 
-        protected virtual void OnMouseUp(MouseUpEventArgs e) { }
+        protected virtual void OnMouseUp(MouseUpEventArgs e)
+        {
+        }
 
         /// <summary>
         /// 键盘按键响应;
         /// </summary>
         /// <param name="canvas"></param>
         /// <param name="e"></param>
-        public void RaisePreviewKeyDown(KeyDownEventArgs e) {
+        public void RaisePreviewKeyDown(KeyDownEventArgs e)
+        {
             CanvasPreviewKeyDown?.Invoke(this, e);
-            if (e.Handled) {
+            if (e.Handled)
+            {
                 return;
             }
 
             OnKeyDown(e);
         }
 
-        protected virtual void OnKeyDown(KeyDownEventArgs e) { }
+        protected virtual void OnKeyDown(KeyDownEventArgs e)
+        {
+        }
 
-        public void RaisePreviewKeyUp(KeyUpEventArgs e) {
+        public void RaisePreviewKeyUp(KeyUpEventArgs e)
+        {
             CanvasPreviewKeyUp?.Invoke(this, e);
 
-            if (e.Handled) {
+            if (e.Handled)
+            {
                 return;
             }
 
             OnKeyUp(e);
         }
 
-        protected virtual void OnKeyUp(KeyUpEventArgs e) {
-
+        protected virtual void OnKeyUp(KeyUpEventArgs e)
+        {
         }
 
-        public void RaisePreviewTextInput(TextInputEventArgs e) {
+        public void RaisePreviewTextInput(TextInputEventArgs e)
+        {
             CanvasPreviewTextInput?.Invoke(this, e);
-            if (e.Handled) {
+            if (e.Handled)
+            {
                 return;
             }
 
             OnTextInput(e);
         }
 
-        protected virtual void OnTextInput(TextInputEventArgs e) {
-            
+        protected virtual void OnTextInput(TextInputEventArgs e)
+        {
         }
-
 
 
         public event EventHandler<MouseDownEventArgs> CanvasPreviewMouseDown;
@@ -296,5 +335,4 @@ namespace Tida.Canvas.Contracts {
         public event EventHandler<KeyUpEventArgs> CanvasPreviewKeyUp;
         public event EventHandler<TextInputEventArgs> CanvasPreviewTextInput;
     }
-
 }

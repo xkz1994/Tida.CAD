@@ -8,7 +8,7 @@ namespace Tida.CAD.Input
     /// <summary>
     /// CADKeyEventArgs;
     /// </summary>
-    public class CADKeyEventArgs:CADRoutedEventArgs
+    public class CADKeyEventArgs : CADRoutedEventArgs
     {
 #if WPF
         /// <summary>

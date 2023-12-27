@@ -1,10 +1,12 @@
 ﻿using System.Windows.Input;
 
-namespace Tida.Canvas.Shell.Contracts.EditTools {
+namespace Tida.Canvas.Shell.Contracts.EditTools
+{
     /// <summary>
     /// 编辑工具提供器元数据;
     /// </summary>
-    public interface IEditToolProviderMetaData {
+    public interface IEditToolProviderMetaData
+    {
         /// <summary>
         /// 编辑工具组唯一标识;
         /// </summary>
@@ -40,7 +42,7 @@ namespace Tida.Canvas.Shell.Contracts.EditTools {
         /// 修改键;
         /// </summary>
         ModifierKeys ModifierKeys { get; }
-        
+
         /// <summary>
         /// 快捷命令;
         /// </summary>

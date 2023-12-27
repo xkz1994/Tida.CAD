@@ -6,11 +6,11 @@ namespace Tida.CAD.Events
     /// <summary>
     /// 绘制对象被移除事件参数;
     /// </summary>
-    public class DrawObjectsRemovedEventArgs : EventArgs {
-        public DrawObjectsRemovedEventArgs(IEnumerable<DrawObject> drawObject) {
-
+    public class DrawObjectsRemovedEventArgs : EventArgs
+    {
+        public DrawObjectsRemovedEventArgs(IEnumerable<DrawObject> drawObject)
+        {
             DrawObjects = drawObject ?? throw new ArgumentNullException(nameof(drawObject));
-
         }
 
         /// <summary>

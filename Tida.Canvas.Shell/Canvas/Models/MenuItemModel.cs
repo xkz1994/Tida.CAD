@@ -5,15 +5,16 @@ using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace Tida.Canvas.Shell.Canvas.Models {
+namespace Tida.Canvas.Shell.Canvas.Models
+{
     /// <summary>
     /// 菜单项模型;
     /// </summary>
-    public class MenuItemModel : BindableBase {
-        public MenuItemModel(CreatedMenuItem createMenuItem) {
-
+    public class MenuItemModel : BindableBase
+    {
+        public MenuItemModel(CreatedMenuItem createMenuItem)
+        {
             _createMenuItem = createMenuItem ?? throw new ArgumentNullException(nameof(createMenuItem));
-
         }
 
         private readonly CreatedMenuItem _createMenuItem;

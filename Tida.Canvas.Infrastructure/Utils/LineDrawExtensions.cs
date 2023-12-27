@@ -6,19 +6,21 @@ using System;
 using System.Collections.Generic;
 using static Tida.Canvas.Infrastructure.Constants;
 
-namespace Tida.Canvas.Infrastructure.Utils {
+namespace Tida.Canvas.Infrastructure.Utils
+{
     /// <summary>
     /// 线段编辑的拓展;
     /// </summary>
-    public static class LineDrawExtensions {
-
+    public static class LineDrawExtensions
+    {
         /// <summary>
         /// 绘制未完成的编辑的线段及其提示;
         /// </summary>
         /// <param name="canvas"></param>
         /// <param name="canvasProxy"></param>
         /// <param name="editingLine"></param>
-        public static void DrawEditingLine(ICanvas canvas, ICanvasScreenConvertable canvasProxy, Line2D editingLine) {
+        public static void DrawEditingLine(ICanvas canvas, ICanvasScreenConvertable canvasProxy, Line2D editingLine)
+        {
             //绘制未完成线段;
             canvas.DrawLine(LinePen, editingLine);
             DrawEditingLineOutLines(canvas, canvasProxy, editingLine);
@@ -34,11 +36,13 @@ namespace Tida.Canvas.Infrastructure.Utils {
         /// <param name="canvas"></param>
         /// <param name="canvasProxy"></param>
         /// <param name="editingLine"></param>
-        public static void DrawEditingLineLengthString(ICanvas canvas, ICanvasScreenConvertable canvasProxy, Line2D editingLine) {
+        public static void DrawEditingLineLengthString(ICanvas canvas, ICanvasScreenConvertable canvasProxy, Line2D editingLine)
+        {
             var lengthString = editingLine.Length.ToString("F2");
 
             var direction = editingLine.Direction;
-            if (direction == null) {
+            if (direction == null)
+            {
                 return;
             }
 
@@ -52,6 +56,7 @@ namespace Tida.Canvas.Infrastructure.Utils {
             var paraLinesDistance = verticalDir * unitDistance;
 
             #region 绘制中点,调试用;
+
 #if DEBUG
             //var middleScreenPoint = canvasProxy.ToScreen(editingLine.MiddlePoint);
             //var surroundRect = NativeGeometryUtil.GetNativeSuroundingScreenRect(middleScreenPoint, 8, 8);
@@ -61,6 +66,7 @@ namespace Tida.Canvas.Infrastructure.Utils {
             //    Tida.Canvas.Shell.Constants.LinePen
             //);
 #endif
+
             #endregion
 
             //绘制提示长度;
@@ -72,7 +78,6 @@ namespace Tida.Canvas.Infrastructure.Utils {
                 LineEditingTipBrush,
                 editingTextPosition
             );
-
         }
 
         /// <summary>
@@ -81,9 +86,11 @@ namespace Tida.Canvas.Infrastructure.Utils {
         /// <param name="canvas"></param>
         /// <param name="canvasProxy"></param>
         /// <param name="editingLine"></param>
-        public static void DrawEditingLineOutLines(ICanvas canvas, ICanvasScreenConvertable canvasProxy, Line2D editingLine) {
+        public static void DrawEditingLineOutLines(ICanvas canvas, ICanvasScreenConvertable canvasProxy, Line2D editingLine)
+        {
             var direction = editingLine.Direction;
-            if (direction == null) {
+            if (direction == null)
+            {
                 return;
             }
 
@@ -118,24 +125,24 @@ namespace Tida.Canvas.Infrastructure.Utils {
             canvas.DrawLine(LineEditingTipPen, verticalLine1);
         }
 
-        
+
         /// <summary>
         /// 为未完成的线段绘制角度弧形,该弧将X正半轴作为起始边;
         /// </summary>
         /// <param name="canvas"></param>
         /// <param name="canvasProxy"></param>
         /// <param name="editingLine"></param>
-        public static void DrawEditingLineArc(ICanvas canvas, ICanvasScreenConvertable canvasProxy, Line2D editingLine) {
-
+        public static void DrawEditingLineArc(ICanvas canvas, ICanvasScreenConvertable canvasProxy, Line2D editingLine)
+        {
             var start = editingLine.Start;
             var end = editingLine.End;
-            
+
             var angle = (end - start).AngleFrom(Vector2D.BasisX);
 
             //弧度化为角度;
             var degAngle = Extension.RadToDeg(angle);
 
-            canvas.DrawArc(LineEditingTipPen, start, editingLine.Length ,0, angle,true);
+            canvas.DrawArc(LineEditingTipPen, start, editingLine.Length, 0, angle, true);
 
             canvas.DrawLine(LineEditingTipPen, new Line2D(start, new Vector2D(start.X + editingLine.Length, start.Y)));
             //canvas.DrawArc(Constants.LineEditingTipPen, new Vector2D(0, 0), 31, 0, 3.14);
@@ -149,16 +156,20 @@ namespace Tida.Canvas.Infrastructure.Utils {
         /// <param name="canvas"></param>
         /// <param name="canvasProxy"></param>
         /// <param name="editingLine"></param>
-        public static void DrawEditingLineArcString(ICanvas canvas, ICanvasScreenConvertable canvasProxy, Line2D editingLine) {
-            if (canvas == null) {
+        public static void DrawEditingLineArcString(ICanvas canvas, ICanvasScreenConvertable canvasProxy, Line2D editingLine)
+        {
+            if (canvas == null)
+            {
                 throw new ArgumentNullException(nameof(canvas));
             }
-            
-            if (canvasProxy == null) {
+
+            if (canvasProxy == null)
+            {
                 throw new ArgumentNullException(nameof(canvasProxy));
             }
-            
-            if (editingLine == null) {
+
+            if (editingLine == null)
+            {
                 throw new ArgumentNullException(nameof(editingLine));
             }
 
@@ -183,33 +194,38 @@ namespace Tida.Canvas.Infrastructure.Utils {
         /// </summary>
         /// <param name="canvas"></param>
         /// <param name="canvasProxy"></param>
-        public static void DrawSelectedLineState(Line2D line2D,ICanvas canvas, ICanvasScreenConvertable canvasProxy,Pen selectionPen) {
-
-            if (line2D == null) {
+        public static void DrawSelectedLineState(Line2D line2D, ICanvas canvas, ICanvasScreenConvertable canvasProxy, Pen selectionPen)
+        {
+            if (line2D == null)
+            {
                 throw new ArgumentNullException(nameof(line2D));
             }
 
 
-            if (selectionPen == null) {
+            if (selectionPen == null)
+            {
                 throw new ArgumentNullException(nameof(selectionPen));
             }
 
             //显示被选择的线;
             canvas.DrawLine(selectionPen, line2D);
 
-            if (canvasProxy == null) {
+            if (canvasProxy == null)
+            {
                 return;
             }
 
 
             //使用矩(正方)形显示两端和中点;
-            IEnumerable<Vector2D> GetPoints() {
+            IEnumerable<Vector2D> GetPoints()
+            {
                 yield return line2D.Start;
                 yield return line2D.MiddlePoint;
                 yield return line2D.End;
             }
 
-            foreach (var point in GetPoints()) {
+            foreach (var point in GetPoints())
+            {
                 PointDrawExtensions.DrawSelectedPointState(point, canvas, canvasProxy);
             }
         }
@@ -222,29 +238,34 @@ namespace Tida.Canvas.Infrastructure.Utils {
         /// <param name="pen"></param>
         /// <param name="horiSideLength">平行于原线段的翼边长度</param>
         /// <param name="vertiSideLength">垂直于原线段的翼边长度</param>
-        public static void DrawArrow(ICanvas canvas,Line2D line2D, Pen pen,double horiSideLength,double vertiSideLength) {
-            if (canvas == null) {
+        public static void DrawArrow(ICanvas canvas, Line2D line2D, Pen pen, double horiSideLength, double vertiSideLength)
+        {
+            if (canvas == null)
+            {
                 throw new ArgumentNullException(nameof(canvas));
             }
 
-            if (line2D == null) {
+            if (line2D == null)
+            {
                 throw new ArgumentNullException(nameof(line2D));
             }
 
-            if (pen == null) {
+            if (pen == null)
+            {
                 throw new ArgumentNullException(nameof(pen));
             }
 
-            if (line2D.Length.AreEqual(0)) {
+            if (line2D.Length.AreEqual(0))
+            {
                 return;
             }
 
             var lineDir = line2D.Direction;
 
             var vertiOffsetVector = new Vector2D(-lineDir.Y, lineDir.X) * vertiSideLength;
-            var horiOffsetVector = - lineDir * horiSideLength;
+            var horiOffsetVector = -lineDir * horiSideLength;
 
-            var sideLine = new Line2D(line2D.End,line2D.End + horiOffsetVector + vertiOffsetVector);
+            var sideLine = new Line2D(line2D.End, line2D.End + horiOffsetVector + vertiOffsetVector);
 
             canvas.DrawLine(pen, sideLine);
 

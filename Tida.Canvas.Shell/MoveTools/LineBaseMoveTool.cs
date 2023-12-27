@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Tida.Canvas.Shell.MoveTools
-{   
+{
     [Export(typeof(IDrawObjectMoveTool))]
     public class LineBaseMoveTool : DrawObjectMoveToolBase<LineBase>
     {

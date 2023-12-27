@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.DWG {
+namespace Tida.Canvas.Shell.DWG
+{
     /// <summary>
     /// 常量;
     /// </summary>
-    static class Constants {
-
+    static class Constants
+    {
         public const string MenuItemGUID_OpenDWGDoc = nameof(MenuItemGUID_OpenDWGDoc);
 
 
@@ -23,6 +24,5 @@ namespace Tida.Canvas.Shell.DWG {
 
 
         public const string MsgText_LayersEmpty = nameof(MsgText_LayersEmpty);
-
     }
 }

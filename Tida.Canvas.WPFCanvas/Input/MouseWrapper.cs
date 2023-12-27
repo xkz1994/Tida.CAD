@@ -10,31 +10,37 @@ using SystemWindows = System.Windows;
 using Tida.Canvas.WPFCanvas.Geometry;
 using Tida.Canvas.Contracts;
 
-namespace Tida.Canvas.WPFCanvas.Input {
+namespace Tida.Canvas.WPFCanvas.Input
+{
     /// <summary>
     /// 鼠标服务WPF封装;
     /// </summary>
-    class MouseWrapper : IMouse {
-        public MouseWrapper(SystemWindows.IInputElement inputElement) {
+    class MouseWrapper : IMouse
+    {
+        public MouseWrapper(SystemWindows.IInputElement inputElement)
+        {
             _inputElement = inputElement ?? throw new ArgumentNullException(nameof(inputElement));
         }
-        
+
         private readonly SystemWindows.IInputElement _inputElement;
-        
+
         public event EventHandler<MouseDownEventArgs> PreviewMouseDown;
         public event EventHandler<MouseMoveEventArgs> PreviewMouseMove;
         public event EventHandler<MouseUpEventArgs> PreviewMouseUp;
 
-       
-        public void RaisePreviewMouseDown(MouseDownEventArgs e) {
+
+        public void RaisePreviewMouseDown(MouseDownEventArgs e)
+        {
             PreviewMouseDown?.Invoke(this, e);
         }
 
-        public void RaisePreviewMouseMove(MouseMoveEventArgs e) {
-            PreviewMouseMove?.Invoke(this, e); 
+        public void RaisePreviewMouseMove(MouseMoveEventArgs e)
+        {
+            PreviewMouseMove?.Invoke(this, e);
         }
 
-        public void RaisePreviewMouseUp(MouseUpEventArgs e) {
+        public void RaisePreviewMouseUp(MouseUpEventArgs e)
+        {
             PreviewMouseUp?.Invoke(this, e);
         }
 
@@ -49,8 +55,8 @@ namespace Tida.Canvas.WPFCanvas.Input {
 
         public MouseButtonState XButton1 => MouseButtonStateAdapter.ConvertToMouseButtonState(SystemInput.Mouse.XButton1);
 
-        public Vector2D GetNativePosition() {
-           
+        public Vector2D GetNativePosition()
+        {
             return Vector2DAdapter.ConverterToVector2D(
                 SystemInput.Mouse.GetPosition(_inputElement)
             );

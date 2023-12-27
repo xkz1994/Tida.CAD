@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.Snaping {
+namespace Tida.Canvas.Shell.Contracts.Snaping
+{
     /// <summary>
     /// 相交规则的提供器契约;
     /// </summary>
-    public interface IIntersectRuleProvider {
+    public interface IIntersectRuleProvider
+    {
         IEnumerable<IDrawObjectIntersectRule> Rules { get; }
     }
 }

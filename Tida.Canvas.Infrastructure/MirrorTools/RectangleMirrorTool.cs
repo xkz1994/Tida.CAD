@@ -3,7 +3,8 @@ using Tida.Canvas.Infrastructure.MirrorTools;
 using Tida.Geometry.Alternation;
 using Tida.Geometry.Primitives;
 
-namespace Tida.Canvas.Infrastructure.MirrorTools {
+namespace Tida.Canvas.Infrastructure.MirrorTools
+{
     public class RectangleMirrorTool : DrawObjectMirroToolBase<Rectangle>
     {
         protected override void OnMirror(Rectangle drawObject, Line2D axis)

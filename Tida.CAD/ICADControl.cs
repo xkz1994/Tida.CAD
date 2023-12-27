@@ -5,11 +5,10 @@ using Tida.CAD.Events;
 
 namespace Tida.CAD
 {
-
     /// <summary>
     /// ICADControl;
     /// </summary>
-    public interface ICADControl :  
+    public interface ICADControl :
 #if WPF
         IInputElement
 #endif
@@ -18,7 +17,7 @@ namespace Tida.CAD
         /// 是否被聚焦;          
         /// </summary>
         bool IsFocused { get; }
-        
+
         /// <summary>
         /// 画布内绘制对象选定状态发生了变化事件;
         /// </summary>
@@ -93,7 +92,5 @@ namespace Tida.CAD
         /// <param name="child"></param>
         void RemoveUIElement(UIElement child);
 #endif
-
     }
-
 }

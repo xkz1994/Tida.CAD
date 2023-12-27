@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Infrastructure.ComponentModel {
-    public interface IDrawObjectDescriptorMetaData:IHaveOrder {
+namespace Tida.Canvas.Infrastructure.ComponentModel
+{
+    public interface IDrawObjectDescriptorMetaData : IHaveOrder
+    {
     }
 }

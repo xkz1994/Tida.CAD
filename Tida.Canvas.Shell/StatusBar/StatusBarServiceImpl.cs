@@ -1,5 +1,4 @@
-﻿
-using Tida.Canvas.Shell.Contracts.Controls;
+﻿using Tida.Canvas.Shell.Contracts.Controls;
 using Tida.Canvas.Shell.Contracts.StatusBar;
 using Tida.Canvas.Shell.Contracts.StatusBar.Events;
 using System;
@@ -9,14 +8,17 @@ using System.Linq;
 using System.Windows.Controls;
 using Tida.Canvas.Shell.Contracts.Common;
 
-namespace Tida.Canvas.Shell.StatusBar {
+namespace Tida.Canvas.Shell.StatusBar
+{
     [Export(typeof(IStatusBarService))]
-    class StatusBarServiceImpl : IStatusBarService {
+    class StatusBarServiceImpl : IStatusBarService
+    {
         [ImportingConstructor]
         public StatusBarServiceImpl(
             Views.StatusBarView statusBar,
-            [ImportMany]IEnumerable<IStatusBarItem> statusBarItems
-        ) {
+            [ImportMany] IEnumerable<IStatusBarItem> statusBarItems
+        )
+        {
             this._statusBarItems = statusBarItems;
             _stackGrid = StackGridFactory.CreateNew<IStatusBarItem>(statusBar.Grid);
             _stackGrid.Orientation = Orientation.Horizontal;
@@ -26,13 +28,13 @@ namespace Tida.Canvas.Shell.StatusBar {
 
         private readonly IStackGrid<IStatusBarItem> _stackGrid;
 
-        public void Initialize() {
-            
-
+        public void Initialize()
+        {
             _items.Clear();
             _stackGrid.Clear();
 
-            foreach (var item in _statusBarItems) {
+            foreach (var item in _statusBarItems)
+            {
                 AddStatusBarItem(item);
             }
 
@@ -50,53 +52,61 @@ namespace Tida.Canvas.Shell.StatusBar {
             //    Contracts.StatusBar.Constants.StatusBarOrder_Indent
             //);
 
-            CommonEventHelper.Publish<StatusBarInitializeEvent,IStatusBarService>(this);
-            CommonEventHelper.PublishEventToHandlers<IStatusBarInitializeEventHandler,IStatusBarService>(this);
-
+            CommonEventHelper.Publish<StatusBarInitializeEvent, IStatusBarService>(this);
+            CommonEventHelper.PublishEventToHandlers<IStatusBarInitializeEventHandler, IStatusBarService>(this);
         }
 
-        
 
         private readonly List<IStatusBarItem> _items = new List<IStatusBarItem>();
         public IEnumerable<IStatusBarItem> StatusBarItems => _items.Select(p => p);
 
-        public void AddStatusBarItem(IStatusBarItem item) {
-            if (item == null) {
+        public void AddStatusBarItem(IStatusBarItem item)
+        {
+            if (item == null)
+            {
                 throw new ArgumentNullException(nameof(item));
             }
 
-            if(_items.Any(p => p.GUID == item.GUID)) {
+            if (_items.Any(p => p.GUID == item.GUID))
+            {
                 return;
             }
-            
+
             _items.Add(item);
-            try {
+            try
+            {
                 _stackGrid.AddChild(item, item.GridChildLength, item.Order);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 LoggerService.WriteCallerLine(ex.Message);
             }
         }
 
         //public void Report(string text, string statusBarItemGUID = null) {
-            
+
         //}
 
-        public void RemoveStatusBarItem(IStatusBarItem item) {
-            if (item == null) {
+        public void RemoveStatusBarItem(IStatusBarItem item)
+        {
+            if (item == null)
+            {
                 throw new ArgumentNullException(nameof(item));
             }
 
-            if (!StatusBarItems.Contains(item)) {
+            if (!StatusBarItems.Contains(item))
+            {
                 LoggerService.WriteCallerLine($"{nameof(StatusBarItems)} doesn't contain the {nameof(item)}");
                 return;
             }
 
-            try {
+            try
+            {
                 _items.Remove(item);
                 _stackGrid.Remove(item);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 LoggerService.WriteCallerLine(ex.Message);
             }
         }
@@ -104,7 +114,5 @@ namespace Tida.Canvas.Shell.StatusBar {
         //public IStatusBarItem CreateStatusBarObjectItem(string guid,object content) => new StatusBarObjectItem(guid, content);
 
         //public IStatusBarTextItem CreateStatusBarTextItem(string guid) => new StatusBarTextItem(guid);
-
-        
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using Tida.Geometry.Primitives;
 using Tida.Canvas.Infrastructure.InteractionHandlers;
 using Tida.Canvas.Infrastructure.Contracts;
@@ -7,19 +6,25 @@ using System.Linq;
 using Tida.Canvas.Events;
 using Tida.Canvas.Contracts;
 
-namespace Tida.Canvas.Infrastructure.InteractionHandlers {
+namespace Tida.Canvas.Infrastructure.InteractionHandlers
+{
     /// <summary>
     /// 画布交互处理器——正交模式;
     /// </summary>
-    public class VertextInteractionHandler : CanvasInteractionHandler {
+    public class VertextInteractionHandler : CanvasInteractionHandler
+    {
         private static bool _isEnabled;
+
         /// <summary>
         /// 正交模式是否可用;
         /// </summary>
-        public static bool IsEnabled {
+        public static bool IsEnabled
+        {
             get => _isEnabled;
-            set {
-                if(_isEnabled == value) {
+            set
+            {
+                if (_isEnabled == value)
+                {
                     return;
                 }
 
@@ -32,31 +37,39 @@ namespace Tida.Canvas.Infrastructure.InteractionHandlers {
         /// 正交模式可用发生变化;
         /// </summary>
         public static event EventHandler<ValueChangedEventArgs<bool>> IsEnabledChanged;
-    
-        public override void  HandlePosition(ICanvasControl canvasContext, Vector2D oriPosition) {
-            if (canvasContext == null) {
+
+        public override void HandlePosition(ICanvasControl canvasContext, Vector2D oriPosition)
+        {
+            if (canvasContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasContext));
             }
-            
-            if (oriPosition == null) {
+
+            if (oriPosition == null)
+            {
                 throw new ArgumentNullException(nameof(oriPosition));
             }
 
             //若正交模式不可用,则不处理;
-            if(!IsEnabled){
+            if (!IsEnabled)
+            {
                 return;
             }
 
-            if(CanvasControl == null) {
+            if (CanvasControl == null)
+            {
                 return;
             }
 
-            if(CanvasControl.CurrentEditTool != null) {
+            if (CanvasControl.CurrentEditTool != null)
+            {
                 HandlePositionByEditTool(CanvasControl.CurrentEditTool, oriPosition);
             }
-            else {
+            else
+            {
                 var lastMouseDownPosition = GetLastMouseDownPositionFromDrawObjects(CanvasControl);
-                if(lastMouseDownPosition == null) {
+                if (lastMouseDownPosition == null)
+                {
                     return;
                 }
 
@@ -69,13 +82,15 @@ namespace Tida.Canvas.Infrastructure.InteractionHandlers {
         /// </summary>
         /// <param name="editTool"></param>
         /// <returns></returns>
-        private static void HandlePositionByEditTool(EditTool editTool,Vector2D oriPosition) {
-
-            if (!(editTool is IHaveMousePositionTracker haveMousePositionTracker)) {
+        private static void HandlePositionByEditTool(EditTool editTool, Vector2D oriPosition)
+        {
+            if (!(editTool is IHaveMousePositionTracker haveMousePositionTracker))
+            {
                 return;
             }
 
-            if (haveMousePositionTracker.MousePositionTracker?.LastMouseDownPosition == null) {
+            if (haveMousePositionTracker.MousePositionTracker?.LastMouseDownPosition == null)
+            {
                 return;
             }
 
@@ -88,14 +103,17 @@ namespace Tida.Canvas.Infrastructure.InteractionHandlers {
         /// </summary>
         /// <param name="positionToBeAligned"></param>
         /// <param name="positionAligning"></param>
-        private static void AlignToPosition(Vector2D positionToBeAligned,Vector2D positionAligning) {
+        private static void AlignToPosition(Vector2D positionToBeAligned, Vector2D positionAligning)
+        {
             var abX = Math.Abs(positionToBeAligned.X - positionAligning.X);
             var abY = Math.Abs(positionToBeAligned.Y - positionAligning.Y);
 
-            if (abX >= abY) {
+            if (abX >= abY)
+            {
                 positionToBeAligned.Y = positionAligning.Y;
             }
-            else {
+            else
+            {
                 positionToBeAligned.X = positionAligning.X;
             }
         }
@@ -105,14 +123,13 @@ namespace Tida.Canvas.Infrastructure.InteractionHandlers {
         /// </summary>
         /// <param name="canvasControl"></param>
         /// <returns></returns>
-        private static Vector2D GetLastMouseDownPositionFromDrawObjects(ICanvasContext canvasControl) {
-            var lastMouseDownPositions = canvasControl.
-                    GetAllVisibleDrawObjects().Where(p => p.IsEditing).
-                    Select(p => p as IHaveMousePositionTracker).Where(p => p != null).
-                    Select(p => p.MousePositionTracker.LastMouseDownPosition);
+        private static Vector2D GetLastMouseDownPositionFromDrawObjects(ICanvasContext canvasControl)
+        {
+            var lastMouseDownPositions = canvasControl.GetAllVisibleDrawObjects().Where(p => p.IsEditing).Select(p => p as IHaveMousePositionTracker).Where(p => p != null).Select(p => p.MousePositionTracker.LastMouseDownPosition);
 
             var lastMouseDownPositionsDistinct = lastMouseDownPositions.Distinct(Vector2DEqualityComparer.StaticInstance);
-            if (lastMouseDownPositionsDistinct.Count() != 1) {
+            if (lastMouseDownPositionsDistinct.Count() != 1)
+            {
                 return null;
             }
 
@@ -120,6 +137,4 @@ namespace Tida.Canvas.Infrastructure.InteractionHandlers {
             return lastMouseDownPositions.First();
         }
     }
-
-    
 }

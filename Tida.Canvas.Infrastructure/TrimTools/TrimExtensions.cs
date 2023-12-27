@@ -3,7 +3,8 @@ using System;
 using System.Linq;
 using Tida.Geometry.External;
 
-namespace Tida.Canvas.Infrastructure.TrimTools {
+namespace Tida.Canvas.Infrastructure.TrimTools
+{
     /// <summary>
     /// 裁剪的相关拓展;
     /// </summary>
@@ -23,6 +24,7 @@ namespace Tida.Canvas.Infrastructure.TrimTools {
             {
                 return null;
             }
+
             if (intersectPositions.Length == 0)
             {
                 return null;
@@ -49,9 +51,10 @@ namespace Tida.Canvas.Infrastructure.TrimTools {
                 //若包含在之中,则将原线段一分为二,返回分离后的线段;
                 if (isIncluded)
                 {
-                    return new Line2D[] {
-                        new Line2D(new Vector2D(line2D.Start),new Vector2D(thisMinPosition)),
-                        new Line2D(new Vector2D(thisMaxPosition),new Vector2D(line2D.End))
+                    return new Line2D[]
+                    {
+                        new Line2D(new Vector2D(line2D.Start), new Vector2D(thisMinPosition)),
+                        new Line2D(new Vector2D(thisMaxPosition), new Vector2D(line2D.End))
                     };
                 }
             }
@@ -88,6 +91,7 @@ namespace Tida.Canvas.Infrastructure.TrimTools {
             {
                 return null;
             }
+
             if (intersectPositions.Length == 0)
             {
                 return null;
@@ -128,9 +132,10 @@ namespace Tida.Canvas.Infrastructure.TrimTools {
                     var angle2 = trimLine2.Direction.AngleWith(line2.Direction);
                     var newEndPoint2 = GetExtendPoint(thisMaxPosition, -line2.Direction, angle2, width, gap);
 
-                    return new Line2D[] {
-                        new Line2D(new Vector2D(line2D.Start),new Vector2D(newEndPoint1)),
-                        new Line2D(new Vector2D(newEndPoint2),new Vector2D(line2D.End))
+                    return new Line2D[]
+                    {
+                        new Line2D(new Vector2D(line2D.Start), new Vector2D(newEndPoint1)),
+                        new Line2D(new Vector2D(newEndPoint2), new Vector2D(line2D.End))
                     };
                 }
             }
@@ -172,12 +177,10 @@ namespace Tida.Canvas.Infrastructure.TrimTools {
         {
             if (angle < Extension.SMALL_NUMBER) throw new Exception("杆件之间夹角过小,无法剪切");
             var d1 = width / 2 / Math.Sin(angle);
-            var d2 = Math.Abs(angle - Math.PI / 2) < Extension.SMALL_NUMBER ?
-                0 : width / 2 / Math.Tan(angle);
+            var d2 = Math.Abs(angle - Math.PI / 2) < Extension.SMALL_NUMBER ? 0 : width / 2 / Math.Tan(angle);
             var dis = d1 - d2 - gap;
-            if (dis <= 12) dis = 12;//2.5d，d为螺钉孔径， 一般为4.8mm
+            if (dis <= 12) dis = 12; //2.5d，d为螺钉孔径， 一般为4.8mm
             return intersectPoint.Offset(dir * dis);
         }
     }
-
 }

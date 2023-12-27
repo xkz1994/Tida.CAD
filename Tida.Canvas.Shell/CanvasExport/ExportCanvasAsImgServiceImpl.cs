@@ -15,28 +15,34 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using static Tida.Canvas.WPFCanvas.WindowsCanvasScreenConverter;
 
-namespace Tida.Canvas.Shell.CanvasExport {
+namespace Tida.Canvas.Shell.CanvasExport
+{
     /// <summary>
     /// 导出为图像服务实现;
     /// </summary>
     [Export(typeof(IExportCanvasAsImgService))]
-    public class ExportCanvasAsImgServiceImpl : IExportCanvasAsImgService {
-        public void ExportDrawObjectsAsImg(IEnumerable<DrawObject> drawObjects, ExportImgSetting exportImgSetting) {
-
-            if (drawObjects == null) {
+    public class ExportCanvasAsImgServiceImpl : IExportCanvasAsImgService
+    {
+        public void ExportDrawObjectsAsImg(IEnumerable<DrawObject> drawObjects, ExportImgSetting exportImgSetting)
+        {
+            if (drawObjects == null)
+            {
                 throw new ArgumentNullException(nameof(drawObjects));
             }
 
-            if (exportImgSetting == null) {
+            if (exportImgSetting == null)
+            {
                 throw new ArgumentNullException(nameof(exportImgSetting));
             }
 
-            if (exportImgSetting.ExportStream == null) {
+            if (exportImgSetting.ExportStream == null)
+            {
                 throw new ArgumentNullException(nameof(exportImgSetting.ExportStream));
             }
 
             var stream = exportImgSetting.ExportStream;
-            if (!stream.CanWrite) {
+            if (!stream.CanWrite)
+            {
                 throw new ArgumentException($"{nameof(stream)} can't be written.");
             }
 
@@ -46,28 +52,32 @@ namespace Tida.Canvas.Shell.CanvasExport {
             var renderTargetBitMap = new RenderTargetBitmap(
                 width, height,
                 ScreenResolution,
-                ScreenResolution, 
+                ScreenResolution,
                 PixelFormats.Default
             );
 
             ///使用<see cref="DrawingVisual"/>作为<see cref="Visual"/>参数;
-            var drawingVisual = new DrawingVisual {
-                Clip = new RectangleGeometry(new Rect {
+            var drawingVisual = new DrawingVisual
+            {
+                Clip = new RectangleGeometry(new Rect
+                {
                     Width = width,
                     Height = height
                 })
             };
 
             var drawingContext = drawingVisual.RenderOpen();
-            
-            var canvasProxy = new WindowsCanvasScreenConverter {
+
+            var canvasProxy = new WindowsCanvasScreenConverter
+            {
                 ActualWidth = width,
                 ActualHeight = height,
                 PanScreenPosition = new Vector2D(width / 2, height / 2),
                 Zoom = 1
             };
 
-            var canvas = new WindowsCanvas(canvasProxy) {
+            var canvas = new WindowsCanvas(canvasProxy)
+            {
                 DrawingContext = drawingContext
             };
 
@@ -77,12 +87,14 @@ namespace Tida.Canvas.Shell.CanvasExport {
             canvasProxy.PanScreenPosition = scope.PanScreenPosition;
 
             //绘制背景;
-            if(exportImgSetting.Background != null) {
-                drawingContext.DrawRectangle(BrushAdapter.ConvertToSystemBrush(exportImgSetting.Background),null,new Rect(new System.Windows.Size(width,height)));
+            if (exportImgSetting.Background != null)
+            {
+                drawingContext.DrawRectangle(BrushAdapter.ConvertToSystemBrush(exportImgSetting.Background), null, new Rect(new System.Windows.Size(width, height)));
             }
 
             //绘制绘制对象;
-            foreach (var drawObject in drawObjects.Where(p => exportImgSetting.ExportUnvisible || p.IsVisible)) {
+            foreach (var drawObject in drawObjects.Where(p => exportImgSetting.ExportUnvisible || p.IsVisible))
+            {
                 drawObject.Draw(canvas, canvasProxy);
             }
 
@@ -93,7 +105,7 @@ namespace Tida.Canvas.Shell.CanvasExport {
             var encoder = new PngBitmapEncoder();
             encoder.Frames.Add(BitmapFrame.Create(renderTargetBitMap));
             encoder.Save(stream);
-            
+
 #if DEBUG
             //if (stream.Length > 0)
             //{
@@ -105,32 +117,35 @@ namespace Tida.Canvas.Shell.CanvasExport {
             //    }
             //}
 #endif
-        }   
+        }
 
         /// <summary>
         /// 根据<paramref name="drawObjects"/>集合获取一个理想的放大倍数,在该放大倍数下,可以确保所有的绘制对象均可见;
         /// </summary>
         /// <param name="drawObjects"></param>
         /// <returns></returns>
-        private static CanvasViewScope GetScopeWithDrawObjects(IEnumerable<DrawObject> drawObjects,double actualWidth,double actualHeight) {
-            var scope = new CanvasViewScope {
+        private static CanvasViewScope GetScopeWithDrawObjects(IEnumerable<DrawObject> drawObjects, double actualWidth, double actualHeight)
+        {
+            var scope = new CanvasViewScope
+            {
                 PanScreenPosition = new Vector2D(actualWidth / 2, actualHeight / 2),
                 Zoom = DefaultZoom
             };
-            
+
             //获取所有绘制对象所在的矩形;
             var rects = drawObjects.Select(p => p.GetBoundingRect()).Where(p => p != null);
 
             var allVertexes = rects.SelectMany(p => p.GetVertexes()).ToArray();
 
-            if (allVertexes.Length != 0) {
+            if (allVertexes.Length != 0)
+            {
                 var minX = allVertexes.Min(p => p.X);
                 var maxX = allVertexes.Max(p => p.X);
                 var minY = allVertexes.Min(p => p.Y);
                 var maxY = allVertexes.Max(p => p.Y);
 
-                var rectScreenWidth = GetScreenLength( maxX - minX,DefaultZoom);
-                var rectScreenHeight = GetScreenLength( maxY - minY,DefaultZoom);
+                var rectScreenWidth = GetScreenLength(maxX - minX, DefaultZoom);
+                var rectScreenHeight = GetScreenLength(maxY - minY, DefaultZoom);
 
                 scope.Zoom = Math.Min(actualHeight / rectScreenHeight, actualWidth / rectScreenWidth);
 
@@ -138,11 +153,11 @@ namespace Tida.Canvas.Shell.CanvasExport {
                 var middleY = (minY + maxY) / 2;
 
                 scope.PanScreenPosition = new Vector2D(
-                    actualWidth / 2 - GetScreenLength(middleX,scope.Zoom),
-                    actualHeight / 2 + GetScreenLength(middleY,scope.Zoom)
+                    actualWidth / 2 - GetScreenLength(middleX, scope.Zoom),
+                    actualHeight / 2 + GetScreenLength(middleY, scope.Zoom)
                 );
             }
-            
+
             return scope;
         }
 
@@ -152,20 +167,21 @@ namespace Tida.Canvas.Shell.CanvasExport {
         /// </summary>
         /// <param name="unitValue"/>
         /// <returns></returns>
-        private static double GetScreenLength(double unitValue,double zoom) {
+        private static double GetScreenLength(double unitValue, double zoom)
+        {
             return unitValue * zoom * ScreenResolution;
         }
 
-        
+
         /// <summary>
         /// 描述画布的位置以及放大倍数的相关信息的实体;
         /// </summary>
-        struct CanvasViewScope {
-
+        struct CanvasViewScope
+        {
             /// <summary>
             /// 放大倍数;
             /// </summary>
-            public double Zoom { get; set; } 
+            public double Zoom { get; set; }
 
             /// <summary>
             /// 原点位置;

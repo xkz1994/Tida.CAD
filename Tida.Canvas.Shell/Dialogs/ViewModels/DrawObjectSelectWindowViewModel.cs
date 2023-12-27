@@ -6,8 +6,10 @@ using Prism.Mvvm;
 using System.Collections.ObjectModel;
 using System;
 
-namespace Tida.Canvas.Shell.Dialogs.ViewModels {
-    class DrawObjectSelectWindowViewModel:BindableBase {
+namespace Tida.Canvas.Shell.Dialogs.ViewModels
+{
+    class DrawObjectSelectWindowViewModel : BindableBase
+    {
         /// <summary>
         /// 所有绘制对象模型;
         /// </summary>
@@ -15,19 +17,23 @@ namespace Tida.Canvas.Shell.Dialogs.ViewModels {
 
 
         private DrawObjectModel _selectedDrawObjectModel;
-        public DrawObjectModel SelectedDrawObjectModel {
+
+        public DrawObjectModel SelectedDrawObjectModel
+        {
             get { return _selectedDrawObjectModel; }
-            set {
-                if(_selectedDrawObjectModel != null) {
+            set
+            {
+                if (_selectedDrawObjectModel != null)
+                {
                     _selectedDrawObjectModel.DrawObject.IsSelected = false;
                 }
-                
-                if (value != null) {
+
+                if (value != null)
+                {
                     value.DrawObject.IsSelected = true;
                 }
 
                 SetProperty(ref _selectedDrawObjectModel, value);
-                
             }
         }
 
@@ -40,13 +46,18 @@ namespace Tida.Canvas.Shell.Dialogs.ViewModels {
         public bool DialogResult { get; private set; }
 
         private DelegateCommand _confirmCommand;
-        public DelegateCommand ConfirmCommand {
-            get {
-                if(_confirmCommand == null) {
-                    _confirmCommand = new DelegateCommand(
-                        () => {
-                            if(SelectedDrawObjectModel == null) {
 
+        public DelegateCommand ConfirmCommand
+        {
+            get
+            {
+                if (_confirmCommand == null)
+                {
+                    _confirmCommand = new DelegateCommand(
+                        () =>
+                        {
+                            if (SelectedDrawObjectModel == null)
+                            {
                                 MsgBoxService.Show(LanguageService.FindResourceString(Constants.MsgText_NoDrawObjectSelected));
 
                                 return;
@@ -66,17 +77,19 @@ namespace Tida.Canvas.Shell.Dialogs.ViewModels {
 
 
         private DelegateCommand _cancelCommand;
+
         public DelegateCommand CancelCommand => _cancelCommand ??
-            (_cancelCommand = new DelegateCommand(
-                () => {
-                SelectedDrawObjectModel = null;
-                CloseRequest?.Invoke(this, EventArgs.Empty);
-                }
-            ));
+                                                (_cancelCommand = new DelegateCommand(
+                                                    () =>
+                                                    {
+                                                        SelectedDrawObjectModel = null;
+                                                        CloseRequest?.Invoke(this, EventArgs.Empty);
+                                                    }
+                                                ));
 
 #if DEBUG
-        ~DrawObjectSelectWindowViewModel() {
-
+        ~DrawObjectSelectWindowViewModel()
+        {
         }
 #endif
     }

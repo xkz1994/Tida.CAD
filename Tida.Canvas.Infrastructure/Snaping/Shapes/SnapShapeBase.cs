@@ -2,8 +2,10 @@
 using Tida.Geometry.Primitives;
 using System;
 
-namespace Tida.Canvas.Infrastructure.Snaping.Shapes {
-    public abstract class SnapShapeBase : ISnapShape {
+namespace Tida.Canvas.Infrastructure.Snaping.Shapes
+{
+    public abstract class SnapShapeBase : ISnapShape
+    {
         public virtual Vector2D Position { get; set; }
 
         public event EventHandler VisualChanged;

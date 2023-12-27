@@ -8,15 +8,18 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Tida.Canvas.Shell.Contracts.App;
 
-namespace Tida.Canvas.Shell.Contracts.ComponentModel.Views {
+namespace Tida.Canvas.Shell.Contracts.ComponentModel.Views
+{
     /// <summary>
     /// 泛型,使用了下拉的标准值集合编辑器;
     /// </summary>
     /// <typeparam name="TValue"></typeparam>
-    public class StandardValuesEditor<TValue> : ContentControl {
-        
-        public StandardValuesEditor(IEnumerable<StandardValueLanguageInfo<TValue>> values) {
-            if (StandardValuesEditorManager.SelectorFactory == null) {
+    public class StandardValuesEditor<TValue> : ContentControl
+    {
+        public StandardValuesEditor(IEnumerable<StandardValueLanguageInfo<TValue>> values)
+        {
+            if (StandardValuesEditorManager.SelectorFactory == null)
+            {
                 throw new ArgumentNullException($"{nameof(StandardValuesEditorManager.SelectorFactory)} should be set to use {nameof(StandardValuesEditor<object>)}");
             }
 
@@ -27,20 +30,24 @@ namespace Tida.Canvas.Shell.Contracts.ComponentModel.Views {
             _selector.ItemsSource = _valueModels;
             _selector.DisplayMemberPath = nameof(ValueModel.DisplayName);
             _selector.SelectionChanged += ComboBox_SelectionChanged;
-            if (_valueModels.Length != 0) {
+            if (_valueModels.Length != 0)
+            {
                 RefreshSelectedItem(_valueModels[0].Value);
             }
         }
-        
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
             RefreshSelectedValue();
         }
 
         /// <summary>
         /// 根据下拉的选中值,刷新依赖属性的值;
         /// </summary>
-        private void RefreshSelectedValue() {
-            if (!(_selector.SelectedItem is ValueModel valueModel)) {
+        private void RefreshSelectedValue()
+        {
+            if (!(_selector.SelectedItem is ValueModel valueModel))
+            {
                 return;
             }
 
@@ -50,8 +57,10 @@ namespace Tida.Canvas.Shell.Contracts.ComponentModel.Views {
         /// <summary>
         /// 根据依赖属性的值,刷新下拉的选中值;
         /// </summary>
-        private void RefreshSelectedItem(TValue selectedValue) {
-            if (_selector.SelectedItem is ValueModel valueModel && object.Equals(selectedValue, valueModel.Value)) {
+        private void RefreshSelectedItem(TValue selectedValue)
+        {
+            if (_selector.SelectedItem is ValueModel valueModel && object.Equals(selectedValue, valueModel.Value))
+            {
                 return;
             }
 
@@ -63,28 +72,34 @@ namespace Tida.Canvas.Shell.Contracts.ComponentModel.Views {
 
         private readonly ValueModel[] _valueModels;
 
-        public TValue SelectedValue {
+        public TValue SelectedValue
+        {
             get { return (TValue)GetValue(SelectedValueProperty); }
             set { SetValue(SelectedValueProperty, value); }
         }
-        
+
         public static readonly DependencyProperty SelectedValueProperty =
             DependencyProperty.Register(nameof(SelectedValue), typeof(TValue), typeof(StandardValuesEditor<TValue>), new FrameworkPropertyMetadata(default(TValue), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, SelectedValue_PropertyChanged));
 
-        private static void SelectedValue_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            if (!(d is StandardValuesEditor<TValue> editor)) {
+        private static void SelectedValue_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (!(d is StandardValuesEditor<TValue> editor))
+            {
                 return;
             }
 
-            if (!(e.NewValue is TValue selectedValue)) {
+            if (!(e.NewValue is TValue selectedValue))
+            {
                 return;
             }
 
             editor.RefreshSelectedItem(selectedValue);
         }
 
-        class ValueModel {
-            public ValueModel(TValue value, string displayName) {
+        class ValueModel
+        {
+            public ValueModel(TValue value, string displayName)
+            {
                 this.Value = value;
                 this.DisplayName = displayName;
             }

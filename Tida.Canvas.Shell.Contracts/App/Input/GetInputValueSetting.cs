@@ -4,21 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.App.Input {
+namespace Tida.Canvas.Shell.Contracts.App.Input
+{
     /// <summary>
     /// 获取输入设定;
     /// </summary>
-    public class GetInputValueSetting {
+    public class GetInputValueSetting
+    {
         /// <summary>
         /// 标题;
         /// </summary>
         public string Title { get; set; }
-        
+
         /// <summary>
         /// 详细;
         /// </summary>
         public string Desc { get; set; }
-        
+
         /// <summary>
         /// 初始值;
         /// </summary>

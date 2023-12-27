@@ -6,23 +6,24 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.ComponentModel {
+namespace Tida.Canvas.Shell.Contracts.ComponentModel
+{
     /// <summary>
     /// 属性描述器;
     /// </summary>
-    public interface IPropertyDescriptor {
+    public interface IPropertyDescriptor
+    {
         /// <summary>
         /// 原属性反射信息;
         /// </summary>
         PropertyInfo PropertyInfo { get; }
-
-
     }
 
     /// <summary>
     /// 属性描述器元数据;
     /// </summary>
-    public interface IPropertyDescriptorMetaData {
+    public interface IPropertyDescriptorMetaData
+    {
         /// <summary>
         /// 显示属性语言键名;
         /// </summary>
@@ -32,7 +33,7 @@ namespace Tida.Canvas.Shell.Contracts.ComponentModel {
         /// 是否是只读的属性;
         /// </summary>
         bool IsReadOnly { get; }
-        
+
         /// <summary>
         /// 描述键名;
         /// </summary>
@@ -67,17 +68,18 @@ namespace Tida.Canvas.Shell.Contracts.ComponentModel {
     /// <summary>
     /// 导出属性描述器注解;
     /// </summary>
-    [MetadataAttribute,AttributeUsage(AttributeTargets.Class,AllowMultiple = false)]
-    public sealed class ExportPropertyDescriptorAttribute:ExportAttribute,IPropertyDescriptorMetaData {
-        public ExportPropertyDescriptorAttribute():base(typeof(IPropertyDescriptor)) {
-            
+    [MetadataAttribute, AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public sealed class ExportPropertyDescriptorAttribute : ExportAttribute, IPropertyDescriptorMetaData
+    {
+        public ExportPropertyDescriptorAttribute() : base(typeof(IPropertyDescriptor))
+        {
         }
-        
+
         /// <summary>
         /// 显示属性语言键名;
         /// </summary>
-        public string DisplayNameKey { get; set; } 
-        
+        public string DisplayNameKey { get; set; }
+
         /// <summary>
         /// 是否是只读的属性;
         /// </summary>
@@ -112,7 +114,5 @@ namespace Tida.Canvas.Shell.Contracts.ComponentModel {
         /// 是否能够应用至派生类型;
         /// </summary>
         public bool Inheritable { get; set; }
-
-        
     }
 }

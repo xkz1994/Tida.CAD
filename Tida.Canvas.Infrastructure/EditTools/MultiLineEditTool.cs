@@ -4,24 +4,28 @@ using Tida.Canvas.Contracts;
 using Tida.Geometry.Primitives;
 using static Tida.Canvas.Infrastructure.Constants;
 
-namespace Tida.Canvas.Infrastructure.EditTools {
+namespace Tida.Canvas.Infrastructure.EditTools
+{
     /// <summary>
     /// 连续地绘制线的编辑工具;
     /// </summary>
-    public class MultiLineEditTool:MultiLineEditToolGenericBase<Line> {
-
-        protected override void OnEndOperation() {
+    public class MultiLineEditTool : MultiLineEditToolGenericBase<Line>
+    {
+        protected override void OnEndOperation()
+        {
             MousePositionTracker.LastMouseDownPosition = null;
             MousePositionTracker.CurrentHoverPosition = null;
             base.OnEndOperation();
         }
 
 
-        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy) {
+        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy)
+        {
             base.Draw(canvas, canvasProxy);
 
             //检查两个关键位置是否为空;
-            if (MousePositionTracker.LastMouseDownPosition == null || MousePositionTracker.CurrentHoverPosition == null) {
+            if (MousePositionTracker.LastMouseDownPosition == null || MousePositionTracker.CurrentHoverPosition == null)
+            {
                 return;
             }
 
@@ -43,20 +47,22 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         /// </summary>
         /// <param name="canvas"></param>
         /// <param name="canvasProxy"></param>
-        private void DrawEditingLineState(ICanvas canvas, ICanvasScreenConvertable canvasProxy) {
+        private void DrawEditingLineState(ICanvas canvas, ICanvasScreenConvertable canvasProxy)
+        {
             //绘制未完成状态;
             var editingLine = new Line2D(MousePositionTracker.LastMouseDownPosition, MousePositionTracker.CurrentHoverPosition);
-            LineDrawExtensions.DrawEditingLine(canvas,canvasProxy,editingLine);
+            LineDrawExtensions.DrawEditingLine(canvas, canvasProxy, editingLine);
         }
-        
 
-        protected override Line OnCreateDrawObject(Vector2D lastDownPosition, Vector2D thisMouseDownPosition) {
+
+        protected override Line OnCreateDrawObject(Vector2D lastDownPosition, Vector2D thisMouseDownPosition)
+        {
             return new Line(lastDownPosition, thisMouseDownPosition);
         }
-        
-#if DEBUG
-        ~MultiLineEditTool() {
 
+#if DEBUG
+        ~MultiLineEditTool()
+        {
         }
 #endif
     }

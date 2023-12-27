@@ -11,9 +11,9 @@
         <UniformGrid DockPanel.Dock="Bottom">
             <DockPanel>
                 <TextBlock>Click Select Mode</TextBlock>
-                <ComboBox ItemsSource="{Binding ClickSelectModes}" SelectedItem="{Binding SelectedClickMode}"/>
+                <ComboBox ItemsSource="{Binding ClickSelectModes}" SelectedItem="{Binding SelectedClickMode}" />
             </DockPanel>
         </UniformGrid>
-        <tidacad:CADControl x:Name="cadControl" ClickSelectMode="{Binding SelectedClickMode}"/>
+        <tidacad:CADControl x:Name="cadControl" ClickSelectMode="{Binding SelectedClickMode}" />
     </DockPanel>
 </Window>

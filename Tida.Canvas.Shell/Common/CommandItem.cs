@@ -8,12 +8,15 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Tida.Canvas.Shell.Contracts.Common;
 
-namespace Tida.Canvas.Shell.Common {
+namespace Tida.Canvas.Shell.Common
+{
     /// <summary>
     /// 命令绑定项,可用于MenuItem等的绑定等;
     /// </summary>
-    class CommandItem : ExtensibleBindableBase, ICommandItem, ICustomNotify {
-        public CommandItem(ICommand command, string guid, Func<bool> isVisible = null) {
+    class CommandItem : ExtensibleBindableBase, ICommandItem, ICustomNotify
+    {
+        public CommandItem(ICommand command, string guid, Func<bool> isVisible = null)
+        {
             this.Command = command;
             this.GUID = guid;
             this._isVisibleFunc = isVisible;
@@ -24,21 +27,28 @@ namespace Tida.Canvas.Shell.Common {
         public bool IsVisible => _isVisibleFunc?.Invoke() ?? true;
 
         private string _commandName;
-        public virtual string Name {
+
+        public virtual string Name
+        {
             get => _commandName;
             set => SetProperty(ref _commandName, value);
         }
 
         private Uri _icon;
-        public Uri Icon {
+
+        public Uri Icon
+        {
             get => _icon;
             set => SetProperty(ref _icon, value);
         }
 
-        public IEnumerable<ICommandItem> Children {
+        public IEnumerable<ICommandItem> Children
+        {
             get => _children;
-            set {
-                if (value is ObservableCollection<ICommandItem> obCommandItems) {
+            set
+            {
+                if (value is ObservableCollection<ICommandItem> obCommandItems)
+                {
                     _children = obCommandItems;
                 }
             }
@@ -48,7 +58,9 @@ namespace Tida.Canvas.Shell.Common {
 
 
         private bool _isEnabled;
-        public bool IsEnabled {
+
+        public bool IsEnabled
+        {
             get => _isEnabled;
             set => SetProperty(ref _isEnabled, value);
         }
@@ -63,15 +75,15 @@ namespace Tida.Canvas.Shell.Common {
 
         public void RemoveChild(ICommandItem commandItem) => _children.Remove(commandItem);
 
-        public void NotifyProperty(string propName) {
+        public void NotifyProperty(string propName)
+        {
             RaisePropertyChanged(nameof(IsVisible));
         }
     }
 
     [Export(typeof(ICommandItemFactory))]
-    class CommandItemFactory : ICommandItemFactory {
+    class CommandItemFactory : ICommandItemFactory
+    {
         public ICommandItem CreateNew(ICommand command, string guid, Func<bool> isVisible = null) => new CommandItem(command, guid, isVisible);
     }
-
-    
 }

@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Tida.Canvas.Shell.Contracts.Ribbon {
- 
+namespace Tida.Canvas.Shell.Contracts.Ribbon
+{
     /// <summary>
     /// Ribbon按钮项;
     /// </summary>
-    public interface IRibbonButtonItem:IRibbonItem {
+    public interface IRibbonButtonItem : IRibbonItem
+    {
         /// <summary>
         /// Icon;   
         /// </summary>
@@ -26,6 +27,4 @@ namespace Tida.Canvas.Shell.Contracts.Ribbon {
         /// </summary>
         string HeaderLanguageKey { get; }
     }
-
-    
 }

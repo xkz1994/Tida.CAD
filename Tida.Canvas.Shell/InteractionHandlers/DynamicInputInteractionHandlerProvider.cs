@@ -12,18 +12,18 @@ using System.Threading.Tasks;
 using Tida.Canvas.Shell.Contracts.Setting;
 using static Tida.Canvas.Shell.Contracts.Constants;
 
-namespace Tida.Canvas.Shell.InteractionHandlers {
-
+namespace Tida.Canvas.Shell.InteractionHandlers
+{
     /// <summary>
     /// 动态输入交互处理器提供器;
     /// </summary>
     [ExportCanvasInteractionHandlerProvider]
-    class DynamicInputInteractionHandlerProvider : ICanvasInteractionHandlerProvider {
+    class DynamicInputInteractionHandlerProvider : ICanvasInteractionHandlerProvider
+    {
         [ImportingConstructor]
-        public DynamicInputInteractionHandlerProvider([ImportMany]IEnumerable<Lazy<ICanvasControlDynamicInputerProvider, ICanvasInteractionHandlerProviderMetaData>> mefEditToolDynamicInputerProviders) {
-
-            DynamicInputInteractionHandler.CanvasControlDynamicInputerProviders.
-                AddRange(mefEditToolDynamicInputerProviders.OrderBy(p => p.Metadata.Order).Select(p => p.Value));
+        public DynamicInputInteractionHandlerProvider([ImportMany] IEnumerable<Lazy<ICanvasControlDynamicInputerProvider, ICanvasInteractionHandlerProviderMetaData>> mefEditToolDynamicInputerProviders)
+        {
+            DynamicInputInteractionHandler.CanvasControlDynamicInputerProviders.AddRange(mefEditToolDynamicInputerProviders.OrderBy(p => p.Metadata.Order).Select(p => p.Value));
 
             var section = SettingsService.GetOrCreateSection(SettingSection_Canvas);
 
@@ -38,8 +38,8 @@ namespace Tida.Canvas.Shell.InteractionHandlers {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DynamicInputInteractionHandler_IsEnabledChanged(object sender, ValueChangedEventArgs<bool> e) {
-
+        private void DynamicInputInteractionHandler_IsEnabledChanged(object sender, ValueChangedEventArgs<bool> e)
+        {
             var section = SettingsService.GetOrCreateSection(SettingSection_Canvas);
 
             //默认设为可用;

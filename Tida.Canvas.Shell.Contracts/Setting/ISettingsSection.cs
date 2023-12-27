@@ -6,11 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Tida.Util.Common.Util;
 
-namespace Tida.Canvas.Shell.Contracts.Setting {
+namespace Tida.Canvas.Shell.Contracts.Setting
+{
     /// <summary>
     /// 设定节;
     /// </summary>
-    public interface ISettingsSection : ICloneable<ISettingsSection> {
+    public interface ISettingsSection : ICloneable<ISettingsSection>
+    {
         /// <summary>
         /// 唯一标识;
         /// </summary>
@@ -19,7 +21,7 @@ namespace Tida.Canvas.Shell.Contracts.Setting {
         /// <summary>
         /// 所有设定对;
         /// </summary>
-        IEnumerable<Tuple<string,string>> Attributes { get; }
+        IEnumerable<Tuple<string, string>> Attributes { get; }
 
         /// <summary>
         /// 设定或添加新的设定对;
@@ -43,7 +45,4 @@ namespace Tida.Canvas.Shell.Contracts.Setting {
         /// <param name="name"></param>
         bool RemoveAttribute(string name);
     }
-
-
-    
 }

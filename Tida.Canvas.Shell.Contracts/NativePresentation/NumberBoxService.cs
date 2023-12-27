@@ -6,10 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Tida.Canvas.Shell.Contracts.Common;
 
-namespace Tida.Canvas.Shell.Contracts.NativePresentation {
+namespace Tida.Canvas.Shell.Contracts.NativePresentation
+{
     /// <summary>
     /// 输入框服务的静态封装;
     /// </summary>
-    public class NumberBoxService: GenericServiceStaticInstance<INumberBoxService> {
+    public class NumberBoxService : GenericServiceStaticInstance<INumberBoxService>
+    {
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using Tida.Canvas.Shell.Contracts.Docking;
+﻿using Tida.Canvas.Shell.Contracts.Docking;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -9,33 +8,38 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using static Tida.Canvas.Shell.Contracts.MainPage.Constants;
 
-namespace Tida.Canvas.Shell.MainPage {
+namespace Tida.Canvas.Shell.MainPage
+{
     /// <summary>
     /// 停靠区域容器-左;
     /// </summary>
-    [ExportDockingContainer(DockingServiceGUID = DockingService_Main,GUID = DockingContainer_Left,InitDockingPosition = DockingPosition.Left)]
-    class LeftDockingPaneContainer : IDockingContainer {
+    [ExportDockingContainer(DockingServiceGUID = DockingService_Main, GUID = DockingContainer_Left, InitDockingPosition = DockingPosition.Left)]
+    class LeftDockingPaneContainer : IDockingContainer
+    {
     }
 
     /// <summary>
     /// 停靠区域容器-右;
     /// </summary>
     [ExportDockingContainer(DockingServiceGUID = DockingService_Main, GUID = DockingContainer_Right, InitDockingPosition = DockingPosition.Right)]
-    class RightDockingPaneContainer : IDockingContainer {
+    class RightDockingPaneContainer : IDockingContainer
+    {
     }
 
     /// <summary>
     /// 停靠区域容器-底部;
     /// </summary>
-    [ExportDockingContainer(DockingServiceGUID = DockingService_Main, GUID = DockingContainer_Bottom, InitDockingPosition = DockingPosition.Bottom,Orientation = Orientation.Horizontal)]
-    class BottomDockingPaneContainer : IDockingContainer {
+    [ExportDockingContainer(DockingServiceGUID = DockingService_Main, GUID = DockingContainer_Bottom, InitDockingPosition = DockingPosition.Bottom, Orientation = Orientation.Horizontal)]
+    class BottomDockingPaneContainer : IDockingContainer
+    {
     }
 
     /// <summary>
     /// 停靠区域容器-顶部;
     /// </summary>
     [ExportDockingContainer(DockingServiceGUID = DockingService_Main, GUID = DockingContainer_Top, InitDockingPosition = DockingPosition.Top)]
-    class TopDockingPaneContainer : IDockingContainer {
+    class TopDockingPaneContainer : IDockingContainer
+    {
     }
 
     ///// <summary>

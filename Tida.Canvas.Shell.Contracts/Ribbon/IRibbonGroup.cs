@@ -4,15 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.Ribbon {
+namespace Tida.Canvas.Shell.Contracts.Ribbon
+{
     /// <summary>
     /// Ribbon组;
     /// </summary>
-    public interface IRibbonGroup {
-        
+    public interface IRibbonGroup
+    {
     }
 
-    public interface IRibbonGroupMetaData {
+    public interface IRibbonGroupMetaData
+    {
         /// <summary>
         /// <see cref="IRibbonTab.GUID"/> 的标识;
         /// </summary>

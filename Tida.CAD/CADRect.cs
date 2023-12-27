@@ -42,10 +42,11 @@ namespace Tida.CAD
             Width = width;
             Height = height;
         }
+
         /// <summary>
         /// Constructor which sets the initial values to bound the two points provided.
         /// </summary>
-        public CADRect(Point point1,Point point2)
+        public CADRect(Point point1, Point point2)
         {
             X = Math.Min(point1.X, point2.X);
             Y = Math.Min(point1.Y, point2.Y);
@@ -78,12 +79,12 @@ namespace Tida.CAD
         /// <summary>
         /// Get the center point of the rectangle;
         /// </summary>
-        public Point Center => new Point(X + Width / 2,Y + Height / 2);
+        public Point Center => new Point(X + Width / 2, Y + Height / 2);
 
         /// <summary>
         /// Get the top-left point of the rectangle;
         /// </summary>
-        public Point TopLeft => new Point(X , Y + Height);
+        public Point TopLeft => new Point(X, Y + Height);
 
         /// <summary>
         /// Get the bottom-left point of the rectangle;
@@ -93,7 +94,7 @@ namespace Tida.CAD
         /// <summary>
         /// Get the bottom-right point of the rectangle;
         /// </summary>
-        public Point BottomRight => new Point(X + Width,Y);
+        public Point BottomRight => new Point(X + Width, Y);
 
         /// <summary>
         /// Get the top-right point of the rectangle;
@@ -116,7 +117,7 @@ namespace Tida.CAD
             yield return TopRight;
             yield return TopLeft;
         }
-        
+
         /// <summary>
         /// Get all the borders of the rect(unclockwise)
         /// </summary>

@@ -5,11 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tida.Canvas.Contracts {
+namespace Tida.Canvas.Contracts
+{
     /// <summary>
     /// 画布数据协约;
     /// </summary>
-    public interface ICanvasContext {
+    public interface ICanvasContext
+    {
         /// <summary>
         /// 所有图层(内容图层);
         /// </summary>
@@ -39,7 +41,7 @@ namespace Tida.Canvas.Contracts {
         /// <summary>
         /// 上次编辑的标识位置;以工程数学坐标为准;
         /// </summary>
-        Vector2D LastEditPosition { get;  }
+        Vector2D LastEditPosition { get; }
 
 
         /// <summary>
@@ -86,19 +88,21 @@ namespace Tida.Canvas.Contracts {
     /// <summary>
     /// 画布上下文拓展;
     /// </summary>
-    public static class ICanvasContextExtensions {
+    public static class ICanvasContextExtensions
+    {
         /// <summary>
         /// 获取画布上下文中所有绘制对象;
         /// </summary>
         /// <param name="canvasContext"></param>
         /// <returns></returns>
-        public static IEnumerable<DrawObject> GetAllDrawObjects(this ICanvasContext canvasContext) {
-
-            if (canvasContext == null) {
+        public static IEnumerable<DrawObject> GetAllDrawObjects(this ICanvasContext canvasContext)
+        {
+            if (canvasContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasContext));
             }
 
-            return canvasContext.Layers?.SelectMany(p => p.DrawObjects)??Enumerable.Empty<DrawObject>();
+            return canvasContext.Layers?.SelectMany(p => p.DrawObjects) ?? Enumerable.Empty<DrawObject>();
         }
 
         /// <summary>
@@ -106,16 +110,14 @@ namespace Tida.Canvas.Contracts {
         /// </summary>
         /// <param name="canvasContext"></param>
         /// <returns></returns>
-        public static IEnumerable<DrawObject> GetAllVisibleDrawObjects(this ICanvasContext canvasContext) {
-
-            if (canvasContext == null) {
+        public static IEnumerable<DrawObject> GetAllVisibleDrawObjects(this ICanvasContext canvasContext)
+        {
+            if (canvasContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasContext));
             }
 
-            return canvasContext.Layers?.
-                Where(p => p.IsVisible)?.
-                SelectMany(p => p.DrawObjects)?.
-                Where(p => p.IsVisible) ?? Enumerable.Empty<DrawObject>();
+            return canvasContext.Layers?.Where(p => p.IsVisible)?.SelectMany(p => p.DrawObjects)?.Where(p => p.IsVisible) ?? Enumerable.Empty<DrawObject>();
         }
 
         /// <summary>
@@ -123,7 +125,8 @@ namespace Tida.Canvas.Contracts {
         /// </summary>
         /// <param name="canvasContext"></param>
         /// <returns></returns>
-        public static IEnumerable<TDrawObject> GetAllVisibleDrawObjects<TDrawObject>(this ICanvasContext canvasContext) where TDrawObject:DrawObject {
+        public static IEnumerable<TDrawObject> GetAllVisibleDrawObjects<TDrawObject>(this ICanvasContext canvasContext) where TDrawObject : DrawObject
+        {
             return GetAllDrawObjects(canvasContext).Select(p => p as TDrawObject).Where(p => p != null);
         }
 
@@ -132,8 +135,10 @@ namespace Tida.Canvas.Contracts {
         /// </summary>
         /// <param name="canvasContext"></param>
         /// <returns></returns>
-        public static IEnumerable<CanvasLayer> GetVisibleLayers(this ICanvasContext canvasContext) {
-            if (canvasContext == null) {
+        public static IEnumerable<CanvasLayer> GetVisibleLayers(this ICanvasContext canvasContext)
+        {
+            if (canvasContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasContext));
             }
 
@@ -145,39 +150,43 @@ namespace Tida.Canvas.Contracts {
         /// </summary>
         /// <param name="canvasContext"></param>
         /// <returns></returns>
-        public static IEnumerable<CanvasLayer> GetInteractionableLayers(this ICanvasContext canvasContext) {
-            if (canvasContext == null) {
+        public static IEnumerable<CanvasLayer> GetInteractionableLayers(this ICanvasContext canvasContext)
+        {
+            if (canvasContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasContext));
             }
 
-            return canvasContext.Layers?.Where(p => !p.IsLocked)?.
-                Where(p => p.IsVisible) ?? Enumerable.Empty<CanvasLayer>();
+            return canvasContext.Layers?.Where(p => !p.IsLocked)?.Where(p => p.IsVisible) ?? Enumerable.Empty<CanvasLayer>();
         }
 
         /// <summary>
         /// 调整画布位置和缩放比例,以使得所有绘制对象在可见的范围内;
         /// </summary>
-        public static void ViewAllDrawObjects(this ICanvasContext canvasContext) {
-            if (canvasContext == null) {
+        public static void ViewAllDrawObjects(this ICanvasContext canvasContext)
+        {
+            if (canvasContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasContext));
             }
 
-            if (canvasContext.CanvasProxy == null) {
+            if (canvasContext.CanvasProxy == null)
+            {
                 return;
             }
 
-            if (canvasContext.Layers == null) {
+            if (canvasContext.Layers == null)
+            {
                 return;
             }
 
             //获取所有绘制对象所在的矩形;
-            var rects = canvasContext.Layers.
-                SelectMany(p => p.DrawObjects).
-                Select(p => p.GetBoundingRect()).Where(p => p != null);
+            var rects = canvasContext.Layers.SelectMany(p => p.DrawObjects).Select(p => p.GetBoundingRect()).Where(p => p != null);
 
             var allVertexes = rects.SelectMany(p => p.GetVertexes()).ToArray();
 
-            if (allVertexes.Length == 0) {
+            if (allVertexes.Length == 0)
+            {
                 return;
             }
 
@@ -220,5 +229,4 @@ namespace Tida.Canvas.Contracts {
 
         //}
     }
-
 }

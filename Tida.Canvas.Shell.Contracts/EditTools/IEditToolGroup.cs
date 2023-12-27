@@ -1,8 +1,10 @@
-﻿namespace Tida.Canvas.Shell.Contracts.EditTools {
+﻿namespace Tida.Canvas.Shell.Contracts.EditTools
+{
     /// <summary>
     /// 编辑工具组;
     /// </summary>
-    public interface IEditToolGroup {
+    public interface IEditToolGroup
+    {
         /// <summary>
         /// 唯一标识;
         /// </summary>

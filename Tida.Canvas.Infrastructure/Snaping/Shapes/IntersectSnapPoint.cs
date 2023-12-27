@@ -4,34 +4,41 @@ using Tida.Geometry.Primitives;
 using Tida.Canvas.Infrastructure.Utils;
 using static Tida.Canvas.Infrastructure.Constants;
 
-namespace Tida.Canvas.Infrastructure.Snaping.Shapes {
+namespace Tida.Canvas.Infrastructure.Snaping.Shapes
+{
     /// <summary>
     /// 表示相交的辅助点;
     /// </summary>
-    public class IntersectSnapPoint : SnapShapeBase {
+    public class IntersectSnapPoint : SnapShapeBase
+    {
         /// <summary>
         /// 相交辅助节点的构建方式;
         /// </summary>
         /// <param name="position">相交的坐标</param>
-        public IntersectSnapPoint(Vector2D position) {
-            if(position == null) {
+        public IntersectSnapPoint(Vector2D position)
+        {
+            if (position == null)
+            {
                 throw new ArgumentNullException(nameof(position));
             }
-            
+
             Position = position;
         }
-        
+
         /// <summary>
         /// 交点绘制;
         /// </summary>
         /// <param name="canvas"></param>
         /// <param name="canvasProxy"></param>
-        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy) {
-            if(canvas == null) {
+        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy)
+        {
+            if (canvas == null)
+            {
                 throw new ArgumentNullException(nameof(canvas));
             }
 
-            if(canvasProxy == null) {
+            if (canvasProxy == null)
+            {
                 throw new ArgumentNullException(nameof(canvasProxy));
             }
 
@@ -45,16 +52,18 @@ namespace Tida.Canvas.Infrastructure.Snaping.Shapes {
             );
             //从左下到右上;
             var line2 = new Line2D(
-                new Vector2D(screenPosition.X - rectLength,screenPosition.Y + rectLength),
-                new Vector2D(screenPosition.X + rectLength,screenPosition.Y - rectLength)
+                new Vector2D(screenPosition.X - rectLength, screenPosition.Y + rectLength),
+                new Vector2D(screenPosition.X + rectLength, screenPosition.Y - rectLength)
             );
 
-            canvas.NativeDrawLine(IntersectPen,line1);
+            canvas.NativeDrawLine(IntersectPen, line1);
             canvas.NativeDrawLine(IntersectPen, line2);
         }
 
-        public override Rectangle2D2 GetNativeBoundingRect(ICanvasScreenConvertable canvasProxy) {
-            if (canvasProxy == null) {
+        public override Rectangle2D2 GetNativeBoundingRect(ICanvasScreenConvertable canvasProxy)
+        {
+            if (canvasProxy == null)
+            {
                 throw new ArgumentNullException(nameof(canvasProxy));
             }
 
@@ -69,7 +78,5 @@ namespace Tida.Canvas.Infrastructure.Snaping.Shapes {
 
             return rect;
         }
-
-
     }
 }

@@ -4,15 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.Ribbon {
+namespace Tida.Canvas.Shell.Contracts.Ribbon
+{
     /// <summary>
     /// Ribbon下拉项契约;
     /// </summary>
-    public interface IRibbonDropDownButtonItem:IRibbonItem {
-        
+    public interface IRibbonDropDownButtonItem : IRibbonItem
+    {
     }
 
-    public interface IRibbonDropDownButtonItemMetaData {
+    public interface IRibbonDropDownButtonItemMetaData
+    {
         /// <summary>
         /// Icon;   
         /// </summary>

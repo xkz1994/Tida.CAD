@@ -13,8 +13,8 @@
             <Button Click="ChangeLayerBackground_Click">Change LayerBackground</Button>
             <Button Click="Clear_Click">Clear</Button>
             <Button Click="AddPolygon_Click">Add Polygon</Button>
-          
+
         </UniformGrid>
-        <tidacad:CADControl x:Name="cadControl"/>
+        <tidacad:CADControl x:Name="cadControl" />
     </DockPanel>
 </Window>

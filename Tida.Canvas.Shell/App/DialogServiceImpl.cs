@@ -4,33 +4,42 @@ using Tida.Canvas.Shell.Contracts.App;
 using Tida.Canvas.Shell.Contracts.App.Input;
 using Ookii.Dialogs.Wpf;
 
-namespace Tida.Canvas.Shell.App {
+namespace Tida.Canvas.Shell.App
+{
     /// <summary>
     /// 对话框服务;
     /// </summary>
     [Export(typeof(IDialogService))]
-    class DialogServiceImpl : IDialogService {
-        public string GetSaveFilePath(string defaultFileName) {
-            return GetSaveFilePath(defaultFileName,null);
+    class DialogServiceImpl : IDialogService
+    {
+        public string GetSaveFilePath(string defaultFileName)
+        {
+            return GetSaveFilePath(defaultFileName, null);
         }
 
-        public string GetSaveFilePath() {
-            return GetSaveFilePath(null,null);
+        public string GetSaveFilePath()
+        {
+            return GetSaveFilePath(null, null);
         }
 
-        public string GetSaveFilePath(string defaultFileName, string filter) {
-            var dialog = new VistaSaveFileDialog {
+        public string GetSaveFilePath(string defaultFileName, string filter)
+        {
+            var dialog = new VistaSaveFileDialog
+            {
                 FileName = defaultFileName
             };
 
-            if (dialog.ShowDialog() == true) {
+            if (dialog.ShowDialog() == true)
+            {
                 return dialog.FileName;
             }
+
             return null;
         }
 
 
-        public string OpenFile() {
+        public string OpenFile()
+        {
             return OpenFile(string.Empty);
         }
 
@@ -40,26 +49,31 @@ namespace Tida.Canvas.Shell.App {
 
         //public IDoubleLoadingDialog CreateDoubleLoadingDialog() => new DoubleProcessDialog();
 
-        public string OpenFile(string filter) {
+        public string OpenFile(string filter)
+        {
             var dialog = new VistaOpenFileDialog();
-            if (dialog.ShowDialog() == true) {
+            if (dialog.ShowDialog() == true)
+            {
                 return dialog.FileName;
             }
+
             return null;
         }
 
-        public string OpenDirect() {
+        public string OpenDirect()
+        {
             var dialog = new VistaFolderBrowserDialog();
-            if (dialog.ShowDialog() == true) {
+            if (dialog.ShowDialog() == true)
+            {
                 return dialog.SelectedPath;
             }
 
             return string.Empty;
         }
 
-        public string GetInputValue(GetInputValueSetting getInputValueSetting = null) {
+        public string GetInputValue(GetInputValueSetting getInputValueSetting = null)
+        {
             return InputValueDialog.Show(getInputValueSetting);
-
         }
 
         //public string GetInputValue(string title = "", string desc = "", string val = "") {

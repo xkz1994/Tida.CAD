@@ -7,7 +7,8 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using static Tida.Canvas.Shell.Contracts.EditTools.Constants;
 
-namespace Tida.Canvas.Shell.EditTools {
+namespace Tida.Canvas.Shell.EditTools
+{
     /// <summary>
     /// 编辑工具——移动;
     /// </summary>
@@ -19,13 +20,14 @@ namespace Tida.Canvas.Shell.EditTools {
         Order = 666,
         Key = System.Windows.Input.Key.M
     )]
-    public class MoveEditToolProvider : EditToolProviderGenericBase<MoveEditTool>,IEditToolProvider {
+    public class MoveEditToolProvider : EditToolProviderGenericBase<MoveEditTool>, IEditToolProvider
+    {
         [ImportingConstructor]
         public MoveEditToolProvider(
-            [ImportMany]IEnumerable<IDrawObjectMoveTool> drawObjectCloneTools,
-            [ImportMany]IEnumerable<IMoveToolsProvider> moveToolsProviders
-        ) {
-
+            [ImportMany] IEnumerable<IDrawObjectMoveTool> drawObjectCloneTools,
+            [ImportMany] IEnumerable<IMoveToolsProvider> moveToolsProviders
+        )
+        {
             MoveEditTool.DrawObjectMoveTools.Clear();
             MoveEditTool.DrawObjectMoveTools.AddRange(drawObjectCloneTools);
             MoveEditTool.DrawObjectMoveTools.AddRange(moveToolsProviders.SelectMany(p => p.Tools));

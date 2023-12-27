@@ -1,14 +1,17 @@
 ﻿using Tida.Canvas.Contracts;
 using System;
 
-namespace Tida.Canvas.Infrastructure.DynamicInput {
+namespace Tida.Canvas.Infrastructure.DynamicInput
+{
     /// <summary>
     /// 动态输入处理器基类;
     /// </summary>
-    public abstract class DynamicInputerBase: CanvasElement,IDynamicInputer {
-
-        public void Dispose() {
-            if (_disposed) {
+    public abstract class DynamicInputerBase : CanvasElement, IDynamicInputer
+    {
+        public void Dispose()
+        {
+            if (_disposed)
+            {
                 throw new ObjectDisposedException($"The object has already been disposed.");
             }
 
@@ -17,11 +20,12 @@ namespace Tida.Canvas.Infrastructure.DynamicInput {
             Disposed?.Invoke(this, EventArgs.Empty);
         }
 
-        protected virtual void OnDispose() {
-            
+        protected virtual void OnDispose()
+        {
         }
 
         private bool _disposed;
+
         /// <summary>
         /// 已经调用了Dispose
         /// </summary>

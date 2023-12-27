@@ -25,11 +25,9 @@ namespace Tida.CAD.WPF.SimpleSample.Views
 
             var cadLayer = new CADLayer();
             cadControl.Layers = new CADLayer[] { cadLayer };
-            var line = new Line { Start = new Point(0, 0), End = new Point(10, 10)};
+            var line = new Line { Start = new Point(0, 0), End = new Point(10, 10) };
             line.Pen = new Pen { Thickness = 2, Brush = Brushes.White };
             cadLayer.AddDrawObject(line);
         }
-
-       
     }
 }

@@ -7,12 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.ExtendTools {
+namespace Tida.Canvas.Shell.ExtendTools
+{
     [Export(typeof(IExtendToolsProvider))]
-    class BasicExtendToolsProvider : IExtendToolsProvider {
+    class BasicExtendToolsProvider : IExtendToolsProvider
+    {
         private IDrawObjectExtendTool[] _tools;
+
         public IEnumerable<IDrawObjectExtendTool> Tools =>
-            _tools ?? (_tools = new IDrawObjectExtendTool[] {
+            _tools ?? (_tools = new IDrawObjectExtendTool[]
+            {
                 new LineExtendTool()
             });
     }

@@ -10,7 +10,8 @@ namespace Tida.CAD.Events
         RoutedEventArgs
 #endif
     {
-        public DragSelectMouseMoveEventArgs(CADRect rect,Point position) {
+        public DragSelectMouseMoveEventArgs(CADRect rect, Point position)
+        {
             Rect = rect;
             Position = position;
         }
@@ -19,7 +20,7 @@ namespace Tida.CAD.Events
         /// The rect that contains the draging select area;
         /// </summary>
         public CADRect Rect { get; }
-        
+
         /// <summary>
         /// Whether anypoint select;
         /// </summary>

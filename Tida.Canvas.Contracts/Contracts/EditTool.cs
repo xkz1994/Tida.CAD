@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Contracts {
-
+namespace Tida.Canvas.Contracts
+{
     /// <summary>
     /// 编辑工具协约;
     /// </summary>
-    public  abstract partial class EditTool:CanvasElement, IDrawable,IInputElement {
-
+    public abstract partial class EditTool : CanvasElement, IDrawable, IInputElement
+    {
         public abstract bool CanUndo { get; }
 
         public abstract bool CanRedo { get; }
@@ -55,7 +55,9 @@ namespace Tida.Canvas.Contracts {
         /// 开始/终止操作事件事件;
         /// </summary>
         public event EventHandler OperationBegan;
+
         public event EventHandler OperationEnded;
+
         /// <summary>
         /// 发生了错误事件;
         /// </summary>
@@ -64,7 +66,8 @@ namespace Tida.Canvas.Contracts {
         /// <summary>
         /// 触发可撤销/重做状态变更事件;
         /// </summary>
-        protected void RaiseCanUndoRedoChanged() {
+        protected void RaiseCanUndoRedoChanged()
+        {
             CanRedoChanged?.Invoke(this, new CanRedoChangedEventArgs(CanRedo));
             CanUndoChanged?.Invoke(this, new CanUndoChangedEventArgs(CanUndo));
         }
@@ -73,8 +76,10 @@ namespace Tida.Canvas.Contracts {
         /// 触发错误发生事件;
         /// </summary>
         /// <param name="ex"></param>
-        protected void RaiseErrorOccurred(Exception ex) {
-            if (ex == null) {
+        protected void RaiseErrorOccurred(Exception ex)
+        {
+            if (ex == null)
+            {
                 throw new ArgumentNullException(nameof(ex));
             }
 
@@ -85,8 +90,10 @@ namespace Tida.Canvas.Contracts {
         /// 呈递事务,并触发已呈递事务事件,可被子类使用;
         /// </summary>
         /// <param name="transaction"></param>
-        protected void CommitTransaction(IEditTransaction transaction) {
-            if (transaction == null) {
+        protected void CommitTransaction(IEditTransaction transaction)
+        {
+            if (transaction == null)
+            {
                 throw new ArgumentNullException(nameof(transaction));
             }
 
@@ -96,20 +103,26 @@ namespace Tida.Canvas.Contracts {
         /// <summary>
         /// 应用未更改的编辑操作;
         /// </summary>
-        public void Commit() {
+        public void Commit()
+        {
             OnCommit();
         }
 
-        protected virtual void OnCommit() { }
+        protected virtual void OnCommit()
+        {
+        }
 
         public abstract void Redo();
 
         public abstract void Undo();
 
         private ICanvasContextEx _canvasContext;
-        public ICanvasContextEx CanvasContext {
+
+        public ICanvasContextEx CanvasContext
+        {
             get => _canvasContext;
-            set {
+            set
+            {
                 var oldCanvasContext = _canvasContext;
                 _canvasContext = value;
                 OnCanvasContextChanged(new ValueChangedEventArgs<ICanvasContextEx>(_canvasContext, oldCanvasContext));
@@ -120,13 +133,16 @@ namespace Tida.Canvas.Contracts {
         /// 当<see cref="CanvasContext"/>发生变化时;
         /// </summary>
         /// <param name="args"></param>
-        protected virtual void OnCanvasContextChanged(ValueChangedEventArgs<ICanvasContextEx> args) { }
+        protected virtual void OnCanvasContextChanged(ValueChangedEventArgs<ICanvasContextEx> args)
+        {
+        }
 
         /// <summary>
         /// 开始操作;
         /// </summary>
         /// <param name="canvasContext"></param>
-        public void BeginOperation() {
+        public void BeginOperation()
+        {
             OnBeginOperation();
             OperationBegan?.Invoke(this, EventArgs.Empty);
         }
@@ -135,15 +151,16 @@ namespace Tida.Canvas.Contracts {
         /// 开始操作可重写方法;
         /// </summary>
         /// <param name="canvasContext"></param>
-        protected virtual void OnBeginOperation() {
-
+        protected virtual void OnBeginOperation()
+        {
         }
 
         /// <summary>
         /// 终止操作可重写方法;
         /// </summary>
         /// <param name="canvasContext"></param>
-        public void EndOperation() {
+        public void EndOperation()
+        {
             OnEndOperation();
             OperationEnded?.Invoke(this, EventArgs.Empty);
         }
@@ -152,15 +169,13 @@ namespace Tida.Canvas.Contracts {
         /// 停止操作;
         /// </summary>
         /// <param name="canvasContext"></param>
-        protected virtual void OnEndOperation() {
-
+        protected virtual void OnEndOperation()
+        {
         }
-        
-        
     }
 
-    public  abstract partial class EditTool {
-
+    public abstract partial class EditTool
+    {
         /// <summary>
         /// 处理事件的泛型方法;
         /// </summary>
@@ -173,11 +188,12 @@ namespace Tida.Canvas.Contracts {
             EventHandler<TEventArgs> previewHandler,
             Action<TEventArgs> handler,
             TEventArgs e
-        ) where TEventArgs : HandleableEventArgs {
-
+        ) where TEventArgs : HandleableEventArgs
+        {
             previewHandler?.Invoke(sender, e);
 
-            if (e.Handled) {
+            if (e.Handled)
+            {
                 return;
             }
 
@@ -185,49 +201,58 @@ namespace Tida.Canvas.Contracts {
         }
 
 
-        public void RaisePreviewMouseDown(MouseDownEventArgs e) {
+        public void RaisePreviewMouseDown(MouseDownEventArgs e)
+        {
             HandleEventArgs(this, CanvasPreviewMouseDown, OnMouseDown, e);
         }
 
-        protected virtual void OnMouseDown(MouseDownEventArgs e) { }
+        protected virtual void OnMouseDown(MouseDownEventArgs e)
+        {
+        }
 
-        public void RaisePreviewMouseMove(MouseMoveEventArgs e) {
+        public void RaisePreviewMouseMove(MouseMoveEventArgs e)
+        {
             HandleEventArgs(this, CanvasPreviewMouseMove, OnMouseMove, e);
         }
 
-        protected virtual void OnMouseMove(MouseMoveEventArgs e) {
-
+        protected virtual void OnMouseMove(MouseMoveEventArgs e)
+        {
         }
 
-        public void RaisePreviewMouseUp(MouseUpEventArgs e) {
+        public void RaisePreviewMouseUp(MouseUpEventArgs e)
+        {
             HandleEventArgs(this, CanvasPreviewMouseUp, OnMouseUp, e);
         }
 
-        protected virtual void OnMouseUp(MouseUpEventArgs e) {
-
+        protected virtual void OnMouseUp(MouseUpEventArgs e)
+        {
         }
 
-        public void RaisePreviewKeyDown(KeyDownEventArgs e) {
+        public void RaisePreviewKeyDown(KeyDownEventArgs e)
+        {
             HandleEventArgs(this, CanvasPreviewKeyDown, args => OnKeyDown(args), e);
         }
 
-        protected virtual void OnKeyDown(KeyDownEventArgs e) {
-
+        protected virtual void OnKeyDown(KeyDownEventArgs e)
+        {
         }
 
-        public void RaisePreviewKeyUp(KeyUpEventArgs e) {
+        public void RaisePreviewKeyUp(KeyUpEventArgs e)
+        {
             HandleEventArgs(this, CanvasPreviewKeyUp, OnKeyUp, e);
         }
 
-        protected virtual void OnKeyUp(KeyUpEventArgs e) {
+        protected virtual void OnKeyUp(KeyUpEventArgs e)
+        {
         }
 
-        public void RaisePreviewTextInput(TextInputEventArgs e) {
+        public void RaisePreviewTextInput(TextInputEventArgs e)
+        {
             HandleEventArgs(this, CanvasPreviewTextInput, OnTextInput, e);
         }
 
-        protected virtual void OnTextInput(TextInputEventArgs e) {
-
+        protected virtual void OnTextInput(TextInputEventArgs e)
+        {
         }
     }
 }

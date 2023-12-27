@@ -6,11 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Contracts {
+namespace Tida.Canvas.Contracts
+{
     /// <summary>
     /// 具备编辑工具契约;
     /// </summary>
-    public interface  IHaveEditTool {
+    public interface IHaveEditTool
+    {
         /// <summary>
         /// 当前使用的编辑工具;
         /// </summary>
@@ -20,6 +22,5 @@ namespace Tida.Canvas.Contracts {
         /// 当前的编辑工具变化事件;
         /// </summary>
         event EventHandler<ValueChangedEventArgs<EditTool>> CurrentEditToolChanged;
-
     }
 }

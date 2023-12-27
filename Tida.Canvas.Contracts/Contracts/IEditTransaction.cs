@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Contracts {
+namespace Tida.Canvas.Contracts
+{
     /// <summary>
     /// 编辑事务,用于记录编辑操作,便于进行撤销,重做等操作;
     /// </summary>
-    public interface IEditTransaction {
+    public interface IEditTransaction
+    {
         /// <summary>
         /// 撤销;
         /// </summary>
@@ -23,7 +25,5 @@ namespace Tida.Canvas.Contracts {
         /// 能否重做;
         /// </summary>
         bool CanRedo { get; }
-        
     }
-
 }

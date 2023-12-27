@@ -4,29 +4,35 @@ using Tida.Canvas.Events;
 using System;
 using System.Collections.Generic;
 
-namespace Tida.Canvas.Infrastructure.InteractionHandlers {
+namespace Tida.Canvas.Infrastructure.InteractionHandlers
+{
     /// <summary>
     /// 画布交互处理器——动态输入;
     /// </summary>
-    public class DynamicInputInteractionHandler : CanvasInteractionHandler {
-        public DynamicInputInteractionHandler() {
+    public class DynamicInputInteractionHandler : CanvasInteractionHandler
+    {
+        public DynamicInputInteractionHandler()
+        {
             Initialize();
         }
 
         /// <summary>
         /// 初始化;
         /// </summary>
-        private void Initialize() {
+        private void Initialize()
+        {
             //订阅可用变更事件;
             IsEnabledChanged += DynamicInputInteractionHandler_IsEnabledChanged;
         }
 
-        private void UnInitialize() {
+        private void UnInitialize()
+        {
             //退订可用变更事件;
             IsEnabledChanged -= DynamicInputInteractionHandler_IsEnabledChanged;
         }
 
-        private void DynamicInputInteractionHandler_IsEnabledChanged(object sender, ValueChangedEventArgs<bool> e) {
+        private void DynamicInputInteractionHandler_IsEnabledChanged(object sender, ValueChangedEventArgs<bool> e)
+        {
             RefreshCurrentEditTool(CanvasControl);
         }
 
@@ -34,6 +40,7 @@ namespace Tida.Canvas.Infrastructure.InteractionHandlers {
         /// 所有编辑工具的交互处理器;
         /// </summary>
         public static readonly List<ICanvasControlDynamicInputerProvider> CanvasControlDynamicInputerProviders = new List<ICanvasControlDynamicInputerProvider>();
+
         /// <summary>
         /// 当前使用的动态输入处理器;
         /// </summary>
@@ -43,7 +50,8 @@ namespace Tida.Canvas.Infrastructure.InteractionHandlers {
         /// 设定当前的动态输入处理器为<paramref name="dynamicInputer"/>
         /// </summary>
         /// <param name="dynamicInputer"></param>
-        private void SetCurrentCanvasControlDynamicInputer(IDynamicInputer dynamicInputer) {
+        private void SetCurrentCanvasControlDynamicInputer(IDynamicInputer dynamicInputer)
+        {
             UnSetupCurrentEditToolDynamicInputer();
             _currentCanvasControlDynamicInputer?.Dispose();
 
@@ -56,8 +64,10 @@ namespace Tida.Canvas.Infrastructure.InteractionHandlers {
         /// <summary>
         /// 卸载当前的编辑工具动态输入处理器;
         /// </summary>
-        private void UnSetupCurrentEditToolDynamicInputer() {
-            if (_currentCanvasControlDynamicInputer == null) {
+        private void UnSetupCurrentEditToolDynamicInputer()
+        {
+            if (_currentCanvasControlDynamicInputer == null)
+            {
                 return;
             }
 
@@ -67,8 +77,10 @@ namespace Tida.Canvas.Infrastructure.InteractionHandlers {
         /// <summary>
         /// 装载当前的编辑工具动态输入处理器;
         /// </summary>
-        private void SetupCurrentEditToolDynamicInputer() {
-            if (_currentCanvasControlDynamicInputer == null) {
+        private void SetupCurrentEditToolDynamicInputer()
+        {
+            if (_currentCanvasControlDynamicInputer == null)
+            {
                 return;
             }
 
@@ -80,19 +92,24 @@ namespace Tida.Canvas.Infrastructure.InteractionHandlers {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CurrentEditToolDynamicInputer_VisualChanged(object sender, EventArgs e) {
+        private void CurrentEditToolDynamicInputer_VisualChanged(object sender, EventArgs e)
+        {
             RaiseVisualChanged();
         }
 
 
         private static bool _isEnabled = true;
+
         /// <summary>
         /// 动态输入是否可用;
         /// </summary>
-        public static bool IsEnabled {
+        public static bool IsEnabled
+        {
             get => _isEnabled;
-            set {
-                if (_isEnabled == value) {
+            set
+            {
+                if (_isEnabled == value)
+                {
                     return;
                 }
 
@@ -103,8 +120,10 @@ namespace Tida.Canvas.Infrastructure.InteractionHandlers {
 
         public static event EventHandler<ValueChangedEventArgs<bool>> IsEnabledChanged;
 
-        protected override void OnLoad(ICanvasControl canvasControl) {
-            if (canvasControl == null) {
+        protected override void OnLoad(ICanvasControl canvasControl)
+        {
+            if (canvasControl == null)
+            {
                 return;
             }
 
@@ -115,8 +134,10 @@ namespace Tida.Canvas.Infrastructure.InteractionHandlers {
             //base.OnLoad(canvasControl);
         }
 
-        private void CanvasControl_DrawObjectIsEditingChanged(object sender, DrawObjectIsEditingChangedEventArgs e) {
-            if (!(sender is ICanvasControl canvasControl)) {
+        private void CanvasControl_DrawObjectIsEditingChanged(object sender, DrawObjectIsEditingChangedEventArgs e)
+        {
+            if (!(sender is ICanvasControl canvasControl))
+            {
                 return;
             }
 
@@ -130,39 +151,48 @@ namespace Tida.Canvas.Infrastructure.InteractionHandlers {
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CanvasControl_CurrentEditToolChanged(object sender, ValueChangedEventArgs<EditTool> e) {
-            if (!(sender is ICanvasControl canvasControl)) {
+        private void CanvasControl_CurrentEditToolChanged(object sender, ValueChangedEventArgs<EditTool> e)
+        {
+            if (!(sender is ICanvasControl canvasControl))
+            {
                 return;
             }
 
             SetCurrentCanvasControlDynamicInputer(null);
 
             var editTool = canvasControl.CurrentEditTool;
-            if (editTool == null) {
+            if (editTool == null)
+            {
                 return;
             }
 
             RefreshCurrentEditTool(canvasControl);
         }
 
-        private void RefreshCurrentEditTool(ICanvasControl canvasControl) {
+        private void RefreshCurrentEditTool(ICanvasControl canvasControl)
+        {
             SetCurrentCanvasControlDynamicInputer(null);
 
-            if (!IsEnabled) {
+            if (!IsEnabled)
+            {
                 return;
             }
 
-            foreach (var inputProvider in CanvasControlDynamicInputerProviders) {
+            foreach (var inputProvider in CanvasControlDynamicInputerProviders)
+            {
                 var inputer = inputProvider.CreateInputer(canvasControl);
-                if (inputer != null) {
+                if (inputer != null)
+                {
                     SetCurrentCanvasControlDynamicInputer(inputer);
                     break;
                 }
             }
         }
 
-        protected override void OnUnLoad(ICanvasControl canvasControl) {
-            if (canvasControl == null) {
+        protected override void OnUnLoad(ICanvasControl canvasControl)
+        {
+            if (canvasControl == null)
+            {
                 return;
             }
 
@@ -173,8 +203,10 @@ namespace Tida.Canvas.Infrastructure.InteractionHandlers {
             //base.OnUnLoad(canvasControl);
         }
 
-        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy) {
-            if (!IsEnabled) {
+        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy)
+        {
+            if (!IsEnabled)
+            {
                 return;
             }
 
@@ -183,9 +215,9 @@ namespace Tida.Canvas.Infrastructure.InteractionHandlers {
             base.Draw(canvas, canvasProxy);
         }
 
-        protected override void OnDispose() {
+        protected override void OnDispose()
+        {
             UnInitialize();
         }
     }
-
 }

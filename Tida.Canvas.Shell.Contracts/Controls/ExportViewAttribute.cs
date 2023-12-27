@@ -6,16 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Tida.Canvas.Shell.Contracts.Controls {
+namespace Tida.Canvas.Shell.Contracts.Controls
+{
     /// <summary>
     /// 通过此注解导出视图元数据;
     /// </summary>
-    public class ExportViewAttribute:ExportAttribute {
-        public ExportViewAttribute(string viewName):base(viewName,typeof(FrameworkElement)) {
-            
+    public class ExportViewAttribute : ExportAttribute
+    {
+        public ExportViewAttribute(string viewName) : base(viewName, typeof(FrameworkElement))
+        {
         }
-
-        
     }
 
     ///// <summary>

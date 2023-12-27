@@ -9,7 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using static Tida.Canvas.Infrastructure.Constants;
 
-namespace Tida.Canvas.Infrastructure.EditTools {
+namespace Tida.Canvas.Infrastructure.EditTools
+{
     /// <summary>
     /// 镜像工具
     /// </summary>
@@ -40,6 +41,7 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         /// 即将被添加的绘制对象的撤销/重做栈;
         /// </summary>
         private readonly Stack<DrawObject[]> _undoMirroredDrawObjectsStack = new Stack<DrawObject[]>();
+
         private readonly Stack<DrawObject[]> _redoMirroredDrawObjectsStack = new Stack<DrawObject[]>();
 
         /// <summary>
@@ -48,8 +50,7 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         private void SyncSelectedDrawObjectsToMirroredCells()
         {
             //获取所有被选中的绘制对象;
-            var selectedDrawObjects = CanvasContext.GetAllDrawObjects().Where(p => p.IsSelected).
-                Union(_createdDrawObjects.Where(p => p.IsSelected));
+            var selectedDrawObjects = CanvasContext.GetAllDrawObjects().Where(p => p.IsSelected).Union(_createdDrawObjects.Where(p => p.IsSelected));
 
             //清除集合后重新填充;
             _mirrorEditDrawObjectCells.Clear();
@@ -70,8 +71,7 @@ namespace Tida.Canvas.Infrastructure.EditTools {
                     MirroredDrawObject = copiedObject
                 };
 
-                mirrorCell.DrawObjectMirrorTool = DrawObjectMirrorTools.
-                    FirstOrDefault(p => p.CheckDrawObjectMirrorable(drawObject));
+                mirrorCell.DrawObjectMirrorTool = DrawObjectMirrorTools.FirstOrDefault(p => p.CheckDrawObjectMirrorable(drawObject));
 
                 ///若找到了满足条件的工具项,则加入<see cref="_copyEditDrawObjectCells"/>
                 if (mirrorCell.DrawObjectMirrorTool != null)
@@ -96,10 +96,7 @@ namespace Tida.Canvas.Infrastructure.EditTools {
                 return;
             }
 
-            _mirrorEditDrawObjectCells.ForEach(p =>
-            {
-                p.DrawObjectMirrorTool.Mirror(p.MirroredDrawObject, Line2D.Create(MousePositionTracker.LastMouseDownPosition, MousePositionTracker.CurrentHoverPosition));
-            });
+            _mirrorEditDrawObjectCells.ForEach(p => { p.DrawObjectMirrorTool.Mirror(p.MirroredDrawObject, Line2D.Create(MousePositionTracker.LastMouseDownPosition, MousePositionTracker.CurrentHoverPosition)); });
         }
 
         private MousePositionTracker _mousePositionTracker;
@@ -161,12 +158,8 @@ namespace Tida.Canvas.Infrastructure.EditTools {
 
             //呈递事务;
             var transaction = new StandardEditTransaction(
-                () => {
-                    layer.RemoveDrawObjects(commitedDrawObjects);
-                },
-                () => {
-                    layer.AddDrawObjects(commitedDrawObjects);
-                }
+                () => { layer.RemoveDrawObjects(commitedDrawObjects); },
+                () => { layer.AddDrawObjects(commitedDrawObjects); }
             );
 
             CommitTransaction(transaction);
@@ -257,10 +250,7 @@ namespace Tida.Canvas.Infrastructure.EditTools {
             var position = e.Position;
 
             //进行偏移变化;
-            _mirrorEditDrawObjectCells.ForEach(p =>
-            {
-                p.DrawObjectMirrorTool.Mirror(p.MirroredDrawObject, Line2D.Create(position, MousePositionTracker.LastMouseDownPosition));
-            });
+            _mirrorEditDrawObjectCells.ForEach(p => { p.DrawObjectMirrorTool.Mirror(p.MirroredDrawObject, Line2D.Create(position, MousePositionTracker.LastMouseDownPosition)); });
 
             MousePositionTracker.CurrentHoverPosition = position;
 
@@ -311,7 +301,6 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         /// <param name="e"></param>
         private void CanvasContext_Snaping(object sender, SnapingEventArgs e)
         {
-
             if (e == null)
             {
                 throw new ArgumentNullException(nameof(e));
@@ -321,7 +310,6 @@ namespace Tida.Canvas.Infrastructure.EditTools {
             {
                 e.DrawObjects.Add(drawObject);
             }
-
         }
 
         /// <summary>
@@ -344,14 +332,10 @@ namespace Tida.Canvas.Infrastructure.EditTools {
 
             var axis = Line2D.Create(thisMouseDownPosition, MousePositionTracker.LastMouseDownPosition);
 
-            _mirrorEditDrawObjectCells.ForEach(p =>
-            {
-                p.DrawObjectMirrorTool.Mirror(p.MirroredDrawObject, axis);
-            });
+            _mirrorEditDrawObjectCells.ForEach(p => { p.DrawObjectMirrorTool.Mirror(p.MirroredDrawObject, axis); });
 
             //本次拷贝的绘制对象入栈;
-            var newMirroredDrawObjects = _mirrorEditDrawObjectCells.
-                Select(p => p.MirroredDrawObject.Clone()).ToArray();
+            var newMirroredDrawObjects = _mirrorEditDrawObjectCells.Select(p => p.MirroredDrawObject.Clone()).ToArray();
 
             _createdDrawObjects.AddRange(newMirroredDrawObjects);
 
@@ -390,7 +374,6 @@ namespace Tida.Canvas.Infrastructure.EditTools {
             {
                 e.Cancel = true;
             }
-
         }
 
         /// <summary>

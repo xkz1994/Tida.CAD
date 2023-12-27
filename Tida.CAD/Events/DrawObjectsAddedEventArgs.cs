@@ -6,11 +6,11 @@ namespace Tida.CAD.Events
     /// <summary>
     /// 绘制对象已被添加事件参数;
     /// </summary>
-    public class DrawObjectsAddedEventArgs:EventArgs {
-        public DrawObjectsAddedEventArgs(IEnumerable<DrawObject> drawObjects) {
-
+    public class DrawObjectsAddedEventArgs : EventArgs
+    {
+        public DrawObjectsAddedEventArgs(IEnumerable<DrawObject> drawObjects)
+        {
             DrawObjects = drawObjects ?? throw new ArgumentNullException(nameof(drawObjects));
-
         }
 
         /// <summary>

@@ -9,12 +9,14 @@ using static Tida.Canvas.Shell.CommandOutput.Constants;
 using System.ComponentModel.Composition;
 using Tida.Canvas.Shell.Contracts.App;
 
-namespace Tida.Canvas.Shell.PropertyGrid {
-  
+namespace Tida.Canvas.Shell.PropertyGrid
+{
     [ExportDockingPane(CanUserClose = false, CanFloat = true, InitPaneGroupGUID = DockingPaneGroup_BottomRight, GUID = DockingPane_PropertyGrid)]
-    class PropertyGridPane : DockingPaneBase {
+    class PropertyGridPane : DockingPaneBase
+    {
         [ImportingConstructor]
-        public PropertyGridPane(Views.PropertyGrid propertyGrid) {
+        public PropertyGridPane(Views.PropertyGrid propertyGrid)
+        {
             Header = LanguageService.FindResourceString(PaneHeader_PropertyGrid);
             this._propertyGrid = propertyGrid;
         }

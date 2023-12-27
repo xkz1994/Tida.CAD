@@ -5,19 +5,23 @@ namespace Tida.CAD
     /// <summary>
     /// The base class of things like Layer and drawobjects;
     /// </summary>
-    public abstract class CADElement : IDrawable {
+    public abstract class CADElement : IDrawable
+    {
         private bool _isVisible = true;
+
         /// <summary>
         /// IsVisible;
         /// </summary>
-        public bool IsVisible {
-            get {
-                return _isVisible;
-            }
-            set {
-                if(_isVisible == value) {
+        public bool IsVisible
+        {
+            get { return _isVisible; }
+            set
+            {
+                if (_isVisible == value)
+                {
                     return;
                 }
+
                 _isVisible = value;
                 IsVisibleChanged?.Invoke(this, EventArgs.Empty);
                 RaiseVisualChanged();
@@ -37,7 +41,8 @@ namespace Tida.CAD
         /// <summary>
         /// Notify the components that registered the <see cref="IsVisibleChanged"/>;
         /// </summary>
-        public void RaiseVisualChanged() {
+        public void RaiseVisualChanged()
+        {
             VisualChanged?.Invoke(this, EventArgs.Empty);
         }
 
@@ -46,8 +51,8 @@ namespace Tida.CAD
         //     are directly used by UI framework.
         /// </summary>
         /// <param name="canvas"></param>
-        public virtual void Draw(ICanvas canvas) {
-
+        public virtual void Draw(ICanvas canvas)
+        {
         }
     }
 }

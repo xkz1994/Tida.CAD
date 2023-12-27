@@ -7,11 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Tida.Canvas.Shell.Contracts.Docking {
+namespace Tida.Canvas.Shell.Contracts.Docking
+{
     /// <summary>
     /// 停靠区域契约;
     /// </summary>
-    public interface IDockingPane : IDockingItem,IUIObjectProvider {
+    public interface IDockingPane : IDockingItem, IUIObjectProvider
+    {
         /// <summary>
         /// 头文字发生变化事件;
         /// </summary>
@@ -31,7 +33,7 @@ namespace Tida.Canvas.Shell.Contracts.Docking {
         /// 头部文字;
         /// </summary>
         string Header { get; set; }
-        
+
         /// <summary>
         /// 头部栏可见状态;
         /// </summary>
@@ -46,7 +48,8 @@ namespace Tida.Canvas.Shell.Contracts.Docking {
     /// <summary>
     /// 停靠区域元数据;
     /// </summary>
-    public interface IDockingPaneMetaData:IDockingItemMetaData {
+    public interface IDockingPaneMetaData : IDockingItemMetaData
+    {
         /// <summary>
         /// 初始宽度;
         /// </summary>
@@ -56,7 +59,7 @@ namespace Tida.Canvas.Shell.Contracts.Docking {
         /// 初始高度;
         /// </summary>
         double InitialHeight { get; }
-        
+
         /// <summary>
         /// 初始停靠组唯一标识;
         /// </summary>
@@ -77,9 +80,10 @@ namespace Tida.Canvas.Shell.Contracts.Docking {
     /// 导出停靠区域注解;
     /// </summary>
     [MetadataAttribute, AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public sealed class ExportDockingPaneAttribute : ExportAttribute, IDockingPaneMetaData {
-        public ExportDockingPaneAttribute():base(typeof(IDockingPane)) {
-
+    public sealed class ExportDockingPaneAttribute : ExportAttribute, IDockingPaneMetaData
+    {
+        public ExportDockingPaneAttribute() : base(typeof(IDockingPane))
+        {
         }
 
         public double InitialWidth { get; set; } = double.NaN;

@@ -7,12 +7,17 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Tida.Canvas.Shell.Contracts.Controls {
-    public class GridViewAutoGeneratingColumnEventArgs {
-        public GridViewAutoGeneratingColumnEventArgs(ItemPropertyInfo propertyInfo) {
-            if(propertyInfo == null) {
+namespace Tida.Canvas.Shell.Contracts.Controls
+{
+    public class GridViewAutoGeneratingColumnEventArgs
+    {
+        public GridViewAutoGeneratingColumnEventArgs(ItemPropertyInfo propertyInfo)
+        {
+            if (propertyInfo == null)
+            {
                 throw new ArgumentNullException(nameof(propertyInfo));
             }
+
             this.ItemPropertyInfo = propertyInfo;
         }
 
@@ -25,11 +30,11 @@ namespace Tida.Canvas.Shell.Contracts.Controls {
         /// 数据模板;
         /// </summary>
         public DataTemplate CellTemplate { get; set; }
-        
+
         /// <summary>
         /// 转换器;
         /// </summary>
-        public IValueConverter Converter {get;set;}
+        public IValueConverter Converter { get; set; }
 
         public bool Cancel { get; set; }
 

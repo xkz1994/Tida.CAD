@@ -9,6 +9,5 @@ namespace Tida.Canvas.Shell.ExtensionExample.Ribbon
     class Constants
     {
         public const string RibbonGroupGuid_Test = nameof(RibbonGroupGuid_Test);
-
     }
 }

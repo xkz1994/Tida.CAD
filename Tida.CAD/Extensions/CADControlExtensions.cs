@@ -5,7 +5,6 @@ using System.Text;
 
 namespace Tida.CAD.Extensions
 {
-
     /// <summary>
     /// Some extended methods for <see cref="ICADControl"/>
     /// </summary>
@@ -18,7 +17,6 @@ namespace Tida.CAD.Extensions
         /// <returns></returns>
         public static IEnumerable<DrawObject> GetAllDrawObjects(this ICADControl cadControl)
         {
-
             if (cadControl == null)
             {
                 throw new ArgumentNullException(nameof(cadControl));
@@ -34,16 +32,12 @@ namespace Tida.CAD.Extensions
         /// <returns></returns>
         public static IEnumerable<DrawObject> GetAllVisibleDrawObjects(this ICADControl cadControl)
         {
-
             if (cadControl == null)
             {
                 throw new ArgumentNullException(nameof(cadControl));
             }
 
-            return cadControl.Layers?.
-                Where(p => p.IsVisible)?.
-                SelectMany(p => p.DrawObjects)?.
-                Where(p => p.IsVisible) ?? Enumerable.Empty<DrawObject>();
+            return cadControl.Layers?.Where(p => p.IsVisible)?.SelectMany(p => p.DrawObjects)?.Where(p => p.IsVisible) ?? Enumerable.Empty<DrawObject>();
         }
 
         /// <summary>
@@ -70,7 +64,5 @@ namespace Tida.CAD.Extensions
 
             return cadControl.Layers?.Where(p => p.IsVisible) ?? Enumerable.Empty<CADLayer>();
         }
-       
     }
-
 }

@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.OffsetTools {
+namespace Tida.Canvas.Shell.Contracts.OffsetTools
+{
     /// <summary>
     /// 绘制对象偏移工具提供器;
     /// </summary>
-    public interface IOffsetToolsProvider {
+    public interface IOffsetToolsProvider
+    {
         /// <summary>
         /// 所提供的偏移工具集合;
         /// </summary>

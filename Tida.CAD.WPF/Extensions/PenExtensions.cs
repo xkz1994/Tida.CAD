@@ -4,7 +4,6 @@ namespace Tida.CAD.WPF.Extensions
 {
     internal class PenExtensions
     {
-
         /// <summary>
         /// 构建一个新的被冻结的笔;
         /// </summary>

@@ -12,14 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Tida.Canvas.Shell.App.Views {
+namespace Tida.Canvas.Shell.App.Views
+{
     /// <summary>
     /// Interaction logic for InputStringWindow.xaml
     /// </summary>
-    public partial class InputValueWindow : Window {
-        public InputValueWindow() {
+    public partial class InputValueWindow : Window
+    {
+        public InputValueWindow()
+        {
             InitializeComponent();
         }
-        
     }
 }

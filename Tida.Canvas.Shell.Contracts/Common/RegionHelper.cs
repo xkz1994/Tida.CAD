@@ -1,15 +1,18 @@
 ﻿using Prism.Regions;
 using System;
 
-namespace Tida.Canvas.Shell.Contracts.Common {
+namespace Tida.Canvas.Shell.Contracts.Common
+{
     /// <summary>
     /// 根据<see cref="IRegionManager"/>所封装的区域导航相关方法;
     /// </summary>
-    public static class RegionHelper {
+    public static class RegionHelper
+    {
         /// <summary>
         /// 当前的导航器实例;
         /// </summary>
         private static IRegionManager _regionManager;
+
         public static IRegionManager RegionManager => _regionManager ?? (_regionManager = ServiceProvider.Current.GetInstance<IRegionManager>());
 
         /// <summary>
@@ -35,7 +38,5 @@ namespace Tida.Canvas.Shell.Contracts.Common {
         public static IRegionManager RegisterViewWithRegion(string regionName, Type viewType) => RegionManager?.RegisterViewWithRegion(regionName, viewType);
 
         public static IRegionManager RegisterViewWithRegion(string regionName, Func<object> getContentDelegate) => RegionManager?.RegisterViewWithRegion(regionName, getContentDelegate);
-
-
     }
 }

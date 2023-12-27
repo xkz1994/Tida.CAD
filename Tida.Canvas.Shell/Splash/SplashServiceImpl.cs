@@ -5,35 +5,43 @@ using System.ComponentModel.Composition;
 using System.Threading;
 using System.Windows.Threading;
 
-namespace Tida.Canvas.Shell.Splash {
+namespace Tida.Canvas.Shell.Splash
+{
     [Export(typeof(ISplashService))]
-    public class SplashService : ISplashService {
+    public class SplashService : ISplashService
+    {
         [ImportingConstructor]
-        public SplashService(ViewModels.SplashViewModel vm) {
+        public SplashService(ViewModels.SplashViewModel vm)
+        {
             this._vm = vm;
         }
 
         private readonly ViewModels.SplashViewModel _vm;
-    
-        public void ReportMessage(string msg) {
+
+        public void ReportMessage(string msg)
+        {
             _vm.LoadingText = msg;
         }
 
-        public void CloseSplash() {
+        public void CloseSplash()
+        {
             var splash = ServiceProvider.Current.GetInstance<Views.Splash>();
             splash.Dispatcher.BeginInvoke((Action)splash.Close);
         }
 
-        public void ShowSplash() {
+        public void ShowSplash()
+        {
             var waitForCreation = new AutoResetEvent(false);
-            var thread = new Thread(() => {
+            var thread = new Thread(() =>
+            {
                 Dispatcher.CurrentDispatcher.BeginInvoke(
-                      (Action)(() => {
-                          var splash = ServiceProvider.Current.GetInstance<Views.Splash>();
-                          splash.Show();
+                    (Action)(() =>
+                    {
+                        var splash = ServiceProvider.Current.GetInstance<Views.Splash>();
+                        splash.Show();
 
-                          waitForCreation.Set();
-                      }));
+                        waitForCreation.Set();
+                    }));
 
                 Dispatcher.Run();
             }) { Name = "Splash Thread", IsBackground = true };

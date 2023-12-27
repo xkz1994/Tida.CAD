@@ -1,17 +1,17 @@
-﻿
+﻿using Tida.Canvas.Shell.Contracts.Common;
 
-using Tida.Canvas.Shell.Contracts.Common;
-
-namespace Tida.Canvas.Shell.Contracts.Canvas {
+namespace Tida.Canvas.Shell.Contracts.Canvas
+{
     /// <summary>
     /// 画布编辑器服务;
     /// </summary>
-    public interface ICanvasService {
+    public interface ICanvasService
+    {
         /// <summary>
         /// 画布当前的上下文数据;
         /// </summary>
         ICanvasDataContext CanvasDataContext { get; }
-        
+
         /// <summary>
         /// 初始化;
         /// </summary>
@@ -37,8 +37,8 @@ namespace Tida.Canvas.Shell.Contracts.Canvas {
         //void AddDrawObjects(ICollection<DrawObject> drawObjects);
     }
 
-    public sealed class CanvasService : GenericServiceStaticInstance<ICanvasService> {
-        
+    public sealed class CanvasService : GenericServiceStaticInstance<ICanvasService>
+    {
         /// <summary>
         /// 画布当前的上下文数据;
         /// </summary>

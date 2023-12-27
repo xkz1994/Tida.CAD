@@ -1,5 +1,4 @@
-﻿
-using Tida.Canvas.Shell.Contracts.Controls;
+﻿using Tida.Canvas.Shell.Contracts.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -9,11 +8,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using Tida.Canvas.Shell.Contracts.Common;
 
-namespace Tida.Canvas.Shell.Contracts.StatusBar {
+namespace Tida.Canvas.Shell.Contracts.StatusBar
+{
     /// <summary>
     /// 状态栏项;
     /// </summary>
-    public interface IStatusBarItem : IUIObjectProvider, IHaveOrder {
+    public interface IStatusBarItem : IUIObjectProvider, IHaveOrder
+    {
         /// <summary>
         /// 唯一标识;
         /// </summary>
@@ -23,7 +24,6 @@ namespace Tida.Canvas.Shell.Contracts.StatusBar {
         /// Grid长度;
         /// </summary>
         GridChildLength GridChildLength { get; }
-        
     }
 
     /// <summary>
@@ -49,6 +49,4 @@ namespace Tida.Canvas.Shell.Contracts.StatusBar {
     //    /// </summary>
     //    public GridChildLength GridChildLength { get; set; }
     //}
-
-    
 }

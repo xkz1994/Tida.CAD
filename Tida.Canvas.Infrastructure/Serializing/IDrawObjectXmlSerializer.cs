@@ -1,11 +1,13 @@
 ﻿using System.Xml.Linq;
 using Tida.Canvas.Contracts;
 
-namespace Tida.Canvas.Infrastructure.Serializing {
+namespace Tida.Canvas.Infrastructure.Serializing
+{
     /// <summary>
     /// 绘制对象的XML持久化序列器;
     /// </summary>
-    public interface IDrawObjectXmlSerializer {
+    public interface IDrawObjectXmlSerializer
+    {
         /// <summary>
         /// 所针对的绘制对象的GUID;
         /// </summary>

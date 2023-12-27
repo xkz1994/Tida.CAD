@@ -5,14 +5,17 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                
 
-                <app:ResourceDictionaryEx  Name="{x:Static app:Constants.LanguageDict}">
+
+                <app:ResourceDictionaryEx Name="{x:Static app:Constants.LanguageDict}">
                     <ResourceDictionary.MergedDictionaries>
-                        <ResourceDictionary Source="pack://application:,,,/Tida.Canvas.Shell;component/Shell/Languages/zh_CN/Tida.Canvas.Shell.Shell.xaml" />
-                        <ResourceDictionary Source="pack://application:,,,/Tida.Canvas.Shell;component/App/Languages/zh_CN/Tida.Canvas.Shell.App.xaml" />
+                        <ResourceDictionary
+                            Source="pack://application:,,,/Tida.Canvas.Shell;component/Shell/Languages/zh_CN/Tida.Canvas.Shell.Shell.xaml" />
+                        <ResourceDictionary
+                            Source="pack://application:,,,/Tida.Canvas.Shell;component/App/Languages/zh_CN/Tida.Canvas.Shell.App.xaml" />
                         <!--<ResourceDictionary Source="pack://application:,,,/Tida.Canvas.Shell;component/EditTools/Languages/zh_CN/Tida.Canvas.Shell.EditTools.xaml" />-->
-                        <ResourceDictionary Source="pack://application:,,,/Tida.Canvas.Shell;component/Canvas/Languages/zh_CN/Tida.Canvas.Shell.Canvas.xaml" />
+                        <ResourceDictionary
+                            Source="pack://application:,,,/Tida.Canvas.Shell;component/Canvas/Languages/zh_CN/Tida.Canvas.Shell.Canvas.xaml" />
                     </ResourceDictionary.MergedDictionaries>
                 </app:ResourceDictionaryEx>
             </ResourceDictionary.MergedDictionaries>

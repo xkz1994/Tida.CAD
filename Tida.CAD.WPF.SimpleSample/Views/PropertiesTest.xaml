@@ -14,10 +14,10 @@
             <CheckBox IsChecked="{Binding ElementName=cadControl,Path=IsDragEnabled}">Drag Enabled</CheckBox>
             <StackPanel Orientation="Horizontal">
                 <TextBlock>GridLineThickness</TextBlock>
-                <TextBox Text="{Binding ElementName=cadControl,Path=GridLineThickness}"/>
+                <TextBox Text="{Binding ElementName=cadControl,Path=GridLineThickness}" />
             </StackPanel>
             <CheckBox IsChecked="{Binding ElementName=cadControl,Path=ShowGridLines}">Show Grid lines</CheckBox>
         </UniformGrid>
-        <tidacad:CADControl x:Name="cadControl"/>
+        <tidacad:CADControl x:Name="cadControl" />
     </DockPanel>
 </Window>

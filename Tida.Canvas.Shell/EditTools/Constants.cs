@@ -1,10 +1,10 @@
-﻿namespace Tida.Canvas.Shell.EditTools {
-   
-
+﻿namespace Tida.Canvas.Shell.EditTools
+{
     /// <summary>
     /// 图标;
     /// </summary>
-    public static partial class Constants {
+    public static partial class Constants
+    {
         const string Prefix = "pack://application:,,,/Tida.Canvas.Shell;component/Resources/";
 
 
@@ -24,15 +24,15 @@
 
         public const string EditToolIcon_MeasureAngle = Prefix + "Angle.png";
         public const string EditToolIcon_Arc = Prefix + "Arc Shape.png";
-
     }
 
     /// <summary>
     /// 语言相关;
     /// </summary>
-    static partial class Constants {
+    static partial class Constants
+    {
         public const string EditToolGroupName_BasicEditor = nameof(EditToolGroupName_BasicEditor);
-        
+
         public const string EditToolGroupName_Round = nameof(EditToolGroupName_Round);
 
 
@@ -77,14 +77,13 @@
 
 
         public const string EditToolName_MeasureAngle = nameof(EditToolName_MeasureAngle);
-
     }
 
     /// <summary>
     /// 裁剪工具提示;
     /// </summary>
-    static partial class Constants {
-
+    static partial class Constants
+    {
         public const string EditToolTip_BeginText_Trim = nameof(EditToolTip_BeginText_Trim);
         public const string EditToolTip_EndText_Trim = nameof(EditToolTip_EndText_Trim);
 
@@ -100,7 +99,7 @@
 
         public const string EditToolTip_BeginText_Offset = nameof(EditToolTip_BeginText_Offset);
         public const string EditToolTip_EndText_Offset = nameof(EditToolTip_EndText_Offset);
-        
+
         public const string EditToolTip_InputOffset = nameof(EditToolTip_InputOffset);
         public const string EditToolTip_SelectDrawObject = nameof(EditToolTip_SelectDrawObject);
 
@@ -123,6 +122,5 @@
         public const string EditToolTip_AngleMeasure_AngleCreated = nameof(EditToolTip_AngleMeasure_AngleCreated);
 
         public const string MenuItemName_MeasureShouldCommitMeasureData = nameof(MenuItemName_MeasureShouldCommitMeasureData);
-
     }
 }

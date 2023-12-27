@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.App.Input {
+namespace Tida.Canvas.Shell.Contracts.App.Input
+{
     /// <summary>
     /// 输入检查结果;
     /// </summary>
-    public class InputCheckResult {
-        public InputCheckResult(bool isValid,string errorMessage = null) {
+    public class InputCheckResult
+    {
+        public InputCheckResult(bool isValid, string errorMessage = null)
+        {
             this.IsValid = isValid;
             this.ErrorMessage = errorMessage;
         }

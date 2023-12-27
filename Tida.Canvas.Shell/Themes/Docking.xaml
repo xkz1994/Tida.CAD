@@ -6,15 +6,16 @@
                     xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
                     xmlns:telerikDocking="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.Docking">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="pack://application:,,,/Telerik.Windows.Themes.Office2013;component/Themes/Telerik.Windows.Controls.Docking.xaml"/>
+        <ResourceDictionary
+            Source="pack://application:,,,/Telerik.Windows.Themes.Office2013;component/Themes/Telerik.Windows.Controls.Docking.xaml" />
     </ResourceDictionary.MergedDictionaries>
-    <ControlTemplate  TargetType="local:RadPaneGroup" x:Key="NoBordernessGroupTemplate">
-        <ContentPresenter x:Name="ContentElement"/>
+    <ControlTemplate TargetType="local:RadPaneGroup" x:Key="NoBordernessGroupTemplate">
+        <ContentPresenter x:Name="ContentElement" />
     </ControlTemplate>
-    <Style TargetType="telerik:RadPaneGroup" x:Key="NoBordernessGroupStyle"  >
-        <Setter Property="Background" Value="{DynamicResource Envoirment.Background}"/>
+    <Style TargetType="telerik:RadPaneGroup" x:Key="NoBordernessGroupStyle">
+        <Setter Property="Background" Value="{DynamicResource Envoirment.Background}" />
         <!--<Setter Property="BorderThickness" Value="0"/>-->
-        <Setter Property="Template" Value="{StaticResource NoBordernessGroupTemplate}"/>
+        <Setter Property="Template" Value="{StaticResource NoBordernessGroupTemplate}" />
     </Style>
 
 </ResourceDictionary>

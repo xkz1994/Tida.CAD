@@ -5,13 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Events {
+namespace Tida.Canvas.Events
+{
     /// <summary>
     /// 即将更改值的事件参数;
     /// </summary>
     /// <typeparam name="TValue"></typeparam>
-    public class ValueChangingEventArgs<TValue> : CancelEventArgs {
-        public ValueChangingEventArgs(TValue newValue, TValue oldValue) {
+    public class ValueChangingEventArgs<TValue> : CancelEventArgs
+    {
+        public ValueChangingEventArgs(TValue newValue, TValue oldValue)
+        {
             this.NewValue = newValue;
             this.OldValue = oldValue;
         }

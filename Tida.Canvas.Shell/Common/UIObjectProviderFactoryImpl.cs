@@ -6,14 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Common {
+namespace Tida.Canvas.Shell.Common
+{
     [Export(typeof(IUIObjectProviderFactory))]
-    class UIObjectProviderFactoryImpl: IUIObjectProviderFactory {
+    class UIObjectProviderFactoryImpl : IUIObjectProviderFactory
+    {
         public IUIObjectProvider CreateNew(object uiObject) => new UIObjectProvider(uiObject);
     }
 
-    class UIObjectProvider : IUIObjectProvider {
-        public UIObjectProvider(object uiObject) {
+    class UIObjectProvider : IUIObjectProvider
+    {
+        public UIObjectProvider(object uiObject)
+        {
             this.UIObject = uiObject;
         }
 

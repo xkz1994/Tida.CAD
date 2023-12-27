@@ -4,12 +4,13 @@ using Tida.Geometry.Primitives;
 using System.Linq;
 using static Tida.Canvas.Infrastructure.Constants;
 
-namespace Tida.Canvas.Infrastructure.Utils {
+namespace Tida.Canvas.Infrastructure.Utils
+{
     /// <summary>
     /// 线段画布判定相关;
     /// </summary>
-    public static class LineHitUtils {
-
+    public static class LineHitUtils
+    {
         /// <summary>
         /// 判断画布中某个位置是否在某个线段附近;
         /// </summary>
@@ -17,12 +18,15 @@ namespace Tida.Canvas.Infrastructure.Utils {
         /// <param name="point"></param>
         /// <param name="canvasProxy"></param>
         /// <returns></returns>
-        public static bool PointInLine(Line2D line2D, Vector2D point, ICanvasScreenConvertable canvasProxy) {
-            if (canvasProxy == null) {
+        public static bool PointInLine(Line2D line2D, Vector2D point, ICanvasScreenConvertable canvasProxy)
+        {
+            if (canvasProxy == null)
+            {
                 return false;
             }
 
-            if (line2D == null) {
+            if (line2D == null)
+            {
                 return false;
             }
 
@@ -42,20 +46,25 @@ namespace Tida.Canvas.Infrastructure.Utils {
         /// <param name="rect"></param>
         /// <param name="anyPoint"></param>
         /// <returns></returns>
-        public static bool LineInRectangle(Line2D line2D, Rectangle2D2 rect, bool anyPoint) {
-            if (line2D == null) {
+        public static bool LineInRectangle(Line2D line2D, Rectangle2D2 rect, bool anyPoint)
+        {
+            if (line2D == null)
+            {
                 return false;
             }
 
             //若在完全在矩形内部,则返回为真;
             if (rect.Contains(line2D.Start)
-                && rect.Contains(line2D.End)) {
+                && rect.Contains(line2D.End))
+            {
                 return true;
             }
             //若任意可选为真,则矩形任意一条边与之存在相交即可;
-            else if (anyPoint) {
+            else if (anyPoint)
+            {
                 return rect.GetLines()?.Any(p => p.Intersect(line2D) != null) ?? false;
             }
+
             return false;
         }
     }

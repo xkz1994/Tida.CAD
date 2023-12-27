@@ -6,10 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.Docking.Events {
-    public class DockingPaneIsHiddenChangedEvent:PubSubEvent<IDockingPane> {
+namespace Tida.Canvas.Shell.Contracts.Docking.Events
+{
+    public class DockingPaneIsHiddenChangedEvent : PubSubEvent<IDockingPane>
+    {
     }
 
-    public interface IDockingPaneIsHiddenChangedEventHandler : IEventHandler<IDockingPane> {
+    public interface IDockingPaneIsHiddenChangedEventHandler : IEventHandler<IDockingPane>
+    {
     }
 }

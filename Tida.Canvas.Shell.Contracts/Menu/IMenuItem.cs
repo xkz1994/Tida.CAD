@@ -7,12 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Tida.Canvas.Shell.Contracts.Menu {
+namespace Tida.Canvas.Shell.Contracts.Menu
+{
     /// <summary>
     /// 菜单项;
     /// </summary>
-    public interface IMenuItem {
-
+    public interface IMenuItem
+    {
         /// <summary>
         /// 命令项;
         /// </summary>
@@ -23,8 +24,8 @@ namespace Tida.Canvas.Shell.Contracts.Menu {
     /// <summary>
     /// 菜单项元数据;
     /// </summary>
-    public interface IMenuItemMetaData : IHaveOrder {
-
+    public interface IMenuItemMetaData : IHaveOrder
+    {
         /// <summary>
         /// 菜单项;
         /// </summary>
@@ -66,9 +67,10 @@ namespace Tida.Canvas.Shell.Contracts.Menu {
     /// 导出菜单项;
     /// </summary>
     [MetadataAttribute, AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class ExportMenuItemAttribute : ExportAttribute, IMenuItemMetaData {
-        public ExportMenuItemAttribute() : base(typeof(IMenuItem)) {
-
+    public class ExportMenuItemAttribute : ExportAttribute, IMenuItemMetaData
+    {
+        public ExportMenuItemAttribute() : base(typeof(IMenuItem))
+        {
         }
 
         public string GUID { get; set; }

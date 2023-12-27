@@ -1,17 +1,21 @@
 ﻿using Tida.Canvas.Contracts;
 
-namespace Tida.Canvas.Shell.Contracts.DrawObjectDescription {
-
+namespace Tida.Canvas.Shell.Contracts.DrawObjectDescription
+{
     /// <summary>
     /// 绘制对象描述器泛型基类2;
     /// </summary>
-    public abstract class DrawObjectDescriptorGenericBase2<TDrawObject> : IDrawObjectDescriptor where TDrawObject : DrawObject {
-        public DrawObjectDescription GetDescription(DrawObject drawObject) {
-            if (!(drawObject is TDrawObject tDrawObject)) {
+    public abstract class DrawObjectDescriptorGenericBase2<TDrawObject> : IDrawObjectDescriptor where TDrawObject : DrawObject
+    {
+        public DrawObjectDescription GetDescription(DrawObject drawObject)
+        {
+            if (!(drawObject is TDrawObject tDrawObject))
+            {
                 return null;
             }
 
-            if (!CheckIsValidDrawObject(tDrawObject)) {
+            if (!CheckIsValidDrawObject(tDrawObject))
+            {
                 return null;
             }
 

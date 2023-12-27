@@ -6,17 +6,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Events {
+namespace Tida.Canvas.Events
+{
     /// <summary>
     /// 通知外部,将要针对指定的绘制对象集合,将要进行某种的类型输入交互的预处理事件的参数;
     /// </summary>
     /// <typeparam name="TEventArgs"></typeparam>
-    public class PreviewDrawObjectsInteractionEventArgs : CancelEventArgs {
-        public PreviewDrawObjectsInteractionEventArgs(IEnumerable<DrawObject> drawObjects) {
+    public class PreviewDrawObjectsInteractionEventArgs : CancelEventArgs
+    {
+        public PreviewDrawObjectsInteractionEventArgs(IEnumerable<DrawObject> drawObjects)
+        {
             DrawObjects = drawObjects ?? throw new ArgumentNullException(nameof(drawObjects));
         }
 
-       
+
         /// <summary>
         /// 将要与之交互的绘制对象集合;
         /// </summary>

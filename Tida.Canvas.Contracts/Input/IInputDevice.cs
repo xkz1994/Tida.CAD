@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Input {
+namespace Tida.Canvas.Input
+{
     /// <summary>
     /// 输入设备服务封装;
     /// </summary>
-    public interface IInputDevice {
-
+    public interface IInputDevice
+    {
         /// <summary>
         /// 键盘服务;
         /// </summary>

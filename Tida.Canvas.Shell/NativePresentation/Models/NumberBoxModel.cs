@@ -5,29 +5,36 @@ using System;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Tida.Canvas.Shell.NativePresentation.Models {
-    public class NumberBoxModel : BindableBase,INumberBox {
+namespace Tida.Canvas.Shell.NativePresentation.Models
+{
+    public class NumberBoxModel : BindableBase, INumberBox
+    {
         public event EventHandler TabConfirmed;
         public event EventHandler EnterConfirmed;
 
         internal event EventHandler FocusRequest;
-        internal event EventHandler<(int selectionStart,int selectionLength)> SelectRequest;
+        internal event EventHandler<(int selectionStart, int selectionLength)> SelectRequest;
         internal event EventHandler<TextCompositionEventArgs> PreviewTextInput;
         internal event EventHandler<int> CaretIndexChanged;
-        
+
         internal bool IsFocused { get; set; }
-        
-        public bool Visible {
-            get => Visibility == Visibility.Visible; 
-            set {
-                if(Visible == value) {
+
+        public bool Visible
+        {
+            get => Visibility == Visibility.Visible;
+            set
+            {
+                if (Visible == value)
+                {
                     return;
                 }
 
-                if (value) {
+                if (value)
+                {
                     Visibility = Visibility.Visible;
                 }
-                else {
+                else
+                {
                     Visibility = Visibility.Hidden;
                 }
             }
@@ -35,37 +42,46 @@ namespace Tida.Canvas.Shell.NativePresentation.Models {
 
 
         private Visibility _visibility;
-        public Visibility Visibility {
+
+        public Visibility Visibility
+        {
             get { return _visibility; }
             set { SetProperty(ref _visibility, value); }
         }
 
 
         private Thickness _margin;
-        public Thickness Margin {
+
+        public Thickness Margin
+        {
             get { return _margin; }
             set { SetProperty(ref _margin, value); }
         }
-        
+
         public bool IsError => Number == null;
-        
+
         private string _text;
+
         /// <summary>
         /// 显示的文本;
         /// </summary>
-        public string Text {
+        public string Text
+        {
             get { return _text; }
-            set {
-                if(_text == value) {
+            set
+            {
+                if (_text == value)
+                {
                     return;
                 }
 
                 SetTextCore(value);
                 _number = null;
-                if(double.TryParse(value, out var number)) {
+                if (double.TryParse(value, out var number))
+                {
                     _number = number;
                 }
-                
+
                 RaisePropertyChanged(nameof(IsError));
             }
         }
@@ -74,7 +90,8 @@ namespace Tida.Canvas.Shell.NativePresentation.Models {
         /// 设定文字核心;
         /// </summary>
         /// <param name="text"></param>
-        private void SetTextCore(string text) {
+        private void SetTextCore(string text)
+        {
             SetProperty(ref _text, text, nameof(Text));
 
             RaisePropertyChanged(nameof(IsError));
@@ -82,42 +99,52 @@ namespace Tida.Canvas.Shell.NativePresentation.Models {
 
         private double? _number;
 
-        public double? Number {
-            get {
-                if(_number != null) {
+        public double? Number
+        {
+            get
+            {
+                if (_number != null)
+                {
                     return _number.Value;
                 }
 
-                if(double.TryParse(Text,out var number)) {
+                if (double.TryParse(Text, out var number))
+                {
                     return number;
                 }
 
                 return null;
             }
-            set {
-                if(Number == value) {
+            set
+            {
+                if (Number == value)
+                {
                     return;
                 }
 
                 _number = value;
                 string text = null;
-                
-                if (value == null) {
+
+                if (value == null)
+                {
                     text = string.Empty;
                 }
-                else {
+                else
+                {
                     text = ((double)(int)(value.Value * _numberToDevide) / _numberToDevide).ToString();
                 }
 
                 SetTextCore(text);
 
-                if (IsReadOnly) {
+                if (IsReadOnly)
+                {
                     return;
                 }
 
                 SelectAll();
-                
-                if (FocusOnParent == null) {
+
+                if (FocusOnParent == null)
+                {
                     return;
                 }
 
@@ -125,7 +152,6 @@ namespace Tida.Canvas.Shell.NativePresentation.Models {
                 FocusOnParent();
             }
         }
-
 
 
         /// <summary>
@@ -136,29 +162,35 @@ namespace Tida.Canvas.Shell.NativePresentation.Models {
         internal Action FocusOnParent { get; set; }
 
 
-        public Vector2D Position {
+        public Vector2D Position
+        {
             get => new Vector2D(Margin.Left, Margin.Top);
             set => Margin = new Thickness(value.X, value.Y, 0, 0);
         }
 
-        
+
         private bool _isReadOnly;
-        public bool IsReadOnly {
-            get => _isReadOnly; 
+
+        public bool IsReadOnly
+        {
+            get => _isReadOnly;
             set => SetProperty(ref _isReadOnly, value);
         }
 
 
-
         private const int DefaultSaveBits = 4;
         private int _saveBits = DefaultSaveBits;
+
         ///<summary>
         /// 保留小数点小数的位数;
         /// </summary>
-        public int SavedBits {
+        public int SavedBits
+        {
             get => _saveBits;
-            set {
-                if(value < 0) {
+            set
+            {
+                if (value < 0)
+                {
                     throw new ArgumentOutOfRangeException($"{nameof(value)} can't be less than zero.");
                 }
 
@@ -171,67 +203,85 @@ namespace Tida.Canvas.Shell.NativePresentation.Models {
         /// 用于计算输入数字显示被整除的数;
         /// </summary>
         private int _numberToDevide = GetNumberToDevide(DefaultSaveBits);
-        private static int GetNumberToDevide(int saveBits) {
-            if(saveBits < 0) {
+
+        private static int GetNumberToDevide(int saveBits)
+        {
+            if (saveBits < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(saveBits));
             }
 
             var number = 1;
-            for (int i = 0; i < saveBits; i++) {
+            for (int i = 0; i < saveBits; i++)
+            {
                 number *= 10;
             }
 
             return number;
         }
-        
-        internal void TabConfirm() {
-            if(Number == null) {
+
+        internal void TabConfirm()
+        {
+            if (Number == null)
+            {
                 return;
             }
+
             TabConfirmed?.Invoke(this, EventArgs.Empty);
         }
 
-        internal void EnterConfirm() {
-            if(Number == null) {
+        internal void EnterConfirm()
+        {
+            if (Number == null)
+            {
                 return;
             }
 
             EnterConfirmed?.Invoke(this, EventArgs.Empty);
         }
 
-        internal void RaisePreviewText(TextCompositionEventArgs e) {
+        internal void RaisePreviewText(TextCompositionEventArgs e)
+        {
             PreviewTextInput?.Invoke(this, e);
         }
 
-        public void Select(int selectionStart,int selectionLength) {
-            if (string.IsNullOrEmpty(Text)) {
+        public void Select(int selectionStart, int selectionLength)
+        {
+            if (string.IsNullOrEmpty(Text))
+            {
                 return;
             }
-            
-            if(selectionStart < 0 || selectionLength + selectionStart > Text.Length) {
+
+            if (selectionStart < 0 || selectionLength + selectionStart > Text.Length)
+            {
                 return;
             }
 
             SelectRequest?.Invoke(this, (selectionStart, selectionLength));
         }
 
-        public void SelectAll() {
-            if (string.IsNullOrEmpty(Text)) {
+        public void SelectAll()
+        {
+            if (string.IsNullOrEmpty(Text))
+            {
                 return;
             }
+
             Select(0, Text.Length);
         }
-        
-        public void Focus() {
-            
+
+        public void Focus()
+        {
             FocusRequest?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
         /// 设定修改符(即"|")偏移;
         /// </summary>
-        public void SetCaretIndex(int caretIndex) {
-            if(caretIndex > (Text?.Length ?? 0) || caretIndex < 0) {
+        public void SetCaretIndex(int caretIndex)
+        {
+            if (caretIndex > (Text?.Length ?? 0) || caretIndex < 0)
+            {
                 return;
             }
 
@@ -239,8 +289,8 @@ namespace Tida.Canvas.Shell.NativePresentation.Models {
         }
 
 #if DEBUG
-        ~NumberBoxModel() {
-
+        ~NumberBoxModel()
+        {
         }
 
 #endif

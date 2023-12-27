@@ -8,24 +8,30 @@ using Tida.Canvas.Infrastructure.Snaping;
 using static Tida.Canvas.Infrastructure.Constants;
 using Tida.Canvas.Contracts;
 
-namespace Tida.Canvas.Infrastructure.Snaping.Rules {
+namespace Tida.Canvas.Infrastructure.Snaping.Rules
+{
     /// <summary>
     /// 网格线的整数点与关注点关系的辅助规则;
     /// </summary>
-    public class GridSnapPointRule : ISnapShapeRule {
-        public ISnapShape MatchSnapShape(DrawObject[] drawObjects, Vector2D position, ICanvasContext canvasContext) {
-            if (position == null) {
+    public class GridSnapPointRule : ISnapShapeRule
+    {
+        public ISnapShape MatchSnapShape(DrawObject[] drawObjects, Vector2D position, ICanvasContext canvasContext)
+        {
+            if (position == null)
+            {
                 throw new ArgumentNullException(nameof(position));
             }
 
 
-            if (canvasContext == null) {
+            if (canvasContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasContext));
             }
 
             //若当前网格的视图长度过小,可能画布缩放比例过大,不能匹配;
             var screenUnitLength = canvasContext.CanvasProxy.ToScreen(1);
-            if (screenUnitLength < TolerantedScreenLength * 2) {
+            if (screenUnitLength < TolerantedScreenLength * 2)
+            {
                 return null;
             }
 
@@ -41,7 +47,8 @@ namespace Tida.Canvas.Infrastructure.Snaping.Rules {
                 TolerantedScreenLength, TolerantedScreenLength
             );
 
-            if (screenRect.Contains(screenPosition)) {
+            if (screenRect.Contains(screenPosition))
+            {
                 return new StandardSnapPoint(gridPointPosition);
             }
 

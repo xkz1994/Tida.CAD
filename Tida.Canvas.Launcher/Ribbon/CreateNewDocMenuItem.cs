@@ -1,5 +1,4 @@
 ﻿using Tida.Canvas.Launcher.ViewModels;
-
 using Tida.Canvas.Shell.Contracts.Menu;
 using Tida.Canvas.Shell.Contracts.Canvas;
 using Tida.Canvas.Shell.Contracts.Ribbon;
@@ -9,7 +8,8 @@ using System.Windows.Input;
 using static Tida.Canvas.Shell.Contracts.Ribbon.Constants;
 using Tida.Canvas.Shell.Contracts.Common;
 
-namespace Tida.Canvas.Launcher.Ribbon {
+namespace Tida.Canvas.Launcher.Ribbon
+{
     [ExportMenuItem(
         GUID = Constants.MenuItemGUID_CreateDoc,
         HeaderLanguageKey = Constants.MenuItemName_New,
@@ -20,7 +20,8 @@ namespace Tida.Canvas.Launcher.Ribbon {
         ModifierKeys = ModifierKeys.Control,
         Order = 1
     )]
-    class CreateNewDocMenuItem : IMenuItem {
+    class CreateNewDocMenuItem : IMenuItem
+    {
         public ICommand Command => GenericServiceStaticInstance<CanvasSerializingViewModel>.Current.CreateNewCommand;
     }
 }

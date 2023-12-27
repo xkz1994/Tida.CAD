@@ -1,5 +1,4 @@
 ﻿using Tida.Canvas.Shell.Contracts.App;
-
 using Tida.Canvas.Shell.Contracts.Canvas.Events;
 using Tida.Geometry.Primitives;
 using System;
@@ -10,11 +9,13 @@ using Tida.Canvas.Contracts;
 using Tida.Extending;
 using Tida.Canvas.Shell.Contracts.Common;
 
-namespace Tida.Canvas.Shell.Contracts.Canvas {
+namespace Tida.Canvas.Shell.Contracts.Canvas
+{
     /// <summary>
     /// 业务层的画布的上下文数据;
     /// </summary>
-    public interface ICanvasDataContext : IExtensible {
+    public interface ICanvasDataContext : IExtensible
+    {
         /// <summary>
         /// 是否只读;本控件及其内容将无法通过输入设备被操作;
         /// </summary>
@@ -59,7 +60,7 @@ namespace Tida.Canvas.Shell.Contracts.Canvas {
         /// 辅助是否可用;
         /// </summary>
         bool IsSnapingEnabled { get; set; }
-        
+
 
         /// <summary>
         /// 当前使用的编辑工具;
@@ -105,38 +106,40 @@ namespace Tida.Canvas.Shell.Contracts.Canvas {
         /// 能否重做;
         /// </summary>
         bool CanRedo { get; }
-
-        
     }
 
     /// <summary>
     /// 业务层的画布的上下文数据拓展;
     /// </summary>
-    public static class CanvasDataContextExtensions {
+    public static class CanvasDataContextExtensions
+    {
         /// <summary>
         /// 调整画布位置和缩放比例,以使得所有绘制对象在可见的范围内;
         /// </summary>
-        public static void ViewAllDrawObjects(this ICanvasDataContext canvasDataContext) {
-            if (canvasDataContext == null) {
+        public static void ViewAllDrawObjects(this ICanvasDataContext canvasDataContext)
+        {
+            if (canvasDataContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasDataContext));
             }
 
-            if(canvasDataContext.CanvasProxy == null) {
+            if (canvasDataContext.CanvasProxy == null)
+            {
                 return;
             }
 
-            if(canvasDataContext.Layers == null) {
+            if (canvasDataContext.Layers == null)
+            {
                 return;
             }
-            
+
             //获取所有绘制对象所在的矩形;
-            var rects = canvasDataContext.Layers.
-                SelectMany(p => p.DrawObjects).
-                Select(p => p.GetBoundingRect()).Where(p => p != null);
+            var rects = canvasDataContext.Layers.SelectMany(p => p.DrawObjects).Select(p => p.GetBoundingRect()).Where(p => p != null);
 
             var allVertexes = rects.SelectMany(p => p.GetVertexes()).ToArray();
 
-            if(allVertexes.Length == 0) {
+            if (allVertexes.Length == 0)
+            {
                 return;
             }
 
@@ -154,7 +157,7 @@ namespace Tida.Canvas.Shell.Contracts.Canvas {
             //计算该矩形区域的中点位置;
             var middleX = (minX + maxX) / 2;
             var middleY = (minY + maxY) / 2;
-            
+
             //计算该矩形区域的长宽;加上一个常数是为了防止该矩形区域中任意一边为零的情况,导致出现除以零的异常;
             var newWidth = canvasProxy.ToUnit(canvasProxy.ToScreen(maxX - minX) + SavedSpace);
             var newHeight = canvasProxy.ToUnit(canvasProxy.ToScreen(maxY - minY) + SavedSpace);
@@ -163,27 +166,28 @@ namespace Tida.Canvas.Shell.Contracts.Canvas {
             var timeX = canvasProxy.ToUnit(actualWidth) / newWidth;
             var timeY = canvasProxy.ToUnit(actualHeight) / newHeight;
 
-            canvasDataContext.Zoom *= Math.Min(timeX,timeY);
-            
+            canvasDataContext.Zoom *= Math.Min(timeX, timeY);
+
             //通过改变原点所在的视图坐标,将该矩形区域的中点移动至视图中心位置;
             //计算该中点与原点的视图偏移;
-            var middlePointToPanOffset = 
+            var middlePointToPanOffset =
                 canvasProxy.ToScreen(new Vector2D(middleX, middleY)) -
                 canvasProxy.ToScreen(Vector2D.Zero);
 
             //以下操作等效于将原点平移至视图中心位置后再将其向矩形区域中点相反的方向进行平移;
             canvasDataContext.PanScreenPosition = new Vector2D(actualWidth / 2, actualHeight / 2) - middlePointToPanOffset;
         }
-        
+
         /// <summary>
         /// 在画布上下文中,获取所有特定类型的可见绘制对象;
         /// </summary>
         /// <typeparam name="TDrawObject"></typeparam>
         /// <param name="canvasDataContext"></param>
         /// <returns></returns>
-        public static IEnumerable<TDrawObject> GetAllVisibleDrawObjects<TDrawObject>(this ICanvasDataContext canvasDataContext) where TDrawObject:DrawObject{
-
-            if (canvasDataContext == null) {
+        public static IEnumerable<TDrawObject> GetAllVisibleDrawObjects<TDrawObject>(this ICanvasDataContext canvasDataContext) where TDrawObject : DrawObject
+        {
+            if (canvasDataContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasDataContext));
             }
 
@@ -196,8 +200,10 @@ namespace Tida.Canvas.Shell.Contracts.Canvas {
         /// <typeparam name="TDrawObject"></typeparam>
         /// <param name="canvasDataContext"></param>
         /// <returns></returns>
-        public static IEnumerable<TDrawObject> GetAllDrawObjects<TDrawObject>(this ICanvasDataContext canvasDataContext) where TDrawObject : DrawObject {
-            if (canvasDataContext == null) {
+        public static IEnumerable<TDrawObject> GetAllDrawObjects<TDrawObject>(this ICanvasDataContext canvasDataContext) where TDrawObject : DrawObject
+        {
+            if (canvasDataContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasDataContext));
             }
 
@@ -209,20 +215,25 @@ namespace Tida.Canvas.Shell.Contracts.Canvas {
         /// </summary>
         /// <param name="canvasDataContext"></param>
         /// <returns></returns>
-        public static IEnumerable<DrawObject> GetAllDrawObjects(this ICanvasDataContext canvasDataContext) {
-            if (canvasDataContext == null) {
+        public static IEnumerable<DrawObject> GetAllDrawObjects(this ICanvasDataContext canvasDataContext)
+        {
+            if (canvasDataContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasDataContext));
             }
 
-            if(canvasDataContext.Layers == null) {
+            if (canvasDataContext.Layers == null)
+            {
                 throw new ArgumentNullException(nameof(canvasDataContext.Layers));
             }
 
             return canvasDataContext.Layers.SelectMany(p => p.DrawObjects);
         }
 
-        public static IEnumerable<DrawObject> GetAllVisibleDrawObjects(this ICanvasDataContext canvasDataContext) {
-            if (canvasDataContext == null) {
+        public static IEnumerable<DrawObject> GetAllVisibleDrawObjects(this ICanvasDataContext canvasDataContext)
+        {
+            if (canvasDataContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasDataContext));
             }
 
@@ -233,9 +244,10 @@ namespace Tida.Canvas.Shell.Contracts.Canvas {
         /// Commit unfinished transactions,and set <see cref="ICanvasDataContext.CurrentEditTool"/> to null;
         /// </summary>
         /// <param name="canvasDataContext"></param>
-        public static void CommitEdit(this ICanvasDataContext canvasDataContext) {
-
-            if (canvasDataContext == null) {
+        public static void CommitEdit(this ICanvasDataContext canvasDataContext)
+        {
+            if (canvasDataContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasDataContext));
             }
 
@@ -245,69 +257,77 @@ namespace Tida.Canvas.Shell.Contracts.Canvas {
         /// <summary>
         /// 清除画布中所有的画布中所有的绘制对象;
         /// </summary>
-        public static void RemoveAllDrawObjects(this ICanvasDataContext canvasDataContext) {
-
-            if (canvasDataContext == null) {
+        public static void RemoveAllDrawObjects(this ICanvasDataContext canvasDataContext)
+        {
+            if (canvasDataContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasDataContext));
             }
 
-            if (canvasDataContext.Layers == null) {
+            if (canvasDataContext.Layers == null)
+            {
                 return;
             }
 
-            foreach (var layer in canvasDataContext.Layers) {
+            foreach (var layer in canvasDataContext.Layers)
+            {
                 layer.Clear();
             }
-            
         }
 
         /// <summary>
         /// 当前上下文中的所有图层的可见状态;
         /// </summary>
         /// <param name="canvasDataContext"></param>
-       public static void SetAllLayersVisible(this ICanvasDataContext canvasDataContext,bool isVisible) {
-
-            if (canvasDataContext == null) {
+        public static void SetAllLayersVisible(this ICanvasDataContext canvasDataContext, bool isVisible)
+        {
+            if (canvasDataContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasDataContext));
             }
 
-            foreach (var layer in canvasDataContext.Layers) {
+            foreach (var layer in canvasDataContext.Layers)
+            {
                 layer.IsVisible = isVisible;
             }
-            
         }
 
         /// <summary>
         /// 移除所有选中绘制对象;将自动呈递事务;
         /// </summary>
-        public static void RemoveSelectedDrawObjects(this ICanvasDataContext canvasDataContext) {
-
-            if (canvasDataContext == null) {
+        public static void RemoveSelectedDrawObjects(this ICanvasDataContext canvasDataContext)
+        {
+            if (canvasDataContext == null)
+            {
                 throw new ArgumentNullException(nameof(canvasDataContext));
             }
 
             //处于编辑状态时不能进行删除;
-            if (canvasDataContext.CurrentEditTool != null) {
+            if (canvasDataContext.CurrentEditTool != null)
+            {
                 return;
             }
 
             //选定画布中所有的选中的绘制对象为即将移除的对象;
             var allDrawObjectsToBeRemoved = CanvasService.CanvasDataContext?.GetAllVisibleDrawObjects().Where(p => p.IsSelected).ToList();
-            if (allDrawObjectsToBeRemoved == null || allDrawObjectsToBeRemoved.Count == 0) {
+            if (allDrawObjectsToBeRemoved == null || allDrawObjectsToBeRemoved.Count == 0)
+            {
                 return;
             }
 
             canvasDataContext.RemoveDrawObjects(allDrawObjectsToBeRemoved);
         }
 
-        
-        public static  void RemoveDrawObjects(this ICanvasDataContext canvasDataContext,ICollection<DrawObject> drawObjects) {
 
-            if (drawObjects == null) {
+        public static void RemoveDrawObjects(this ICanvasDataContext canvasDataContext, ICollection<DrawObject> drawObjects)
+        {
+            if (drawObjects == null)
+            {
                 throw new ArgumentNullException(nameof(drawObjects));
             }
 
-            if (drawObjects.Count == 0) {
+            if (drawObjects.Count == 0)
+            {
                 return;
             }
 
@@ -316,32 +336,40 @@ namespace Tida.Canvas.Shell.Contracts.Canvas {
             CommonEventHelper.Publish<CanvasDrawObjectsRemovingEvent, CanvasDrawObjectsRemovingEventArgs>(removingArgs);
             CommonEventHelper.PublishEventToHandlers<ICanvasDrawObjectsRemovingEventHandler, CanvasDrawObjectsRemovingEventArgs>(removingArgs);
             //若指示取消或集合为空,则不继续执行;
-            if (removingArgs.Cancel || removingArgs.RemovingDrawObjects.Count == 0) {
+            if (removingArgs.Cancel || removingArgs.RemovingDrawObjects.Count == 0)
+            {
                 return;
             }
 
-            var removingGroups = removingArgs.RemovingDrawObjects.
-                GroupBy(p => p.Parent as CanvasLayer).Where(p => p.Key != null).ToArray();
+            var removingGroups = removingArgs.RemovingDrawObjects.GroupBy(p => p.Parent as CanvasLayer).Where(p => p.Key != null).ToArray();
 
-            void RemoveDrawObjects() {
-                try {
-                    foreach (var tuple in removingGroups) {
+            void RemoveDrawObjects()
+            {
+                try
+                {
+                    foreach (var tuple in removingGroups)
+                    {
                         tuple.Key.RemoveDrawObjects(tuple);
                     }
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     LoggerService.WriteException(ex);
                     MsgBoxService.ShowError(ex.Message);
                 }
             }
 
-            void AddDrawObjects() {
-                try {
-                    foreach (var tuple in removingGroups) {
+            void AddDrawObjects()
+            {
+                try
+                {
+                    foreach (var tuple in removingGroups)
+                    {
                         tuple.Key.AddDrawObjects(tuple);
                     }
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     LoggerService.WriteException(ex);
                     MsgBoxService.ShowError(ex.Message);
                 }
@@ -354,26 +382,34 @@ namespace Tida.Canvas.Shell.Contracts.Canvas {
             canvasDataContext.CommitTransaction(action);
         }
 
-        public static void AddDrawObjects(this ICanvasDataContext canvasDataContext,ICollection<DrawObject> drawObjects) {
-            if (drawObjects == null) {
+        public static void AddDrawObjects(this ICanvasDataContext canvasDataContext, ICollection<DrawObject> drawObjects)
+        {
+            if (drawObjects == null)
+            {
                 throw new ArgumentNullException(nameof(drawObjects));
             }
 
-            if (drawObjects.Count == 0) {
+            if (drawObjects.Count == 0)
+            {
                 return;
             }
 
             var activeLayer = canvasDataContext.ActiveLayer;
-            if (activeLayer == null) {
+            if (activeLayer == null)
+            {
                 return;
                 //throw new InvalidOperationException(LanguageService.FindResourceString(Exception_ActiveLayerCannotBeNull));
             }
 
-            void AddDrawObjects() {
+            void AddDrawObjects()
+            {
                 activeLayer.AddDrawObjects(drawObjects);
-            };
+            }
 
-            void RemoveDrawObjects() {
+            ;
+
+            void RemoveDrawObjects()
+            {
                 activeLayer.RemoveDrawObjects(drawObjects);
             }
 
@@ -383,11 +419,10 @@ namespace Tida.Canvas.Shell.Contracts.Canvas {
 
             canvasDataContext.CommitTransaction(transaction);
         }
+
         /// <summary>
         /// 保留的空余间距;
         /// </summary>
         private const double SavedSpace = 200;
     }
-
-
 }

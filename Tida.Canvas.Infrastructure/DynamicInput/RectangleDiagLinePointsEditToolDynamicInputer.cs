@@ -1,4 +1,6 @@
-﻿namespace Tida.Canvas.Infrastructure.DynamicInput {
-    class RectangleDiagLinePointsEditToolDynamicInputer {
+﻿namespace Tida.Canvas.Infrastructure.DynamicInput
+{
+    class RectangleDiagLinePointsEditToolDynamicInputer
+    {
     }
 }

@@ -46,24 +46,25 @@ namespace Tida.CAD.WPF.SimpleSample.Views
             _cadLayer.AddDrawObject(rect2);
             this.DataContext = new ViewModel();
         }
+
         private readonly CADLayer _cadLayer;
 
-        class ViewModel:BindableBase
+        class ViewModel : BindableBase
         {
             public ViewModel()
             {
-                
             }
+
             public ClickSelectMode[] ClickSelectModes { get; } = Enum.GetValues<ClickSelectMode>();
 
 
             private ClickSelectMode _selectedClickMode;
+
             public ClickSelectMode SelectedClickMode
             {
                 get => _selectedClickMode;
                 set => SetProperty(ref _selectedClickMode, value);
             }
-
         }
     }
 }

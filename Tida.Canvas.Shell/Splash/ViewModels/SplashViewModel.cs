@@ -1,15 +1,17 @@
 ﻿using Prism.Mvvm;
 using System.ComponentModel.Composition;
 
-namespace Tida.Canvas.Shell.Splash.ViewModels {
+namespace Tida.Canvas.Shell.Splash.ViewModels
+{
     [Export]
-    public class SplashViewModel:BindableBase {
-        
+    public class SplashViewModel : BindableBase
+    {
         private string _loadingText;
-        public string LoadingText {
+
+        public string LoadingText
+        {
             get { return _loadingText; }
             set { SetProperty(ref _loadingText, value); }
         }
-
     }
 }

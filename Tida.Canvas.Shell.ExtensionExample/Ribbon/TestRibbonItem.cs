@@ -13,7 +13,7 @@ using Tida.Geometry.Primitives;
 
 namespace Tida.Canvas.Shell.ExtensionExample.Ribbon
 {
-    [ExportRibbonItem(GroupGUID = Constants.RibbonGroupGuid_Test,Order = 1)]
+    [ExportRibbonItem(GroupGUID = Constants.RibbonGroupGuid_Test, Order = 1)]
     class TestRibbonItem : IRibbonButtonItem
     {
         [ImportingConstructor]
@@ -21,6 +21,7 @@ namespace Tida.Canvas.Shell.ExtensionExample.Ribbon
         {
             _canvasService = canvasService;
         }
+
         private readonly ICanvasService _canvasService;
 
         public string Icon => null;
@@ -28,17 +29,19 @@ namespace Tida.Canvas.Shell.ExtensionExample.Ribbon
         public ICommand Command => _testcommand ?? (_testcommand = new DelegateCommand(Test));
 
         private ICommand _testcommand;
+
         private void Test()
         {
             var canvasDataContext = _canvasService.CanvasDataContext;
             var layer = canvasDataContext.ActiveLayer;
             var lines = new Line[]
             {
-                new Line(Vector2D.BasisX + Vector2D.BasisY,-Vector2D.BasisX - Vector2D.BasisY),
-                new Line(-Vector2D.BasisX + Vector2D.BasisY,Vector2D.BasisX - Vector2D.BasisY)
+                new Line(Vector2D.BasisX + Vector2D.BasisY, -Vector2D.BasisX - Vector2D.BasisY),
+                new Line(-Vector2D.BasisX + Vector2D.BasisY, Vector2D.BasisX - Vector2D.BasisY)
             };
             layer.AddDrawObjects(lines);
         }
+
         public string HeaderLanguageKey => "Test Add DrawObjects";
     }
 }

@@ -7,7 +7,8 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using static Tida.Canvas.Shell.Contracts.EditTools.Constants;
 
-namespace Tida.Canvas.Shell.EditTools {
+namespace Tida.Canvas.Shell.EditTools
+{
     [ExportEditToolProvider(
         GroupGUID = EditToolGroup_BasicEditor,
         GUID = EditTool_CopyTool,
@@ -15,13 +16,14 @@ namespace Tida.Canvas.Shell.EditTools {
         IconResource = Constants.EditToolIcon_Copy,
         Order = 688
     )]
-    class CopyEditToolProvider : EditToolProviderGenericBase<CopyEditTool>,IEditToolProvider {
+    class CopyEditToolProvider : EditToolProviderGenericBase<CopyEditTool>, IEditToolProvider
+    {
         [ImportingConstructor]
         public CopyEditToolProvider(
-            [ImportMany]IEnumerable<IDrawObjectMoveTool> drawObjectMoveTools,
-            [ImportMany]IEnumerable<IMoveToolsProvider> moveToolsProviders
-        ) {
-
+            [ImportMany] IEnumerable<IDrawObjectMoveTool> drawObjectMoveTools,
+            [ImportMany] IEnumerable<IMoveToolsProvider> moveToolsProviders
+        )
+        {
             CopyEditTool.DrawObjectMoveTools.Clear();
             CopyEditTool.DrawObjectMoveTools.AddRange(drawObjectMoveTools);
             CopyEditTool.DrawObjectMoveTools.AddRange(moveToolsProviders.SelectMany(p => p.Tools));

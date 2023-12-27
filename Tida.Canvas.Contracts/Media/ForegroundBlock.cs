@@ -4,20 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Media {
-
+namespace Tida.Canvas.Media
+{
     /// <summary>
     /// 文字字体颜色单元;
     /// </summary>
-    public class ForegroundBlock {
-        public ForegroundBlock(Brush brush, int start, int length) {
-            if (length < 0) {
+    public class ForegroundBlock
+    {
+        public ForegroundBlock(Brush brush, int start, int length)
+        {
+            if (length < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(length));
             }
 
-            if (start < 0) {
+            if (start < 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(brush));
             }
+
             Start = start;
             Length = length;
             Brush = brush;

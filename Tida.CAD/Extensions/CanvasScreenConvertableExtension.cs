@@ -3,7 +3,6 @@ using System.Windows;
 
 namespace Tida.CAD.Extensions
 {
-
     /// <summary>
     /// Some extended methods for <see cref="ICADScreenConverter"/>;
     /// </summary>
@@ -17,7 +16,6 @@ namespace Tida.CAD.Extensions
         /// <exception cref="ArgumentNullException"></exception>
         public static Point GetBottomRightCADPoint(this ICADScreenConverter canvasScreenConverter)
         {
-
             if (canvasScreenConverter == null)
             {
                 throw new ArgumentNullException(nameof(canvasScreenConverter));
@@ -41,7 +39,5 @@ namespace Tida.CAD.Extensions
 
             return canvasScreenConverter.ToCAD(new Point(0, 0));
         }
-
-
     }
 }

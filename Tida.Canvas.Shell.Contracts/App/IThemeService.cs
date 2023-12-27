@@ -6,11 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Tida.Canvas.Shell.Contracts.App {
+namespace Tida.Canvas.Shell.Contracts.App
+{
     /// <summary>
     /// 主题服务;
     /// </summary>
-    public interface IThemeService {
+    public interface IThemeService
+    {
         /// <summary>
         /// 添加资源字典到统一的全局资源中;
         /// </summary>
@@ -20,13 +22,13 @@ namespace Tida.Canvas.Shell.Contracts.App {
         /// 从统一的全局资源中移除资源字典;
         /// </summary>
         void RemoveDictionary(ResourceDictionary res);
-
     }
 
     /// <summary>
     /// 主题服务;
     /// </summary>
-    public class ThemeService : GenericServiceStaticInstance<IThemeService> {
+    public class ThemeService : GenericServiceStaticInstance<IThemeService>
+    {
         /// <summary>
         /// 添加资源字典到统一的全局资源中;
         /// </summary>

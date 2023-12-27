@@ -9,11 +9,13 @@ namespace Tida.CAD.WPF
     /// <summary>
     /// Visible element;
     /// </summary>
-    public class VisualContainer : FrameworkElement {
-        public VisualContainer() {
+    public class VisualContainer : FrameworkElement
+    {
+        public VisualContainer()
+        {
             this.Focusable = true;
         }
-        
+
         /// <summary>
         /// 当前所有的可见对象
         /// </summary>
@@ -34,23 +36,27 @@ namespace Tida.CAD.WPF
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        protected override Visual GetVisualChild(int index) {
-            if (index < 0 || index >= this._visuals.Count) {
-
+        protected override Visual GetVisualChild(int index)
+        {
+            if (index < 0 || index >= this._visuals.Count)
+            {
                 return null;
             }
+
             return _visuals[index];
         }
-        
+
         /// <summary>
         /// 添加Visual
         /// </summary>
         /// <param name="visual"></param>
-        public void AddVisual(Visual visual) {
+        public void AddVisual(Visual visual)
+        {
             _visuals.Add(visual);
             base.AddVisualChild(visual);
             base.AddLogicalChild(visual);
         }
+
         /// <summary>
         /// 插入Visual;
         /// </summary>
@@ -62,12 +68,15 @@ namespace Tida.CAD.WPF
             base.AddVisualChild(visual);
             base.AddLogicalChild(visual);
         }
+
         /// <summary>
         /// 删除Visual
         /// </summary>
         /// <param name="visual"></param>
-        public void RemoveVisual(Visual visual) {
-            if (!_visuals.Contains(visual)) {
+        public void RemoveVisual(Visual visual)
+        {
+            if (!_visuals.Contains(visual))
+            {
                 throw new InvalidOperationException($"The Visual Children doesn't contain the visual.");
             }
 
@@ -80,11 +89,14 @@ namespace Tida.CAD.WPF
         /// <summary>
         /// 清除视图;
         /// </summary>
-        protected void ClearVisuals() {
-            foreach (var visual in _visuals) {
+        protected void ClearVisuals()
+        {
+            foreach (var visual in _visuals)
+            {
                 base.RemoveVisualChild(visual);
                 base.RemoveLogicalChild(visual);
             }
+
             _visuals.Clear();
         }
 
@@ -93,12 +105,10 @@ namespace Tida.CAD.WPF
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
-        protected Visual GetVisual(Point point) {
+        protected Visual GetVisual(Point point)
+        {
             HitTestResult hitResult = VisualTreeHelper.HitTest(this, point);
             return hitResult.VisualHit as Visual;
         }
-
-
-
     }
 }

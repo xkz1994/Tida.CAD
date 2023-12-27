@@ -4,11 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Media {
-    internal static class KnownColors {
+namespace Tida.Canvas.Media
+{
+    internal static class KnownColors
+    {
         // Token: 0x060026AD RID: 9901 RVA: 0x0009D184 File Offset: 0x0009C584
-        static KnownColors() {
-            foreach (KnownColor knownColor in Enum.GetValues(typeof(KnownColor))) {
+        static KnownColors()
+        {
+            foreach (KnownColor knownColor in Enum.GetValues(typeof(KnownColor)))
+            {
                 string key = string.Format("#{0,8:X8}", (uint)knownColor);
                 s_knownArgbColors[key] = knownColor;
             }
@@ -26,55 +30,70 @@ namespace Tida.Canvas.Media {
         //}
 
         // Token: 0x060026AF RID: 9903 RVA: 0x0009D240 File Offset: 0x0009C640
-        public static bool IsKnownSolidColorBrush(SolidColorBrush scp) {
+        public static bool IsKnownSolidColorBrush(SolidColorBrush scp)
+        {
             Dictionary<uint, SolidColorBrush> obj = s_solidColorBrushCache;
             bool result;
-            lock (obj) {
+            lock (obj)
+            {
                 result = s_solidColorBrushCache.ContainsValue(scp);
             }
+
             return result;
         }
 
         // Token: 0x060026B0 RID: 9904 RVA: 0x0009D294 File Offset: 0x0009C694
-        public static SolidColorBrush SolidColorBrushFromUint(uint argb) {
+        public static SolidColorBrush SolidColorBrushFromUint(uint argb)
+        {
             SolidColorBrush solidColorBrush = null;
             Dictionary<uint, SolidColorBrush> obj = s_solidColorBrushCache;
-            lock (obj) {
-                if (!s_solidColorBrushCache.TryGetValue(argb, out solidColorBrush)) {
+            lock (obj)
+            {
+                if (!s_solidColorBrushCache.TryGetValue(argb, out solidColorBrush))
+                {
                     solidColorBrush = new SolidColorBrush(Color.FromUInt32(argb));
                     solidColorBrush.Freeze();
                     s_solidColorBrushCache[argb] = solidColorBrush;
                 }
             }
+
             return solidColorBrush;
         }
 
         // Token: 0x060026B1 RID: 9905 RVA: 0x0009D30C File Offset: 0x0009C70C
-        internal static string MatchColor(string colorString, out bool isKnownColor, out bool isNumericColor, out bool isContextColor, out bool isScRgbColor) {
+        internal static string MatchColor(string colorString, out bool isKnownColor, out bool isNumericColor, out bool isContextColor, out bool isScRgbColor)
+        {
             string text = colorString.Trim();
-            if ((text.Length == 4 || text.Length == 5 || text.Length == 7 || text.Length == 9) && text[0] == '#') {
+            if ((text.Length == 4 || text.Length == 5 || text.Length == 7 || text.Length == 9) && text[0] == '#')
+            {
                 isNumericColor = true;
                 isScRgbColor = false;
                 isKnownColor = false;
                 isContextColor = false;
                 return text;
             }
+
             isNumericColor = false;
-            if (text.StartsWith("sc#", StringComparison.Ordinal)) {
+            if (text.StartsWith("sc#", StringComparison.Ordinal))
+            {
                 isNumericColor = false;
                 isScRgbColor = true;
                 isKnownColor = false;
                 isContextColor = false;
             }
-            else {
+            else
+            {
                 isScRgbColor = false;
             }
-            if (text.StartsWith("ContextColor ", StringComparison.OrdinalIgnoreCase)) {
+
+            if (text.StartsWith("ContextColor ", StringComparison.OrdinalIgnoreCase))
+            {
                 isContextColor = true;
                 isScRgbColor = false;
                 isKnownColor = false;
                 return text;
             }
+
             isContextColor = false;
             isKnownColor = true;
             return text;

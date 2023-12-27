@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Tida.CAD.WPF.SimpleSample"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+
     </Application.Resources>
 </Application>

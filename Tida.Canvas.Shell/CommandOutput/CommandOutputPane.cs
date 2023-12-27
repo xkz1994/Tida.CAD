@@ -9,15 +9,17 @@ using static Tida.Canvas.Shell.CommandOutput.Constants;
 using System.ComponentModel.Composition;
 using Tida.Canvas.Shell.Contracts.App;
 
-namespace Tida.Canvas.Shell.CommandOutput {
-
+namespace Tida.Canvas.Shell.CommandOutput
+{
     /// <summary>
     /// 命令输出Pane;
     /// </summary>
-    [ExportDockingPane(CanUserClose =  false,CanFloat = true,InitPaneGroupGUID = DockingPaneGroup_BottomLeft,GUID = DockingPane_CommandOutput)]
-    class CommandOutPutPane : DockingPaneBase {
+    [ExportDockingPane(CanUserClose = false, CanFloat = true, InitPaneGroupGUID = DockingPaneGroup_BottomLeft, GUID = DockingPane_CommandOutput)]
+    class CommandOutPutPane : DockingPaneBase
+    {
         [ImportingConstructor]
-        public CommandOutPutPane(Views.CommandOutput commandOutput) {
+        public CommandOutPutPane(Views.CommandOutput commandOutput)
+        {
             _commandOutput = commandOutput;
             Header = LanguageService.FindResourceString(PaneHeader_CommandOutput);
         }

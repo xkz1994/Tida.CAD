@@ -1,11 +1,12 @@
 ﻿using Tida.Canvas.Contracts;
 
-namespace Tida.Canvas.Infrastructure.ExtendTools {
+namespace Tida.Canvas.Infrastructure.ExtendTools
+{
     /// <summary>
     /// 绘制对象延伸工具;
     /// </summary>
-    public interface IDrawObjectExtendTool {
-
+    public interface IDrawObjectExtendTool
+    {
         /// <summary>
         /// 检查是否是本单位可以延伸的绘制对象;
         /// </summary>

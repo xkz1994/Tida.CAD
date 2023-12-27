@@ -3,26 +3,31 @@ using Tida.Geometry.Primitives;
 using System;
 using static Tida.Canvas.Infrastructure.Constants;
 
-namespace Tida.Canvas.Infrastructure.Utils {
+namespace Tida.Canvas.Infrastructure.Utils
+{
     /// <summary>
     /// 位置的绘制拓展;
     /// </summary>
-    public static class PointDrawExtensions {
+    public static class PointDrawExtensions
+    {
         /// <summary>
         /// 绘制某位置的选中状态(使用一个矩形);
         /// </summary>
         /// <param name="point"></param>
-        public static void DrawSelectedPointState(Vector2D point, ICanvas canvas, ICanvasScreenConvertable canvasProxy) {
-
-            if (point == null) {
+        public static void DrawSelectedPointState(Vector2D point, ICanvas canvas, ICanvasScreenConvertable canvasProxy)
+        {
+            if (point == null)
+            {
                 throw new ArgumentNullException(nameof(point));
             }
-            
-            if (canvas == null) {
+
+            if (canvas == null)
+            {
                 throw new ArgumentNullException(nameof(canvas));
             }
-            
-            if (canvasProxy == null) {
+
+            if (canvasProxy == null)
+            {
                 throw new ArgumentNullException(nameof(canvasProxy));
             }
 

@@ -6,17 +6,18 @@ using Tida.Canvas.Infrastructure.DrawObjects;
 using Tida.Canvas.Input;
 using Tida.Geometry.Primitives;
 
-namespace Tida.Canvas.Infrastructure.EditTools {
-
+namespace Tida.Canvas.Infrastructure.EditTools
+{
     /// <summary>
     /// 起点,圆心,中点的圆弧绘制工具;
     /// </summary>
-    public class ArcStartAndCenterThenEndEditTool : UniqueTypeEditToolGenericBase<Arc> {
+    public class ArcStartAndCenterThenEndEditTool : UniqueTypeEditToolGenericBase<Arc>
+    {
         private Vector2D _firstClickPoint;
         private Vector2D _secondClickPoint;
         private Vector2D _hoverPoint;
 
-        private readonly Line _firstToSecondLine = new Line(Vector2D.Zero,Vector2D.Zero);
+        private readonly Line _firstToSecondLine = new Line(Vector2D.Zero, Vector2D.Zero);
         private readonly Arc _editingArc = new Arc(new Arc2D(Vector2D.Zero));
         public override bool IsEditing => true;
 
@@ -24,22 +25,26 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         {
             base.OnMouseDown(e);
             e.Handled = true;
-            if (e.Button != MouseButton.Left){
+            if (e.Button != MouseButton.Left)
+            {
                 return;
             }
 
-            if(_firstClickPoint == null){
+            if (_firstClickPoint == null)
+            {
                 _firstClickPoint = e.Position;
                 return;
             }
 
-            if(_secondClickPoint == null){
+            if (_secondClickPoint == null)
+            {
                 _secondClickPoint = e.Position;
                 return;
             }
 
             var arc2D = GetArc2DOnCurrentState(e.Position);
-            if(arc2D == null){
+            if (arc2D == null)
+            {
                 return;
             }
 
@@ -48,12 +53,14 @@ namespace Tida.Canvas.Infrastructure.EditTools {
             _secondClickPoint = null;
             _hoverPoint = null;
         }
-        protected override void OnMouseMove(MouseMoveEventArgs e) {
+
+        protected override void OnMouseMove(MouseMoveEventArgs e)
+        {
             e.Handled = true;
             _hoverPoint = e.Position;
             RaiseVisualChanged();
         }
-        
+
         /// <summary>
         /// 根据当前状态获取一个圆弧;
         /// </summary>
@@ -61,15 +68,18 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         /// <returns></returns>
         private Arc2D GetArc2DOnCurrentState(Vector2D thirdPoint)
         {
-            if(_firstClickPoint == null || _secondClickPoint == null){
+            if (_firstClickPoint == null || _secondClickPoint == null)
+            {
                 return null;
             }
 
-            if (_secondClickPoint.IsAlmostEqualTo(_firstClickPoint)){
+            if (_secondClickPoint.IsAlmostEqualTo(_firstClickPoint))
+            {
                 return null;
             }
 
-            if (thirdPoint.IsAlmostEqualTo(_secondClickPoint)){
+            if (thirdPoint.IsAlmostEqualTo(_secondClickPoint))
+            {
                 return null;
             }
 
@@ -79,7 +89,8 @@ namespace Tida.Canvas.Infrastructure.EditTools {
             var startAngle = firstLineVector.AngleFrom(Vector2D.BasisX);
             var angle = secondLineVector.AngleFrom(Vector2D.BasisX) - startAngle;
 
-            return new Arc2D(_secondClickPoint) {
+            return new Arc2D(_secondClickPoint)
+            {
                 StartAngle = startAngle,
                 Angle = angle,
                 Radius = firstLineVector.Modulus()
@@ -89,26 +100,26 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy)
         {
             base.Draw(canvas, canvasProxy);
-            if (_firstClickPoint == null) {
+            if (_firstClickPoint == null)
+            {
                 return;
             }
 
-            if(_secondClickPoint == null && _hoverPoint != null) {
+            if (_secondClickPoint == null && _hoverPoint != null)
+            {
                 _firstToSecondLine.Line2D.Start = _firstClickPoint;
                 _firstToSecondLine.Line2D.End = _hoverPoint;
-                _firstToSecondLine.Draw(canvas,canvasProxy);
+                _firstToSecondLine.Draw(canvas, canvasProxy);
                 return;
             }
 
 
             var editingArc2D = GetArc2DOnCurrentState(_hoverPoint);
-            if(editingArc2D != null) {
+            if (editingArc2D != null)
+            {
                 _editingArc.Arc2D = editingArc2D;
                 _editingArc.Draw(canvas, canvasProxy);
             }
         }
-
-       
-        
     }
 }

@@ -2,16 +2,18 @@
 using System;
 using System.Collections.Generic;
 
-namespace Tida.Canvas.Infrastructure.EditTools {
+namespace Tida.Canvas.Infrastructure.EditTools
+{
     /// <summary>
     /// 单种单种绘制对象编辑工具呈递信息;
     /// </summary>
-    public class UniqueTypeEditToolCommitParams {
-        public UniqueTypeEditToolCommitParams(ICollection<DrawObject> addedDrawObjects) {
-
+    public class UniqueTypeEditToolCommitParams
+    {
+        public UniqueTypeEditToolCommitParams(ICollection<DrawObject> addedDrawObjects)
+        {
             AddedDrawObjects = addedDrawObjects ?? throw new ArgumentNullException(nameof(addedDrawObjects));
-
         }
+
         /// <summary>
         /// 应用的图层;
         /// </summary>

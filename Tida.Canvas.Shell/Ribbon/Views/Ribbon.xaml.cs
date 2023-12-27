@@ -1,13 +1,16 @@
 ﻿using System.ComponentModel.Composition;
 using System.Windows.Controls;
 
-namespace Tida.Canvas.Shell.Ribbon.Views {
+namespace Tida.Canvas.Shell.Ribbon.Views
+{
     /// <summary>
     /// Ribbon.xaml 的交互逻辑
     /// </summary>
     [Export]
-    public partial class Ribbon : UserControl {
-        public Ribbon() {
+    public partial class Ribbon : UserControl
+    {
+        public Ribbon()
+        {
             InitializeComponent();
         }
 

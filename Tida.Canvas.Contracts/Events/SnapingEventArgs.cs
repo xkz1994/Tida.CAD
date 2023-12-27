@@ -6,13 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Events {
+namespace Tida.Canvas.Events
+{
     /// <summary>
     /// 正在进行辅助判断的事件参数;
     /// </summary>
-    public class SnapingEventArgs:CancelEventArgs {
-        public SnapingEventArgs(IEnumerable<DrawObject> drawObjects) {
-            if (drawObjects == null) {
+    public class SnapingEventArgs : CancelEventArgs
+    {
+        public SnapingEventArgs(IEnumerable<DrawObject> drawObjects)
+        {
+            if (drawObjects == null)
+            {
                 throw new ArgumentNullException(nameof(drawObjects));
             }
 

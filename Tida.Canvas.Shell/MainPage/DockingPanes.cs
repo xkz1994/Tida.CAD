@@ -9,13 +9,15 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using static Tida.Canvas.Shell.Contracts.MainPage.Constants;
 
-namespace Tida.Canvas.Shell.MainPage {
-    
+namespace Tida.Canvas.Shell.MainPage
+{
     //[Export(typeof(IDockingPane)), Export]
-    class LeftDockingPane : DockingPaneBase,IDockingPaneMetaData {
-        public LeftDockingPane() {
-
+    class LeftDockingPane : DockingPaneBase, IDockingPaneMetaData
+    {
+        public LeftDockingPane()
+        {
         }
+
         public string InitPaneGroupGUID => DockingPaneGroup_Left;
 
 
@@ -24,7 +26,7 @@ namespace Tida.Canvas.Shell.MainPage {
         public override string Header { get; set; } = LanguageService.FindResourceString("CaseData");
 
         public double InitialWidth { get; } = 210;
-        
+
 
         private TextBlock _txb = new TextBlock { Text = "Fuckyou" };
         public override object UIObject => _txb;
@@ -40,9 +42,11 @@ namespace Tida.Canvas.Shell.MainPage {
 #if DEBUG
     //[ExportRibbonItem(GroupGUID = Tida.Canvas.Shell.Canvas.Constants.RibbonGroup_Edit, GUID = "da", Order = 231)]
 #endif
-    class TestRibbonItem : IRibbonButtonItem {
+    class TestRibbonItem : IRibbonButtonItem
+    {
         [ImportingConstructor]
-        public TestRibbonItem(LeftDockingPane leftDockingPane) {
+        public TestRibbonItem(LeftDockingPane leftDockingPane)
+        {
             this._leftDockingPane = leftDockingPane;
         }
 
@@ -50,15 +54,16 @@ namespace Tida.Canvas.Shell.MainPage {
         public string Icon => null;
 
         public ICommand Command => _testCommand ?? (_testCommand =
-            new DelegateCommand(() => {
-                //if (MainDockingService.Current.DockingPanes.Contains(_leftDockingPane)) {
-                //    MainDockingService.Current.RemovePane(_leftDockingPane);
-                //}
-                //else {
-                //    MainDockingService.Current.AddPane(_leftDockingPane);
-                //}
-            }
-        ));
+            new DelegateCommand(() =>
+                {
+                    //if (MainDockingService.Current.DockingPanes.Contains(_leftDockingPane)) {
+                    //    MainDockingService.Current.RemovePane(_leftDockingPane);
+                    //}
+                    //else {
+                    //    MainDockingService.Current.AddPane(_leftDockingPane);
+                    //}
+                }
+            ));
 
         private DelegateCommand _testCommand;
         public string HeaderLanguageKey => "测试";

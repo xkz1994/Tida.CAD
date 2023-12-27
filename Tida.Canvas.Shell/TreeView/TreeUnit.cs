@@ -8,9 +8,12 @@ using System.Threading.Tasks;
 using Tida.Canvas.Shell.Contracts.Common;
 using Tida.Canvas.Shell.Contracts.TreeView;
 
-namespace Tida.Canvas.Shell.TreeView {
-    public class TreeUnit : ExtensibleBindableBase, ITreeUnit, IInternalNode<ITreeUnit> {
-        public TreeUnit(string typeGuid) {
+namespace Tida.Canvas.Shell.TreeView
+{
+    public class TreeUnit : ExtensibleBindableBase, ITreeUnit, IInternalNode<ITreeUnit>
+    {
+        public TreeUnit(string typeGuid)
+        {
             this.TypeGuid = typeGuid;
             _children = new ObservableCollectionEx<ITreeUnit, TreeUnit>(this);
         }
@@ -26,24 +29,32 @@ namespace Tida.Canvas.Shell.TreeView {
 
 
         //节点级别;
-        public int Level {
-            get {
+        public int Level
+        {
+            get
+            {
                 var level = 0;
                 var node = Parent;
-                while (node != null) {
+                while (node != null)
+                {
                     node = node.Parent;
                     level++;
                 }
+
                 return level;
             }
         }
 
         //子节点;
         private ObservableCollectionEx<ITreeUnit, TreeUnit> _children;
-        public ICollection<ITreeUnit> Children {
+
+        public ICollection<ITreeUnit> Children
+        {
             get => _children;
-            set {
-                if (value is ObservableCollectionEx<ITreeUnit, TreeUnit> cCollection) {
+            set
+            {
+                if (value is ObservableCollectionEx<ITreeUnit, TreeUnit> cCollection)
+                {
                     _children = cCollection;
                 }
             }
@@ -51,20 +62,24 @@ namespace Tida.Canvas.Shell.TreeView {
 
         //节点图标;
         private Uri _icon;
-        public Uri Icon {
+
+        public Uri Icon
+        {
             get => _icon;
             set => SetProperty(ref _icon, value);
         }
 
         private bool _isExpanded;
-        public bool IsExpanded {
+
+        public bool IsExpanded
+        {
             get => _isExpanded;
             set => SetProperty(ref _isExpanded, value);
         }
-
     }
 
-    interface IInternalNode<TNode> {
+    interface IInternalNode<TNode>
+    {
         TNode InternalParent { get; set; }
     }
 
@@ -73,32 +88,45 @@ namespace Tida.Canvas.Shell.TreeView {
     /// </summary>
     /// <typeparam name="TInternalNode"></typeparam>
     class ObservableCollectionEx<TNode, TChildNode> :
-        ObservableCollection<TNode> where TChildNode : IInternalNode<TNode> {
-        public ObservableCollectionEx(TNode owner) {
+        ObservableCollection<TNode> where TChildNode : IInternalNode<TNode>
+    {
+        public ObservableCollectionEx(TNode owner)
+        {
             this._owner = owner;
         }
 
         private TNode _owner;
-        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e) {
+
+        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+        {
             base.OnCollectionChanged(e);
-            switch (e.Action) {
+            switch (e.Action)
+            {
                 case NotifyCollectionChangedAction.Add:
-                    if (e.NewItems != null) {
-                        foreach (var item in e.NewItems) {
-                            if (item is TChildNode node) {
+                    if (e.NewItems != null)
+                    {
+                        foreach (var item in e.NewItems)
+                        {
+                            if (item is TChildNode node)
+                            {
                                 node.InternalParent = _owner;
                             }
                         }
                     }
+
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    if (e.NewItems != null) {
-                        foreach (var item in e.NewItems) {
-                            if (item is TChildNode node) {
+                    if (e.NewItems != null)
+                    {
+                        foreach (var item in e.NewItems)
+                        {
+                            if (item is TChildNode node)
+                            {
                                 node.InternalParent = default(TNode);
                             }
                         }
                     }
+
                     break;
                 case NotifyCollectionChangedAction.Replace:
                     break;
@@ -110,6 +138,5 @@ namespace Tida.Canvas.Shell.TreeView {
                     break;
             }
         }
-
     }
 }

@@ -2,11 +2,13 @@
 using Tida.Geometry.Primitives;
 
 
-namespace Tida.Canvas.Infrastructure.ExtendTools {
+namespace Tida.Canvas.Infrastructure.ExtendTools
+{
     /// <summary>
     /// 进行延伸所需的信息;
     /// </summary>
-    public class DrawObjectExtendInfo {
+    public class DrawObjectExtendInfo
+    {
         /// <summary>
         /// 将要被延伸的绘制对象;
         /// </summary>

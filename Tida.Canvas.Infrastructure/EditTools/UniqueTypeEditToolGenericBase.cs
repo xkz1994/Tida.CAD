@@ -4,12 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Tida.Canvas.Infrastructure.EditTools {
+namespace Tida.Canvas.Infrastructure.EditTools
+{
     /// <summary>
     /// 适用于绘制单种绘制对象编辑工具实现类,本类实现了默认的撤销/重做;
     /// </summary>
     /// <typeparam name="TDrawObject">该工具所操作的绘制对象类别</typeparam>
-    public abstract class UniqueTypeEditToolGenericBase<TDrawObject> : EditTool where TDrawObject : DrawObject {
+    public abstract class UniqueTypeEditToolGenericBase<TDrawObject> : EditTool where TDrawObject : DrawObject
+    {
         /// <summary>
         /// 本次编辑时,创建的绘制对象的撤销栈;
         /// </summary>
@@ -26,36 +28,44 @@ namespace Tida.Canvas.Infrastructure.EditTools {
 
         public bool SupportSelection => true;
 
-        protected override void OnBeginOperation() {
-            if (CanvasContext == null) {
+        protected override void OnBeginOperation()
+        {
+            if (CanvasContext == null)
+            {
                 return;
             }
 
             RedoDrawObjects.Clear();
             UndoDrawObjects.Clear();
-           
+
             CanvasContext.Snaping += CanvasContext_Snaping;
 
             base.OnBeginOperation();
         }
 
-        private void CanvasContext_Snaping(object sender, SnapingEventArgs e) {
-            if(e == null) {
+        private void CanvasContext_Snaping(object sender, SnapingEventArgs e)
+        {
+            if (e == null)
+            {
                 return;
             }
 
-            if(e.DrawObjects == null) {
+            if (e.DrawObjects == null)
+            {
                 return;
             }
 
             //将本次缓存的对象加入辅助判断;
-            foreach (var drawObject in UndoDrawObjects) {
+            foreach (var drawObject in UndoDrawObjects)
+            {
                 e.DrawObjects.Add(drawObject);
             }
         }
 
-        protected override void OnEndOperation() {
-            if (CanvasContext == null) {
+        protected override void OnEndOperation()
+        {
+            if (CanvasContext == null)
+            {
                 return;
             }
 
@@ -71,35 +81,43 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         /// 呈递修改的默认实现,本方法将呈递撤销栈中的修改操作,并清空撤销/重做栈;
         /// </summary>
         /// <param name="canvasContext"></param>
-        protected override void OnCommit() {
-            if(CanvasContext == null) {
+        protected override void OnCommit()
+        {
+            if (CanvasContext == null)
+            {
                 return;
             }
 
             //若撤销栈为空,则不进行呈递修改操作;
-            if (UndoDrawObjects.Count == 0) {
+            if (UndoDrawObjects.Count == 0)
+            {
                 return;
             }
 
-            if (CanvasContext.ActiveLayer == null) {
+            if (CanvasContext.ActiveLayer == null)
+            {
                 return;
             }
-            
-            var commitParams = new UniqueTypeEditToolCommitParams(new List<DrawObject>(UndoDrawObjects.ToArray())) {
+
+            var commitParams = new UniqueTypeEditToolCommitParams(new List<DrawObject>(UndoDrawObjects.ToArray()))
+            {
                 AppliedLayer = CanvasContext.ActiveLayer
             };
 
             OnCommitParams(commitParams);
 
-            if (commitParams.Cancel) {
+            if (commitParams.Cancel)
+            {
                 return;
             }
 
-            if(commitParams.AppliedLayer == null) {
+            if (commitParams.AppliedLayer == null)
+            {
                 return;
             }
 
-            if(commitParams.AddedDrawObjects.Count == 0) {
+            if (commitParams.AddedDrawObjects.Count == 0)
+            {
                 return;
             }
 
@@ -110,12 +128,8 @@ namespace Tida.Canvas.Infrastructure.EditTools {
             appliedLayer.AddDrawObjects(addedDrawObjects);
 
             var transAction = new StandardEditTransaction(
-                () => {
-                    appliedLayer.RemoveDrawObjects(addedDrawObjects);
-                },
-                () => {
-                    appliedLayer.AddDrawObjects(addedDrawObjects);
-                }
+                () => { appliedLayer.RemoveDrawObjects(addedDrawObjects); },
+                () => { appliedLayer.AddDrawObjects(addedDrawObjects); }
             );
 
             CommitTransaction(transAction);
@@ -124,9 +138,9 @@ namespace Tida.Canvas.Infrastructure.EditTools {
             UndoDrawObjects.Clear();
             RedoDrawObjects.Clear();
         }
-        
-        protected virtual void OnCommitParams(UniqueTypeEditToolCommitParams commitParams) {
-            
+
+        protected virtual void OnCommitParams(UniqueTypeEditToolCommitParams commitParams)
+        {
         }
 
         /// <summary>
@@ -134,8 +148,10 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         /// </summary>
         /// <param name="drawObject"></param>
         /// <param name="layer"></param>
-        protected void AddDrawObjectToUndoStack(TDrawObject drawObject) {
-            if (drawObject == null) {
+        protected void AddDrawObjectToUndoStack(TDrawObject drawObject)
+        {
+            if (drawObject == null)
+            {
                 throw new ArgumentNullException(nameof(drawObject));
             }
 
@@ -152,17 +168,20 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         /// 添加到对应图层中,并压入撤销栈;
         /// </summary>
         /// <param name="canvasContext"></param>
-        public override void Redo() {
-            if(CanvasContext == null) {
+        public override void Redo()
+        {
+            if (CanvasContext == null)
+            {
                 return;
             }
 
-            if (RedoDrawObjects.Count == 0) {
+            if (RedoDrawObjects.Count == 0)
+            {
                 return;
             }
 
             var lastRedoDrawObject = RedoDrawObjects.Pop();
-            
+
             UndoDrawObjects.Push(lastRedoDrawObject);
 
             RaiseVisualChanged();
@@ -174,17 +193,20 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         /// 撤销默认实现,本实现将撤销栈中最后入栈的元素出栈,从对应图层中移除,并压入重做栈;
         /// </summary>
         /// <param name="canvasContext"></param>
-        public override void Undo() {
-            if (CanvasContext == null) {
+        public override void Undo()
+        {
+            if (CanvasContext == null)
+            {
                 return;
             }
 
-            if (UndoDrawObjects.Count == 0) {
+            if (UndoDrawObjects.Count == 0)
+            {
                 return;
             }
 
             var lastUndoDrawObject = UndoDrawObjects.Pop();
-            
+
             RedoDrawObjects.Push(lastUndoDrawObject);
 
             RaiseVisualChanged();
@@ -197,12 +219,14 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         /// </summary>
         /// <param name="canvas"></param>
         /// <param name="canvasProxy"></param>
-        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy) {
-            foreach (var drawObject in UndoDrawObjects) {
+        public override void Draw(ICanvas canvas, ICanvasScreenConvertable canvasProxy)
+        {
+            foreach (var drawObject in UndoDrawObjects)
+            {
                 drawObject.Draw(canvas, canvasProxy);
             }
+
             base.Draw(canvas, canvasProxy);
         }
-        
     }
 }

@@ -5,11 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Shell.Contracts.TreeView {
+namespace Tida.Canvas.Shell.Contracts.TreeView
+{
     /// <summary>
     /// 树形节点工厂契约(此单位唯一);
     /// </summary>
-    public interface ITreeUnitFactory {
+    public interface ITreeUnitFactory
+    {
         /// <summary>
         /// 创建一个新的树形节点;
         /// </summary>
@@ -18,7 +20,8 @@ namespace Tida.Canvas.Shell.Contracts.TreeView {
         ITreeUnit CreateNew(string typeGUID);
     }
 
-    public class TreeUnitFactory : GenericServiceStaticInstance<ITreeUnitFactory> {
+    public class TreeUnitFactory : GenericServiceStaticInstance<ITreeUnitFactory>
+    {
         public static ITreeUnit CreateNew(string typeGuid) => Current?.CreateNew(typeGuid);
     }
 }

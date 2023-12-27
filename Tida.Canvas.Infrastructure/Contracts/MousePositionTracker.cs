@@ -2,16 +2,16 @@
 using Tida.Geometry.Primitives;
 using System;
 
-namespace Tida.Canvas.Infrastructure.Contracts {
-
+namespace Tida.Canvas.Infrastructure.Contracts
+{
     /// <summary>
     /// 记录部分鼠标状态的管理单元;
     /// </summary>
-    public sealed class MousePositionTracker {
-        public MousePositionTracker(object owner) {
-
+    public sealed class MousePositionTracker
+    {
+        public MousePositionTracker(object owner)
+        {
             Owner = owner ?? throw new ArgumentNullException(nameof(owner));
-
         }
 
         /// <summary>
@@ -20,13 +20,17 @@ namespace Tida.Canvas.Infrastructure.Contracts {
         public object Owner { get; }
 
         private Vector2D _lastMouseDownPosition;
+
         /// <summary>
         /// 上一次鼠标按下的位置;
         /// </summary>
-        public Vector2D LastMouseDownPosition {
+        public Vector2D LastMouseDownPosition
+        {
             get => _lastMouseDownPosition;
-            set {
-                if (_lastMouseDownPosition == value) {
+            set
+            {
+                if (_lastMouseDownPosition == value)
+                {
                     return;
                 }
 
@@ -40,25 +44,30 @@ namespace Tida.Canvas.Infrastructure.Contracts {
 
                 PreviewLastMouseDownPositionChanged?.Invoke(this, args);
                 //若通知被挂起,则不触发事件;
-                if (NotificationSuspended) {
+                if (NotificationSuspended)
+                {
                     return;
                 }
 
-                LastMouseDownPositionChanged?.Invoke(this,args);
+                LastMouseDownPositionChanged?.Invoke(this, args);
             }
         }
 
         private Vector2D _currentHoverPosition;
+
         /// <summary>
         /// 当前鼠标的位置;
         /// </summary>
-        public Vector2D CurrentHoverPosition {
+        public Vector2D CurrentHoverPosition
+        {
             get => _currentHoverPosition;
-            set {
-                if (_currentHoverPosition == value) {
+            set
+            {
+                if (_currentHoverPosition == value)
+                {
                     return;
                 }
-                
+
                 var oldCurrentHoverPosition = _currentHoverPosition;
                 _currentHoverPosition = value;
 
@@ -70,7 +79,8 @@ namespace Tida.Canvas.Infrastructure.Contracts {
                 PreviewCurrentHoverPositionChanged?.Invoke(this, args);
 
                 //若通知被挂起,则不触发事件;
-                if (NotificationSuspended) {
+                if (NotificationSuspended)
+                {
                     return;
                 }
 
@@ -112,13 +122,15 @@ namespace Tida.Canvas.Infrastructure.Contracts {
     /// <summary>
     /// <see cref="MousePositionTracker"/>拓展;
     /// </summary>
-    public static class MousePositionTrackerExtention {
+    public static class MousePositionTrackerExtention
+    {
         /// <summary>
         /// 复位<see cref="MousePositionTracker"/>的状态;
         /// 将<see cref="MousePositionTracker.CurrentHoverPosition"/>和<see cref="MousePositionTracker.LastMouseDownPosition"/>置为空;
         /// </summary>
         /// <param name="notificationSuspended">是否挂起通知;</param>
-        public static void Reset(this MousePositionTracker mousePositionTracker, bool notificationSuspended = false) {
+        public static void Reset(this MousePositionTracker mousePositionTracker, bool notificationSuspended = false)
+        {
             mousePositionTracker.SetBothMousePositions(null, notificationSuspended);
         }
 
@@ -130,7 +142,8 @@ namespace Tida.Canvas.Infrastructure.Contracts {
         /// </summary>
         /// <param name="mousePositionTracker"></param>
         /// <param name="mousePosition"></param>
-        public static void SetBothMousePositions(this MousePositionTracker mousePositionTracker, Vector2D mousePosition, bool notificationSuspended = false) {
+        public static void SetBothMousePositions(this MousePositionTracker mousePositionTracker, Vector2D mousePosition, bool notificationSuspended = false)
+        {
             mousePositionTracker.SetMousePositions(mousePosition, mousePosition, notificationSuspended);
         }
 
@@ -142,8 +155,10 @@ namespace Tida.Canvas.Infrastructure.Contracts {
         /// <param name="lastMouseDownPosition"></param>
         /// <param name="currentHoverPosition"></param>
         /// <param name="notificationSuspended">是否挂起通知;</param>
-        public static void SetMousePositions(this MousePositionTracker mousePositionTracker,Vector2D lastMouseDownPosition,Vector2D currentHoverPosition, bool notificationSuspended = false) {
-            if (mousePositionTracker == null) {
+        public static void SetMousePositions(this MousePositionTracker mousePositionTracker, Vector2D lastMouseDownPosition, Vector2D currentHoverPosition, bool notificationSuspended = false)
+        {
+            if (mousePositionTracker == null)
+            {
                 throw new ArgumentNullException(nameof(mousePositionTracker));
             }
 
@@ -156,6 +171,5 @@ namespace Tida.Canvas.Infrastructure.Contracts {
 
             mousePositionTracker.NotificationSuspended = oldNotificationSuspended;
         }
-        
     }
 }

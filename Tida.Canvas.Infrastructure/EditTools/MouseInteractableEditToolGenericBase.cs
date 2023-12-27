@@ -5,34 +5,41 @@ using Tida.Canvas.Input;
 using Tida.Geometry.Primitives;
 using System;
 
-namespace Tida.Canvas.Infrastructure.EditTools {
+namespace Tida.Canvas.Infrastructure.EditTools
+{
     /// <summary>
     /// 根据鼠标状态再封装的泛型编辑工具;
     /// </summary>
     /// <typeparam name="TDrawObject">针对的绘制对象</typeparam>
-    public abstract class MouseInteractableEditToolGenericBase<TDrawObject> : UniqueTypeEditToolGenericBase<TDrawObject>,IHaveMousePositionTracker where TDrawObject : DrawObject {
-        public MouseInteractableEditToolGenericBase() {
+    public abstract class MouseInteractableEditToolGenericBase<TDrawObject> : UniqueTypeEditToolGenericBase<TDrawObject>, IHaveMousePositionTracker where TDrawObject : DrawObject
+    {
+        public MouseInteractableEditToolGenericBase()
+        {
             MousePositionTracker.CurrentHoverPositionChanged += MouseTracker_PositionStateChanged;
             MousePositionTracker.LastMouseDownPositionChanged += MouseTracker_PositionStateChanged;
         }
 
-        private void MouseTracker_PositionStateChanged(object sender, ValueChangedEventArgs<Vector2D> e) {
+        private void MouseTracker_PositionStateChanged(object sender, ValueChangedEventArgs<Vector2D> e)
+        {
             this.RaiseVisualChanged();
         }
 
         private MousePositionTracker _mousePositionTracker;
-        public MousePositionTracker MousePositionTracker => _mousePositionTracker??(_mousePositionTracker = new MousePositionTracker(this));
+        public MousePositionTracker MousePositionTracker => _mousePositionTracker ?? (_mousePositionTracker = new MousePositionTracker(this));
 
         public override bool IsEditing => true;
-        
+
         public override bool CanUndo => base.CanUndo || MousePositionTracker.LastMouseDownPosition != null;
 
-        protected override void OnMouseDown(MouseDownEventArgs e) {
-            if (e == null) {
+        protected override void OnMouseDown(MouseDownEventArgs e)
+        {
+            if (e == null)
+            {
                 throw new ArgumentNullException(nameof(e));
             }
 
-            if (e.Button != MouseButton.Left) {
+            if (e.Button != MouseButton.Left)
+            {
                 return;
             }
 
@@ -43,12 +50,15 @@ namespace Tida.Canvas.Infrastructure.EditTools {
             ApplyMouseDownPosition(e.Position);
         }
 
-        protected override void OnMouseMove(MouseMoveEventArgs e) {
-            if (e == null) {
+        protected override void OnMouseMove(MouseMoveEventArgs e)
+        {
+            if (e == null)
+            {
                 throw new ArgumentNullException(nameof(e));
             }
 
-            if (e.Position == null) {
+            if (e.Position == null)
+            {
                 throw new ArgumentException();
             }
 
@@ -60,7 +70,8 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         /// 应用鼠标按下的位置,并进行数据的修改;
         /// </summary>
         /// <param name="thisMouseDownPosition"></param>
-        public void ApplyMouseDownPosition(Vector2D thisMouseDownPosition) {
+        public void ApplyMouseDownPosition(Vector2D thisMouseDownPosition)
+        {
             OnApplyMouseDownPosition(thisMouseDownPosition);
         }
 
@@ -69,8 +80,5 @@ namespace Tida.Canvas.Infrastructure.EditTools {
         /// </summary>
         /// <param name="thisMouseDownPosition"></param>
         protected abstract void OnApplyMouseDownPosition(Vector2D thisMouseDownPosition);
-
-        
-
     }
 }

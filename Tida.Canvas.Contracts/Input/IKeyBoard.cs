@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Input {
+namespace Tida.Canvas.Input
+{
     /// <summary>
     /// 键盘服务抽象;
     /// </summary>
-    public interface IKeyBoard {
+    public interface IKeyBoard
+    {
         /// <summary>
         /// 获取按键是否按下;
         /// </summary>
@@ -35,6 +37,5 @@ namespace Tida.Canvas.Input {
         /// 修饰键状态;
         /// </summary>
         ModifierKeys ModifierKeys { get; }
-
     }
 }

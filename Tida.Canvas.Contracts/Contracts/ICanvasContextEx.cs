@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Tida.Canvas.Contracts {
-
+namespace Tida.Canvas.Contracts
+{
     /// <summary>
     /// 画布上下文升级契约,此契约在<see cref="ICanvasContext"/>上加入了辅助规则内容;
     /// </summary>
-    public interface ICanvasContextEx : ICanvasContext {
-
+    public interface ICanvasContextEx : ICanvasContext
+    {
         /// <summary>
         /// 辅助规则集合;
         /// </summary>
@@ -43,7 +43,5 @@ namespace Tida.Canvas.Contracts {
         /// </summary>
         /// <param name="nativeVisual"></param>
         void RemoveUIObject(object nativeVisual);
-
-        
     }
 }

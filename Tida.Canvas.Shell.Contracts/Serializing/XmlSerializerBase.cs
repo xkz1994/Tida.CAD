@@ -2,14 +2,18 @@
 using System.Xml.Linq;
 using Tida.Canvas.Contracts;
 
-namespace Tida.Canvas.Shell.Contracts.Serializing {
+namespace Tida.Canvas.Shell.Contracts.Serializing
+{
     /// <summary>
     /// 绘制对象序列化泛型基类;
     /// </summary>
     /// <typeparam name="TDrawObject">对应的序列化器所序列化和反序列化的绘制对象类型,该类型应为绘制对象的最终类型</typeparam>
-    public abstract class DrawObjectXmlSerializerBase<TDrawObject> : IDrawObjectXmlSerializer where TDrawObject:DrawObject{
-        public DrawObjectXmlSerializerBase(string xElemName_DrawObject) {
-            if (string.IsNullOrEmpty(xElemName_DrawObject)) {
+    public abstract class DrawObjectXmlSerializerBase<TDrawObject> : IDrawObjectXmlSerializer where TDrawObject : DrawObject
+    {
+        public DrawObjectXmlSerializerBase(string xElemName_DrawObject)
+        {
+            if (string.IsNullOrEmpty(xElemName_DrawObject))
+            {
                 throw new ArgumentNullException(nameof(xElemName_DrawObject));
             }
 
@@ -21,12 +25,15 @@ namespace Tida.Canvas.Shell.Contracts.Serializing {
         /// </summary>
         private readonly string _xElemName_DrawObject;
 
-        public virtual DrawObject Deserialize(XElement xElem) {
-            if(xElem == null) {
+        public virtual DrawObject Deserialize(XElement xElem)
+        {
+            if (xElem == null)
+            {
                 return null;
             }
 
-            if(xElem.Name != _xElemName_DrawObject) {
+            if (xElem.Name != _xElemName_DrawObject)
+            {
                 return null;
             }
 
@@ -39,19 +46,22 @@ namespace Tida.Canvas.Shell.Contracts.Serializing {
         /// <param name="xElem"></param>
         /// <returns></returns>
         protected abstract TDrawObject OnDeserialize(XElement xElem);
-        
+
         /// <summary>
         /// 进行序列化;
         /// </summary>
         /// <param name="drawObject"></param>
         /// <returns></returns>
-        public XElement Serialize(DrawObject drawObject) {
-            if(drawObject == null) {
+        public XElement Serialize(DrawObject drawObject)
+        {
+            if (drawObject == null)
+            {
                 throw new ArgumentNullException(nameof(drawObject));
             }
 
             //因为绘制对象可能存在继承关系,所以需判断最终类型是否匹配;
-            if(drawObject.GetType() != typeof(TDrawObject)) {
+            if (drawObject.GetType() != typeof(TDrawObject))
+            {
                 return null;
             }
 

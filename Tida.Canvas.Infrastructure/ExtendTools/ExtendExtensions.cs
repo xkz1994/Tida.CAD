@@ -4,7 +4,8 @@ using Tida.Geometry.Primitives;
 using System;
 using System.Linq;
 
-namespace Tida.Canvas.Infrastructure.ExtendTools {
+namespace Tida.Canvas.Infrastructure.ExtendTools
+{
     public static class ExtendExtensions
     {
         public static Line2D GetExtendLineWithIntersectPositions(Line2D line2D, Line2D[] extendLines, Vector2D[] intersectPositions, Rectangle2D2 rectIntersect)
@@ -64,6 +65,7 @@ namespace Tida.Canvas.Infrastructure.ExtendTools {
                 var newEndPoint = GetExtendPoint(intersectPositions.First(), line2D.Direction, angle, width, gap);
                 return Line2D.Create(line2D.Start, newEndPoint);
             }
+
             return null;
         }
 
@@ -71,10 +73,9 @@ namespace Tida.Canvas.Infrastructure.ExtendTools {
         {
             if (angle < Extension.SMALL_NUMBER) throw new Exception("杆件之间夹角过小,无法剪切");
             var d1 = width / 2 / Math.Sin(angle);
-            var d2 = Math.Abs(angle - Math.PI / 2) < Extension.SMALL_NUMBER ?
-                0 : width / 2 / Math.Tan(angle);
+            var d2 = Math.Abs(angle - Math.PI / 2) < Extension.SMALL_NUMBER ? 0 : width / 2 / Math.Tan(angle);
             var dis = d1 - d2 - gap;
-            if (dis <= 12) dis = 12;//2.5d，d为螺钉孔径， 一般为4.8mm
+            if (dis <= 12) dis = 12; //2.5d，d为螺钉孔径， 一般为4.8mm
             return intersectPoint.Offset(dir * dis);
         }
     }

@@ -9,13 +9,15 @@ using System.Threading.Tasks;
 using Tida.Canvas.Shell.Contracts.App;
 using Tida.Canvas.Shell.Contracts.Common;
 
-namespace Tida.Canvas.Shell.ComponentModel {
+namespace Tida.Canvas.Shell.ComponentModel
+{
     /// <summary>
     /// 用作动态生成代码的封装;
     /// </summary>
-    public static class DynamicAsmManager {
-
-        static DynamicAsmManager() {
+    public static class DynamicAsmManager
+    {
+        static DynamicAsmManager()
+        {
             var asmName = new AssemblyName(TidaAsmName);
             AsmBuilder = AssemblyBuilder.DefineDynamicAssembly(asmName, AssemblyBuilderAccess.RunAndCollect);
             ModuleBuilder = AsmBuilder.DefineDynamicModule(asmName.Name);
@@ -23,18 +25,22 @@ namespace Tida.Canvas.Shell.ComponentModel {
 
         private const string TidaAsmName = "TidaDynamicEditorAsm";
         private static readonly AssemblyBuilder AsmBuilder;
+
         /// <summary>
         /// 本应用程序域用于动态生成模块的模块生成器;
         /// </summary>
         public static readonly ModuleBuilder ModuleBuilder;
+
         /// <summary>
         /// 应用程序保存事件;
         /// </summary>
         public static event EventHandler Saving;
+
         /// <summary>
         /// 保存临时程序集,本方法只能被调用一次,用于在调试中检查生成后的代码;
         /// </summary>
-        public static void SaveTempAssembly() {
+        public static void SaveTempAssembly()
+        {
             ///.net core 中已经移除<see cref="AssemblyBuilder.Save(string)"/>,故.net core 中将不能保存程序集;
 #if NETFRAMEWORK
             try
@@ -44,7 +50,7 @@ namespace Tida.Canvas.Shell.ComponentModel {
             }
             catch (Exception ex) {
                 LoggerService.WriteException(ex);
-            }      
+            }
 #endif
         }
     }

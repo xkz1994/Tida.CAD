@@ -11,7 +11,8 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using static Tida.Canvas.Shell.Contracts.EditTools.Constants;
 
-namespace Tida.Canvas.Shell.EditTools {
+namespace Tida.Canvas.Shell.EditTools
+{
     [ExportEditToolProvider(
         GroupGUID = EditToolGroup_BasicEditor,
         GUID = EditTool_TrimTool,
@@ -20,17 +21,18 @@ namespace Tida.Canvas.Shell.EditTools {
         Order = 699,
         Key = System.Windows.Input.Key.T
     )]
-    public class TrimEditToolProvider : EditToolProviderGenericBase<TrimEditTool>,IEditToolProvider {
+    public class TrimEditToolProvider : EditToolProviderGenericBase<TrimEditTool>, IEditToolProvider
+    {
         [ImportingConstructor]
         public TrimEditToolProvider(
-            [ImportMany]IEnumerable<IDrawObjectIntersectRule> drawObjectIntersectRules,
-            [ImportMany]IEnumerable<IIntersectRuleProvider> intersectRuleProviders,
-            [ImportMany]IEnumerable<IDrawObjectTrimTool> drawObjectTrimTools,
-            [ImportMany]IEnumerable<ITrimToolsProvider> trimToolsProviders,
-
-            [ImportMany]IEnumerable<IDrawObjectExtendTool> drawObjectExtendTools,
-            [ImportMany]IEnumerable<IExtendToolsProvider> extendToolsProviders
-        ) {
+            [ImportMany] IEnumerable<IDrawObjectIntersectRule> drawObjectIntersectRules,
+            [ImportMany] IEnumerable<IIntersectRuleProvider> intersectRuleProviders,
+            [ImportMany] IEnumerable<IDrawObjectTrimTool> drawObjectTrimTools,
+            [ImportMany] IEnumerable<ITrimToolsProvider> trimToolsProviders,
+            [ImportMany] IEnumerable<IDrawObjectExtendTool> drawObjectExtendTools,
+            [ImportMany] IEnumerable<IExtendToolsProvider> extendToolsProviders
+        )
+        {
             TrimEditTool.DrawObjectIntersectRules.Clear();
             TrimEditTool.DrawObjectIntersectRules.AddRange(drawObjectIntersectRules);
             TrimEditTool.DrawObjectIntersectRules.AddRange(intersectRuleProviders.SelectMany(p => p.Rules));

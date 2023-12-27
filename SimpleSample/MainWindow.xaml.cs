@@ -31,7 +31,6 @@ namespace SimpleSample
             };
             canvasControl.InteractionHandlers = new CanvasInteractionHandler[]
             {
-
             };
         }
 
@@ -39,7 +38,7 @@ namespace SimpleSample
 
         private void AddLine_Click(object sender, RoutedEventArgs e)
         {
-            var line = new Tida.Canvas.Infrastructure.DrawObjects.Line(new Vector2D(-3,3),new Vector2D(3,-3));
+            var line = new Tida.Canvas.Infrastructure.DrawObjects.Line(new Vector2D(-3, 3), new Vector2D(3, -3));
             _canvasLayer.AddDrawObject(line);
         }
 
