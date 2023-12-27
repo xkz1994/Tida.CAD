@@ -13,8 +13,8 @@ namespace Tida.CAD.Events
     {
         public ClickUnselectedEventArgs(Point position, IList<DrawObject> unselectedDrawObjects)
         {
-            this.HitPosition = position;
-            this.UnselectedDrawObjects = unselectedDrawObjects;
+            HitPosition = position;
+            UnselectedDrawObjects = unselectedDrawObjects;
         }
 
         /// <summary>

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 
@@ -39,7 +37,7 @@ namespace Tida.CAD.DrawObjects
 
         public Brush Brush
         {
-            get { return _brush; }
+            get => _brush;
             set
             {
                 _brush = value;
@@ -47,13 +45,9 @@ namespace Tida.CAD.DrawObjects
             }
         }
 
-
         public override void Draw(ICanvas canvas)
         {
-            if (Points == null)
-            {
-                return;
-            }
+            if (Points == null) return;
 
             canvas.DrawPolygon(Points, Brush, Pen);
             base.Draw(canvas);

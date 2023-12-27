@@ -5,21 +5,20 @@ using System.Windows;
 namespace Tida.CAD
 {
     /// <summary>
-    /// Describes the width, height, and location (the bottom left point) of a rectangle.
+    /// 描述矩形的宽度、高度和位置（左下点）
     /// </summary>
     /// <remarks>
-    /// Note that the y-axis is up forward,which is opposite when in rendering coordinate systems,
-    /// the coordinate system which will be used here, is named "CAD Coordinates"
+    /// 请注意，y 轴是向前的，这在大多数渲染坐标系中是相反的，此处将使用的坐标系名为“CAD 坐标”
     /// </remarks>
-    public struct CADRect
+    public struct CadRect
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CADRect"/> structure that has the
+        /// Initializes a new instance of the <see cref="CadRect"/> structure that has the
         ///     specified bottom-left corner location and the specified width and height.
         /// </summary>
         /// <param name="location">A point that specifies the location of the bottom-left corner of the rectangle.</param>
         /// <param name="size">A System.Windows.Size structure that specifies the width and height of the rectangle.</param>
-        public CADRect(Point location, Size size)
+        public CadRect(Point location, Size size)
         {
             X = location.X;
             Y = location.Y;
@@ -28,14 +27,14 @@ namespace Tida.CAD
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CADRect"/> structure that has the
+        /// Initializes a new instance of the <see cref="CadRect"/> structure that has the
         ///     specified x-coordinate, y-coordinate, width, and height.
         /// </summary>
         /// <param name="x"> The x-coordinate of the bottom-left corner of the rectangle.</param>
         /// <param name="y"> The y-coordinate of the bottom-left corner of the rectangle.</param>
         /// <param name="width">The width of the rectangle.</param>
         /// <param name="height">The height of the rectangle.</param>
-        public CADRect(double x, double y, double width, double height)
+        public CadRect(double x, double y, double width, double height)
         {
             X = x;
             Y = y;
@@ -46,7 +45,7 @@ namespace Tida.CAD
         /// <summary>
         /// Constructor which sets the initial values to bound the two points provided.
         /// </summary>
-        public CADRect(Point point1, Point point2)
+        public CadRect(Point point1, Point point2)
         {
             X = Math.Min(point1.X, point2.X);
             Y = Math.Min(point1.Y, point2.Y);
@@ -106,11 +105,10 @@ namespace Tida.CAD
             return (point.X - X) >= 0 && (point.X - X) <= Width && (point.Y - Y) >= 0 && (point.Y - Y) <= Height;
         }
 
-
         /// <summary>
-        /// Get all the vertex points of the rect(unclockwise);
+        /// Get all the vertex points of the rect(顺时针);
         /// </summary>
-        public IEnumerable<Point> GetVertexes()
+        public readonly IEnumerable<Point> GetVertexes()
         {
             yield return BottomLeft;
             yield return BottomRight;
@@ -119,15 +117,15 @@ namespace Tida.CAD
         }
 
         /// <summary>
-        /// Get all the borders of the rect(unclockwise)
+        /// Get all the borders of the rect(顺时针)
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<CADLine> GetBorders()
+        public readonly IEnumerable<CadLine> GetBorders()
         {
-            yield return new CADLine(BottomLeft, BottomRight);
-            yield return new CADLine(BottomRight, TopRight);
-            yield return new CADLine(TopRight, TopLeft);
-            yield return new CADLine(TopLeft, BottomLeft);
+            yield return new CadLine(BottomLeft, BottomRight);
+            yield return new CadLine(BottomRight, TopRight);
+            yield return new CadLine(TopRight, TopLeft);
+            yield return new CadLine(TopLeft, BottomLeft);
         }
     }
 }

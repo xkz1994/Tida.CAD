@@ -3,33 +3,12 @@
 namespace Tida.CAD
 {
     /// <summary>
-    /// The base class of things like Layer and drawobjects;
+    /// The base class of things like Layer and draw objects
     /// </summary>
-    public abstract class CADElement : IDrawable
+    public abstract class CadElement : IDrawable
     {
-        private bool _isVisible = true;
-
         /// <summary>
-        /// IsVisible;
-        /// </summary>
-        public bool IsVisible
-        {
-            get { return _isVisible; }
-            set
-            {
-                if (_isVisible == value)
-                {
-                    return;
-                }
-
-                _isVisible = value;
-                IsVisibleChanged?.Invoke(this, EventArgs.Empty);
-                RaiseVisualChanged();
-            }
-        }
-
-        /// <summary>
-        /// Occurs when isvisible changed;
+        /// Occurs when is visibly changed;
         /// </summary>
         public event EventHandler IsVisibleChanged;
 
@@ -37,6 +16,24 @@ namespace Tida.CAD
         /// Occurs when the visual content changed;
         /// </summary>
         public event EventHandler VisualChanged;
+
+        private bool _isVisible = true;
+
+        /// <summary>
+        /// IsVisible;
+        /// </summary>
+        public bool IsVisible
+        {
+            get => _isVisible;
+            set
+            {
+                if (_isVisible == value) return;
+
+                _isVisible = value;
+                IsVisibleChanged?.Invoke(this, EventArgs.Empty);
+                RaiseVisualChanged();
+            }
+        }
 
         /// <summary>
         /// Notify the components that registered the <see cref="IsVisibleChanged"/>;
@@ -46,11 +43,6 @@ namespace Tida.CAD
             VisualChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        /// <summary>
-        ///   When overridden in a derived class, participates in rendering operations that
-        //     are directly used by UI framework.
-        /// </summary>
-        /// <param name="canvas"></param>
         public virtual void Draw(ICanvas canvas)
         {
         }

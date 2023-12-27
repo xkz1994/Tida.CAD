@@ -7,13 +7,13 @@ using System.Windows.Media;
 namespace Tida.CAD.WPF
 {
     /// <summary>
-    /// Visible element;
+    /// Visible element
     /// </summary>
     public class VisualContainer : FrameworkElement
     {
         public VisualContainer()
         {
-            this.Focusable = true;
+            Focusable = true;
         }
 
         /// <summary>
@@ -22,26 +22,23 @@ namespace Tida.CAD.WPF
         private readonly List<Visual> _visuals = new List<Visual>();
 
         /// <summary>
-        /// 获取Visual的个数
-        /// </summary>
-        protected override int VisualChildrenCount => _visuals.Count;
-
-        /// <summary>
         /// 获取界面上所有的可视化对象
         /// </summary>
         public IEnumerable<Visual> Visuals => _visuals.Select(p => p);
 
         /// <summary>
-        /// 获取Visual
+        /// 获取Visual的个数
+        /// 重写VisualChildrenCount属性并返回已经增加了的可视化对象的数量
         /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        protected override int VisualChildrenCount => _visuals.Count;
+
+        /// <summary>
+        /// 获取Visual
+        /// 重写GetVisualChild()方法，当通过索引号请求可视化对象时，添加返回可视化对象所需的代码
+        /// </summary>
         protected override Visual GetVisualChild(int index)
         {
-            if (index < 0 || index >= this._visuals.Count)
-            {
-                return null;
-            }
+            if (index < 0 || index >= _visuals.Count) return null;
 
             return _visuals[index];
         }
@@ -49,30 +46,28 @@ namespace Tida.CAD.WPF
         /// <summary>
         /// 添加Visual
         /// </summary>
-        /// <param name="visual"></param>
         public void AddVisual(Visual visual)
         {
             _visuals.Add(visual);
-            base.AddVisualChild(visual);
-            base.AddLogicalChild(visual);
+            // 元素调用AddVisualChild()和AddLogicalChild()方法来注册可视化对象。
+            // 从技术角度看，为了显示可视化对象，不需要执行这些任务，但为了保证正确跟踪可视化对象、在可视化树和逻辑树中显示可视化对象以及使用其他WPF特性（如命中测试），需要执行这些操作.
+            AddVisualChild(visual);
+            AddLogicalChild(visual);
         }
 
         /// <summary>
         /// 插入Visual;
         /// </summary>
-        /// <param name="index"></param>
-        /// <param name="visual"></param>
         public void InsertVisual(int index, Visual visual)
         {
             _visuals.Insert(index, visual);
-            base.AddVisualChild(visual);
-            base.AddLogicalChild(visual);
+            AddVisualChild(visual);
+            AddLogicalChild(visual);
         }
 
         /// <summary>
         /// 删除Visual
         /// </summary>
-        /// <param name="visual"></param>
         public void RemoveVisual(Visual visual)
         {
             if (!_visuals.Contains(visual))
@@ -81,20 +76,19 @@ namespace Tida.CAD.WPF
             }
 
             _visuals.Remove(visual);
-            base.RemoveVisualChild(visual);
-            base.RemoveLogicalChild(visual);
+            RemoveVisualChild(visual);
+            RemoveLogicalChild(visual);
         }
 
-
         /// <summary>
-        /// 清除视图;
+        /// 清除视图
         /// </summary>
         protected void ClearVisuals()
         {
             foreach (var visual in _visuals)
             {
-                base.RemoveVisualChild(visual);
-                base.RemoveLogicalChild(visual);
+                RemoveVisualChild(visual);
+                RemoveLogicalChild(visual);
             }
 
             _visuals.Clear();
@@ -103,11 +97,9 @@ namespace Tida.CAD.WPF
         /// <summary>
         /// 命中测试
         /// </summary>
-        /// <param name="point"></param>
-        /// <returns></returns>
         protected Visual GetVisual(Point point)
         {
-            HitTestResult hitResult = VisualTreeHelper.HitTest(this, point);
+            var hitResult = VisualTreeHelper.HitTest(this, point);
             return hitResult.VisualHit as Visual;
         }
     }

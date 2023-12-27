@@ -4,7 +4,7 @@ using System.Windows;
 namespace Tida.CAD.Extensions
 {
     /// <summary>
-    /// Some extended methods for <see cref="ICADScreenConverter"/>;
+    /// Some extended methods for <see cref="ICadScreenConverter"/>;
     /// </summary>
     public static class CanvasScreenConvertableExtension
     {
@@ -14,14 +14,14 @@ namespace Tida.CAD.Extensions
         /// <param name="canvasScreenConverter"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static Point GetBottomRightCADPoint(this ICADScreenConverter canvasScreenConverter)
+        public static Point GetBottomRightCADPoint(this ICadScreenConverter canvasScreenConverter)
         {
             if (canvasScreenConverter == null)
             {
                 throw new ArgumentNullException(nameof(canvasScreenConverter));
             }
 
-            return canvasScreenConverter.ToCAD(new Point(canvasScreenConverter.ActualWidth, canvasScreenConverter.ActualHeight));
+            return canvasScreenConverter.ToCad(new Point(canvasScreenConverter.ActualWidth, canvasScreenConverter.ActualHeight));
         }
 
         /// <summary>
@@ -30,14 +30,14 @@ namespace Tida.CAD.Extensions
         /// <param name="canvasScreenConverter"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static Point GetTopLeftCADPoint(this ICADScreenConverter canvasScreenConverter)
+        public static Point GetTopLeftCADPoint(this ICadScreenConverter canvasScreenConverter)
         {
             if (canvasScreenConverter == null)
             {
                 throw new ArgumentNullException(nameof(canvasScreenConverter));
             }
 
-            return canvasScreenConverter.ToCAD(new Point(0, 0));
+            return canvasScreenConverter.ToCad(new Point(0, 0));
         }
     }
 }

@@ -5,23 +5,23 @@ using System.Windows;
 namespace Tida.CAD.Events
 {
     /// <summary>
-    /// The eventargs used while selecting drawobjects with clicking;
+    /// The event args used while selecting draw objects with clicking;
     /// </summary>
     public class ClickSelectingEventArgs : CancelEventArgs
     {
         public ClickSelectingEventArgs(Point position, IList<DrawObject> hitedDrawObjects)
         {
-            this.HitPosition = position;
-            this.HitedDrawObjects = hitedDrawObjects;
+            HitPosition = position;
+            HitedDrawObjects = hitedDrawObjects;
         }
 
         /// <summary>
-        /// The position where the mouse clicked;
+        /// The position where the mouse clicked
         /// </summary>
         public Point HitPosition { get; }
 
         /// <summary>
-        /// The drawobject to select;
+        /// The draw object to select
         /// </summary>
         public IList<DrawObject> HitedDrawObjects { get; }
     }

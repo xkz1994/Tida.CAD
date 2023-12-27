@@ -22,11 +22,11 @@ namespace Tida.CAD.WPF.SimpleSample.Views
         public DrawObjectSample()
         {
             InitializeComponent();
-            _cadLayer = new CADLayer();
-            cadControl.Layers = new CADLayer[] { _cadLayer };
+            _cadLayer = new CadLayer();
+            cadControl.Layers = new CadLayer[] { _cadLayer };
         }
 
-        private readonly CADLayer _cadLayer;
+        private readonly CadLayer _cadLayer;
 
         private void Addline_Click(object sender, RoutedEventArgs e)
         {
@@ -41,7 +41,7 @@ namespace Tida.CAD.WPF.SimpleSample.Views
             var rectBackground = Brushes.Orange;
             rectPen.Freeze();
 
-            var rect = new Rectangle(new CADRect(new Point(-2, -2), new Size(4, 4)))
+            var rect = new Rectangle(new CadRect(new Point(-2, -2), new Size(4, 4)))
             {
                 Pen = rectPen,
                 IsSelected = true,

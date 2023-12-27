@@ -7,26 +7,29 @@ using System.Windows.Media;
 namespace Tida.CAD
 {
     /// <summary>
-    /// The layer of cad;
+    /// The layer of cad
     /// </summary>
-    public class CADLayer : CADElement
+    public class CadLayer : CadElement
     {
         /// <summary>
-        /// Draw;
+        /// 对象被移除事件
         /// </summary>
-        /// <param name="canvas">画布</param>
-        public override void Draw(ICanvas canvas)
-        {
-            if (Background == null)
-            {
-                return;
-            }
+        public event EventHandler<IEnumerable<DrawObject>> DrawObjectsRemoved;
 
-            var topLeftPoint = canvas.CADScreenConverter.ToCAD(new Point(0, 0));
-            var bottomRightPoint = canvas.CADScreenConverter.ToCAD(new Point(canvas.CADScreenConverter.ActualWidth, canvas.CADScreenConverter.ActualHeight));
+        /// <summary>
+        /// 对象被增加事件
+        /// </summary>
+        public event EventHandler<IEnumerable<DrawObject>> DrawObjectsAdded;
 
-            canvas.DrawRectangle(new CADRect(topLeftPoint, bottomRightPoint), Background, null);
-        }
+        /// <summary>
+        /// 绘制对象集合已经被清除事件
+        /// </summary>
+        public event EventHandler DrawObjectsCleared;
+
+        /// <summary>
+        /// 绘制对象集合即将被清除事件
+        /// </summary>
+        public event EventHandler DrawObjectsClearing;
 
         private Brush _background;
 
@@ -35,10 +38,7 @@ namespace Tida.CAD
             get => _background;
             set
             {
-                if (_background == value)
-                {
-                    return;
-                }
+                if (_background == value) return;
 
                 _background = value;
                 RaiseVisualChanged();
@@ -46,21 +46,36 @@ namespace Tida.CAD
         }
 
         /// <summary>
-        /// The drawobjects of the layer;
+        /// The draw objects of the layer;
         /// </summary>
         private readonly List<DrawObject> _drawObjects = new List<DrawObject>();
 
+        /// <summary>
+        /// 绘画对象
+        /// </summary>
         public IReadOnlyList<DrawObject> DrawObjects => new ReadOnlyCollection<DrawObject>(_drawObjects);
 
         /// <summary>
-        /// Add draw object instance;
+        /// Draw一个画布
         /// </summary>
-        /// <param name="drawObject"></param>
+        public override void Draw(ICanvas canvas)
+        {
+            if (Background == null) return;
+
+            var topLeftPoint = canvas.CadScreenConverter.ToCad(new Point(0, 0));
+            var bottomRightPoint = canvas.CadScreenConverter.ToCad(new Point(canvas.CadScreenConverter.ActualWidth, canvas.CadScreenConverter.ActualHeight));
+
+            canvas.DrawRectangle(new CadRect(topLeftPoint, bottomRightPoint), Background, null);
+        }
+
+        /// <summary>
+        /// Add draw object instance
+        /// </summary>
         public void AddDrawObject(DrawObject drawObject)
         {
             AddDrawObjectCore(drawObject);
             RaiseVisualChanged();
-            DrawObjectsAdded?.Invoke(this, new DrawObject[] { drawObject });
+            DrawObjectsAdded?.Invoke(this, new[] { drawObject });
         }
 
         /// <summary>
@@ -69,10 +84,7 @@ namespace Tida.CAD
         /// <param name="drawObjects"></param>
         public void AddDrawObjects(IEnumerable<DrawObject> drawObjects)
         {
-            if (drawObjects == null)
-            {
-                throw new ArgumentNullException(nameof(drawObjects));
-            }
+            if (drawObjects == null) throw new ArgumentNullException(nameof(drawObjects));
 
             foreach (var drawObject in drawObjects)
             {
@@ -84,37 +96,14 @@ namespace Tida.CAD
         }
 
         /// <summary>
-        /// 添加绘制对象核心;
+        /// 移除绘制元素
         /// </summary>
-        /// <param name="drawObject"></param>
-        private void AddDrawObjectCore(DrawObject drawObject)
-        {
-            if (drawObject == null)
-            {
-                throw new ArgumentNullException(nameof(drawObject));
-            }
-
-            //检查是否是独立的绘制元素;
-            if (drawObject.Layer != null)
-            {
-                throw new InvalidOperationException("Please remove the drawObject from its parent first.");
-            }
-
-            _drawObjects.Add(drawObject);
-            drawObject.InternalLayer = this;
-        }
-
-        /// <summary>
-        /// 移除绘制元素;
-        /// </summary>
-        /// <param name="drawObject"></param>
-        /// <param name="raiseRemoveEvent">是否触发移除事件</param>
         public void RemoveDrawObject(DrawObject drawObject)
         {
             RemoveDrawObjectCore(drawObject);
 
             RaiseVisualChanged();
-            DrawObjectsRemoved?.Invoke(this, new DrawObject[] { drawObject });
+            DrawObjectsRemoved?.Invoke(this, new[] { drawObject });
         }
 
         /// <summary>
@@ -123,21 +112,28 @@ namespace Tida.CAD
         /// <param name="drawObjects"></param>
         public void RemoveDrawObjects(IEnumerable<DrawObject> drawObjects)
         {
-            if (drawObjects == null)
-            {
-                throw new ArgumentNullException(nameof(drawObjects));
-            }
+            if (drawObjects == null) throw new ArgumentNullException(nameof(drawObjects));
 
             foreach (var drawObject in drawObjects)
-            {
                 if (_drawObjects.Contains(drawObject) && drawObject.Layer == this)
-                {
                     RemoveDrawObjectCore(drawObject);
-                }
-            }
 
             RaiseVisualChanged();
             DrawObjectsRemoved?.Invoke(this, drawObjects);
+        }
+
+        /// <summary>
+        /// 清除绘制元素
+        /// </summary>
+        public void Clear()
+        {
+            DrawObjectsClearing?.Invoke(this, EventArgs.Empty);
+
+            foreach (var drawObject in DrawObjects) drawObject.InternalLayer = null;
+
+            _drawObjects.Clear();
+            DrawObjectsCleared?.Invoke(this, EventArgs.Empty);
+            RaiseVisualChanged();
         }
 
         /// <summary>
@@ -146,57 +142,27 @@ namespace Tida.CAD
         /// <param name="drawObject"></param>
         private void RemoveDrawObjectCore(DrawObject drawObject)
         {
-            if (drawObject == null)
-            {
-                throw new ArgumentNullException(nameof(drawObject));
-            }
+            if (drawObject == null) throw new ArgumentNullException(nameof(drawObject));
 
             //检查绘制元素是否属于本实例;
-            if (drawObject.Layer != this)
-            {
-                throw new InvalidOperationException("This instance doesn't own the drawObject.");
-            }
+            if (drawObject.Layer != this) throw new InvalidOperationException("This instance doesn't own the drawObject.");
 
             _drawObjects.Remove(drawObject);
             drawObject.InternalLayer = null;
         }
 
         /// <summary>
-        /// 清除绘制元素;
+        /// 添加绘制对象核心;
         /// </summary>
-        public void Clear()
+        private void AddDrawObjectCore(DrawObject drawObject)
         {
-            DrawObjectsClearing?.Invoke(this, EventArgs.Empty);
+            if (drawObject == null) throw new ArgumentNullException(nameof(drawObject));
 
-            foreach (var drawObject in DrawObjects)
-            {
-                drawObject.InternalLayer = null;
-            }
+            //检查是否是独立的绘制元素;
+            if (drawObject.Layer != null) throw new InvalidOperationException("Please remove the drawObject from its parent first.");
 
-            _drawObjects.Clear();
-            DrawObjectsCleared?.Invoke(this, EventArgs.Empty);
-            RaiseVisualChanged();
+            _drawObjects.Add(drawObject);
+            drawObject.InternalLayer = this;
         }
-
-        /// <summary>
-        /// 对象被移除事件;
-        /// </summary>
-        public event EventHandler<IEnumerable<DrawObject>> DrawObjectsRemoved;
-
-        /// <summary>
-        /// 对象被增加事件;
-        /// </summary>
-        public event EventHandler<IEnumerable<DrawObject>> DrawObjectsAdded;
-
-
-        /// <summary>
-        /// 绘制对象集合已经被清除事件;
-        /// </summary>
-        public event EventHandler DrawObjectsCleared;
-
-        /// <summary>
-        /// 绘制对象集合即将被清除事件;
-        /// </summary>
-        public event EventHandler DrawObjectsClearing;
     }
 }

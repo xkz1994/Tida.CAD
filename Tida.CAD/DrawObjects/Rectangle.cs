@@ -2,9 +2,6 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using Tida.CAD;
-using Tida.CAD.Extensions;
-using Tida.CAD.Input;
 
 namespace Tida.CAD.DrawObjects
 {
@@ -15,15 +12,15 @@ namespace Tida.CAD.DrawObjects
     {
         static Rectangle()
         {
-            _defaultSelectionPen = new Pen
+            DefaultSelectionPen = new Pen
             {
                 Brush = Brushes.Blue,
                 Thickness = 3
             };
-            _defaultSelectionPen.Freeze();
+            DefaultSelectionPen.Freeze();
         }
 
-        private static Pen _defaultSelectionPen;
+        private static readonly Pen DefaultSelectionPen;
 
         private Pen _pen;
 
@@ -40,7 +37,7 @@ namespace Tida.CAD.DrawObjects
             }
         }
 
-        private Pen _selectionPen = _defaultSelectionPen;
+        private Pen _selectionPen = DefaultSelectionPen;
 
         /// <summary>
         /// The pen used for borders when selected;
@@ -70,15 +67,9 @@ namespace Tida.CAD.DrawObjects
             }
         }
 
-        public Rectangle(CADRect rect)
-        {
-            this.Rectangle2D = rect;
-        }
+        private CadRect _rectangle2D;
 
-
-        private CADRect _rectangle2D;
-
-        public CADRect Rectangle2D
+        public CadRect Rectangle2D
         {
             get => _rectangle2D;
             set
@@ -88,25 +79,25 @@ namespace Tida.CAD.DrawObjects
             }
         }
 
+        public Rectangle(CadRect rect)
+        {
+            Rectangle2D = rect;
+        }
 
-        public override CADRect? GetBoundingRect()
+        public override CadRect? GetBoundingRect()
         {
             return Rectangle2D;
         }
 
-        public override bool ObjectInRectangle(CADRect rect, ICADScreenConverter cadScreenConverter, bool anyPoint)
+        public override bool ObjectInRectangle(CadRect rect, ICadScreenConverter cadScreenConverter, bool anyPoint)
         {
             if (anyPoint)
-            {
                 return Rectangle2D.GetVertexes()?.Any(p => rect.Contains(p)) ?? false;
-            }
-            else
-            {
-                return Rectangle2D.GetVertexes()?.All(p => rect.Contains(p)) ?? false;
-            }
+
+            return Rectangle2D.GetVertexes()?.All(p => rect.Contains(p)) ?? false;
         }
 
-        public override bool PointInObject(Point point, ICADScreenConverter cadScreenConverter)
+        public override bool PointInObject(Point point, ICadScreenConverter cadScreenConverter)
         {
             return Rectangle2D.Contains(point);
         }
@@ -118,21 +109,9 @@ namespace Tida.CAD.DrawObjects
                 throw new ArgumentNullException(nameof(canvas));
             }
 
-            if (IsSelected)
-            {
-                canvas.DrawRectangle(Rectangle2D, Background, SelectionPen);
-            }
-            else
-            {
-                canvas.DrawRectangle(Rectangle2D, Background, Pen);
-            }
+            canvas.DrawRectangle(Rectangle2D, Background, IsSelected ? SelectionPen : Pen);
 
             base.Draw(canvas);
-        }
-
-        protected override void OnMouseUpCore(CADMouseButtonEventArgs e)
-        {
-            base.OnMouseUpCore(e);
         }
     }
 }

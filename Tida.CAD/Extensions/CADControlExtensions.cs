@@ -6,7 +6,7 @@ using System.Text;
 namespace Tida.CAD.Extensions
 {
     /// <summary>
-    /// Some extended methods for <see cref="ICADControl"/>
+    /// Some extended methods for <see cref="ICadControl"/>
     /// </summary>
     public static class CADControlExtensions
     {
@@ -15,7 +15,7 @@ namespace Tida.CAD.Extensions
         /// </summary>
         /// <param name="cadControl"></param>
         /// <returns></returns>
-        public static IEnumerable<DrawObject> GetAllDrawObjects(this ICADControl cadControl)
+        public static IEnumerable<DrawObject> GetAllDrawObjects(this ICadControl cadControl)
         {
             if (cadControl == null)
             {
@@ -30,7 +30,7 @@ namespace Tida.CAD.Extensions
         /// </summary>
         /// <param name="cadControl"></param>
         /// <returns></returns>
-        public static IEnumerable<DrawObject> GetAllVisibleDrawObjects(this ICADControl cadControl)
+        public static IEnumerable<DrawObject> GetAllVisibleDrawObjects(this ICadControl cadControl)
         {
             if (cadControl == null)
             {
@@ -45,7 +45,7 @@ namespace Tida.CAD.Extensions
         /// </summary>
         /// <param name="cadContext"></param>
         /// <returns></returns>
-        public static IEnumerable<TDrawObject> GetAllVisibleDrawObjects<TDrawObject>(this ICADControl cadContext) where TDrawObject : DrawObject
+        public static IEnumerable<TDrawObject> GetAllVisibleDrawObjects<TDrawObject>(this ICadControl cadContext) where TDrawObject : DrawObject
         {
             return GetAllDrawObjects(cadContext).Select(p => p as TDrawObject).Where(p => p != null);
         }
@@ -55,14 +55,14 @@ namespace Tida.CAD.Extensions
         /// </summary>
         /// <param name="cadControl"></param>
         /// <returns></returns>
-        public static IEnumerable<CADLayer> GetVisibleLayers(this ICADControl cadControl)
+        public static IEnumerable<CadLayer> GetVisibleLayers(this ICadControl cadControl)
         {
             if (cadControl == null)
             {
                 throw new ArgumentNullException(nameof(cadControl));
             }
 
-            return cadControl.Layers?.Where(p => p.IsVisible) ?? Enumerable.Empty<CADLayer>();
+            return cadControl.Layers?.Where(p => p.IsVisible) ?? Enumerable.Empty<CadLayer>();
         }
     }
 }

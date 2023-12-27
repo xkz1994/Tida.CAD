@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace Tida.CAD.Input
 {
     /// <summary>
-    /// CADKeyEventArgs;
+    /// CADKeyEventArgs
     /// </summary>
-    public class CADKeyEventArgs : CADRoutedEventArgs
+    public class CadKeyEventArgs : CadRoutedEventArgs
     {
-#if WPF
         /// <summary>
-        /// KeyEventArgs in WPF;
+        /// KeyEventArgs in WPF
         /// </summary>
         public KeyEventArgs KeyEventArgs { get; set; }
-#endif
     }
 }

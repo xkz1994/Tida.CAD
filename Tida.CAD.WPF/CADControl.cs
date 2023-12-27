@@ -16,122 +16,121 @@ using Tida.CAD.DrawObjects;
 namespace Tida.CAD.WPF
 {
     /// <summary>
-    /// <see cref="ICADControl"/> implemented with WPF;
+    /// <see cref="ICadControl"/> implemented with WPF;
     /// </summary>
-    public partial class CADControl : Panel, ICADControl
+    public partial class CadControl : Panel, ICadControl
     {
-        static CADControl()
+        static CadControl()
         {
-            BackgroundProperty.OverrideMetadata(typeof(CADControl), new FrameworkPropertyMetadata(
-                Constants.DefaultCADBackground,
+            // 修改背景色默认值
+            BackgroundProperty.OverrideMetadata(typeof(CadControl), new FrameworkPropertyMetadata(
+                Constants.DefaultCadBackground,
                 FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.Inherits
             ));
         }
 
-        public CADControl()
-        {
-            this.Children.Add(VisualContainer);
-            VisualContainer.AddVisual(_dragSelectionContainerVisual);
-            this.Focusable = true;
-
-            RefreshPanPen();
-            RefreshGridLinePen();
-        }
-
-        protected readonly VisualContainer VisualContainer = new VisualContainer();
-        private readonly Dictionary<CADLayer, ContainerVisual> _layerContainerVisualDict = new Dictionary<CADLayer, ContainerVisual>();
-        private readonly ContainerVisual _dragSelectionContainerVisual = new ContainerVisual();
-
         /// <summary>
-        /// <see cref="ICanvas"/> implemented with WPF;
-        /// </summary>
-        private WPFCanvas InternalCanvas => _canvas ?? (_canvas = new WPFCanvas(this.CADScreenConverter));
-
-        private WPFCanvas _canvas;
-
-        /// <summary>
-        /// 记录鼠标按下的位置,拖拽画布时使用;
-        /// </summary>
-        private Point _lastMouseDownPointForPan;
-
-        /// <summary>
-        /// 记录是否正在被拖拽;
-        /// </summary>
-        private bool _isDragging = false;
-
-        /// <summary>
-        /// 记录未拖动前原点的视图坐标(用于拖拽进行中的时候);
-        /// </summary>
-        private Point _lastPanOffsetBeforeDragging;
-
-        /// <summary>
-        /// 可绘制对象与WPF DrawingVisual缓存;
-        /// </summary>
-        private readonly Dictionary<IDrawable, DrawingVisual> _visualDict = new Dictionary<IDrawable, DrawingVisual>();
-
-        /// <summary>
-        /// 当前被悬停的绘制对象集合;
-        /// </summary>
-        private readonly List<DrawObject> _hoveredDrawObjects = new List<DrawObject>();
-
-        /// <summary>
-        /// 内部存储维护的所有图层集合;
-        /// </summary>
-        private readonly List<CADLayer> _CADLayers = new List<CADLayer>();
-
-        /// <summary>
-        /// 记录上一次鼠标按下的位置,在拖放选择时使用;
-        /// </summary>
-        private Point? _lastMouseDownPositionForDragSelecting;
-
-        /// <summary>
-        /// 拖放选择时所呈现的矩形对象;
-        /// </summary>
-        private readonly SimpleRectangle _dragSelectRectangle = new SimpleRectangle();
-
-        /// <summary>
-        /// 拖放选取时是否为任意选中;
-        /// </summary>
-        private bool _anyPointSelectForDragSelect;
-
-
-        /// <summary>
-        /// 画布内绘制对象选定状态发生了变化事件;
+        /// 画布内绘制对象选定状态发生了变化事件
         /// </summary>
         public event EventHandler<DrawObjectSelectedChangedEventArgs> DrawObjectIsSelectedChanged;
 
-
         /// <summary>
-        /// 绘制对象被移除;
+        /// 绘制对象被移除
         /// </summary>
         public event EventHandler<DrawObjectsRemovedEventArgs> DrawObjectsRemoved;
 
         /// <summary>
-        /// 绘制对象被添加;
+        /// 绘制对象被添加
         /// </summary>
         public event EventHandler<DrawObjectsAddedEventArgs> DrawObjectsAdded;
 
         /// <summary>
-        /// 拖拽选择事件;
+        /// 拖拽选择事件
         /// </summary>
         public event EventHandler<DragSelectEventArgs> DragSelect;
 
         /// <summary>
-        /// 拖拽选择鼠标移动事件;
+        /// 拖拽选择鼠标移动事件
         /// </summary>
         public event EventHandler<DragSelectMouseMoveEventArgs> DrawSelectMouseMove;
 
+        /// <summary>
+        /// 视图容器
+        /// </summary>
+        protected readonly VisualContainer VisualContainer = new VisualContainer();
+
+        private readonly Dictionary<CadLayer, ContainerVisual> _layerContainerVisualDict = new Dictionary<CadLayer, ContainerVisual>();
+
+        private readonly ContainerVisual _dragSelectionContainerVisual = new ContainerVisual();
+
+        private WpfCanvas _canvas;
+
+        private WpfCanvas InternalCanvas => _canvas ??= new WpfCanvas(CadScreenConverter);
+
+        /// <summary>
+        /// 记录鼠标按下的位置,拖拽画布时使用
+        /// </summary>
+        private Point _lastMouseDownPointForPan;
+
+        /// <summary>
+        /// 记录是否正在被拖拽
+        /// </summary>
+        private bool _isDragging;
+
+        /// <summary>
+        /// 记录未拖动前原点的视图坐标(用于拖拽进行中的时候)
+        /// </summary>
+        private Point _lastPanOffsetBeforeDragging;
+
+        /// <summary>
+        /// 可绘制对象与WPF DrawingVisual缓存
+        /// </summary>
+        private readonly Dictionary<IDrawable, DrawingVisual> _visualDict = new Dictionary<IDrawable, DrawingVisual>();
+
+        /// <summary>
+        /// 当前被悬停的绘制对象集合
+        /// </summary>
+        private readonly List<DrawObject> _hoveredDrawObjects = new List<DrawObject>();
+
+        /// <summary>
+        /// 内部存储维护的所有图层集合
+        /// </summary>
+        private readonly List<CadLayer> _cadLayers = new List<CadLayer>();
+
+        /// <summary>
+        /// 记录上一次鼠标按下的位置,在拖放选择时使用
+        /// </summary>
+        private Point? _lastMouseDownPositionForDragSelecting;
+
+        /// <summary>
+        /// 拖放选择时所呈现的矩形对象
+        /// </summary>
+        private readonly SimpleRectangle _dragSelectRectangle = new SimpleRectangle();
+
+        /// <summary>
+        /// 拖放选取时是否为任意选中
+        /// </summary>
+        private bool _anyPointSelectForDragSelect;
+
         private bool _panInitialized;
+
+        public CadControl()
+        {
+            Children.Add(VisualContainer);
+            VisualContainer.AddVisual(_dragSelectionContainerVisual);
+            // 获取或设置一个值，该值指示元素是否可以接收焦点。 这是一个依赖项属性
+            Focusable = true;
+
+            RefreshPanPen();
+            RefreshGridLinePen();
+        }
 
         /// <summary>
         /// Initialize PanScreenPosition the first time control is being arranged;
         /// </summary>
         private void InitializePanScreenPosition(Size actualSize)
         {
-            if (_panInitialized)
-            {
-                return;
-            }
+            if (_panInitialized) return;
 
             PanScreenPosition = new Point(actualSize.Width / 2, actualSize.Height / 2);
             _panInitialized = true;
@@ -140,13 +139,9 @@ namespace Tida.CAD.WPF
         /// <summary>
         /// 通过调整原点的视图偏移,使得某个某个视图坐标的某工程坐标点处于视图中心的位置;
         /// </summary>
-        /// <param name="screenPoint"></param>
         protected void SetCenterScreen(Point screenPoint)
         {
-            PanScreenPosition = new Point(
-                PanScreenPosition.X + this.ActualWidth / 2 - screenPoint.X,
-                PanScreenPosition.Y + this.ActualHeight / 2 - screenPoint.Y
-            );
+            PanScreenPosition = new Point(PanScreenPosition.X + ActualWidth / 2 - screenPoint.X, PanScreenPosition.Y + ActualHeight / 2 - screenPoint.Y);
         }
 
         /// <summary>
@@ -166,18 +161,18 @@ namespace Tida.CAD.WPF
 
             AddSelectRectangleToDict();
             /*重绘元素*/
-
             //因为尺寸可能发生了变化,故需重新设定裁剪区域;
             var clipGeometry = new RectangleGeometry(
                 new Rect
                 {
-                    Width = this.ActualWidth,
-                    Height = this.ActualHeight
+                    Width = ActualWidth,
+                    Height = ActualHeight
                 }
             );
 
             foreach (var pair in _visualDict)
             {
+                // 获取或设置 <see cref=“T：System.Windows.Media.ContainerVisual” /> 的剪切区域。
                 pair.Value.Clip = clipGeometry;
                 DrawDrawableCore(pair.Key, pair.Value);
             }
@@ -186,35 +181,36 @@ namespace Tida.CAD.WPF
         protected override Size ArrangeOverride(Size arrangeSize)
         {
             InitializePanScreenPosition(arrangeSize);
-            UpdateCADScreenConverter(arrangeSize);
+            UpdateCadScreenConverter(arrangeSize);
             return base.ArrangeOverride(arrangeSize);
         }
     }
 
     /// <summary>
-    /// <see cref="ICanvasScreenConvertable"/>相关成员;
+    /// 相关成员
     /// </summary>
-    public partial class CADControl
+    public partial class CadControl
     {
-        private static readonly DependencyPropertyKey CADScreenConverterPropertyKey = DependencyProperty.RegisterReadOnly(nameof(CADScreenConverter), typeof(ICADScreenConverter), typeof(CADControl), new PropertyMetadata());
-        public static readonly DependencyProperty CADScreenConverterProperty = CADScreenConverterPropertyKey.DependencyProperty;
+        private static readonly DependencyPropertyKey CadScreenConverterPropertyKey =
+            DependencyProperty.RegisterReadOnly(nameof(CadScreenConverter), typeof(ICadScreenConverter), typeof(CadControl), new PropertyMetadata());
 
+        public static readonly DependencyProperty CadScreenConverterProperty = CadScreenConverterPropertyKey.DependencyProperty;
 
-        private readonly WPFCADScreenConverter _cadScreenConverter = new WPFCADScreenConverter();
+        private readonly WpfCadScreenConverter _cadScreenConverter = new WpfCadScreenConverter();
 
         /// <summary>
         /// 画布坐标转化实例;
         /// </summary>
-        public ICADScreenConverter CADScreenConverter
+        public ICadScreenConverter CadScreenConverter
         {
             get => _cadScreenConverter;
-            set => throw new NotSupportedException($"The {nameof(CADScreenConverter)} property is readonly!");
+            set => throw new NotSupportedException($"The {nameof(CadScreenConverter)} property is readonly!");
         }
 
         /// <summary>
         /// 更新<see cref="_cadScreenConverter"/>中的关键参数;
         /// </summary>
-        private void UpdateCADScreenConverter(Size? actualSize = null)
+        private void UpdateCadScreenConverter(Size? actualSize = null)
         {
             if (actualSize != null)
             {
@@ -222,15 +218,15 @@ namespace Tida.CAD.WPF
                 _cadScreenConverter.ActualWidth = actualSize.Value.Width;
             }
 
-            _cadScreenConverter.Zoom = this.Zoom;
-            _cadScreenConverter.PanScreenPosition = this.PanScreenPosition;
+            _cadScreenConverter.Zoom = Zoom;
+            _cadScreenConverter.PanScreenPosition = PanScreenPosition;
         }
     }
 
     /// <summary>
-    /// 鼠标,键盘动作的重写;
+    /// 鼠标, 键盘动作的重写;
     /// </summary>
-    public partial class CADControl
+    public partial class CadControl
     {
         /// <summary>
         /// 处理路由事件的方法,遍历处理器集合中的每一个元素进行处理,直到某一个处理器指示已被处理;
@@ -257,9 +253,8 @@ namespace Tida.CAD.WPF
             }
         }
 
-
         /// <summary>
-        /// 鼠标滚动;
+        /// 鼠标滚动
         /// </summary>
         /// <param name="e"></param>
         protected override void OnPreviewMouseWheel(MouseWheelEventArgs e)
@@ -284,7 +279,7 @@ namespace Tida.CAD.WPF
         /// <param name="e"></param>
         protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
         {
-            this.Focus();
+            Focus();
             HandleRoutedEvent(e, GetMouseDownEventHandlers());
             base.OnPreviewMouseDown(e);
         }
@@ -456,7 +451,7 @@ namespace Tida.CAD.WPF
     /// <summary>
     /// 网格部分;
     /// </summary>
-    public partial class CADControl
+    public partial class CadControl
     {
         private Pen _gridLinePen;
 
@@ -487,11 +482,12 @@ namespace Tida.CAD.WPF
         };
 
         public static readonly DependencyProperty GridLineBrushProperty =
-            DependencyProperty.Register(nameof(GridLineBrush), typeof(Brush), typeof(CADControl), new FrameworkPropertyMetadata(DefaultGridLineBrush, FrameworkPropertyMetadataOptions.AffectsRender, GridLineBrush_PropertyChanged));
+            DependencyProperty.Register(nameof(GridLineBrush), typeof(Brush), typeof(CadControl),
+                new FrameworkPropertyMetadata(DefaultGridLineBrush, FrameworkPropertyMetadataOptions.AffectsRender, GridLineBrush_PropertyChanged));
 
         private static void GridLineBrush_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is CADControl cadControl))
+            if (!(d is CadControl cadControl))
             {
                 return;
             }
@@ -509,18 +505,18 @@ namespace Tida.CAD.WPF
         }
 
         public static readonly DependencyProperty GirdLineThicknessProperty =
-            DependencyProperty.Register(nameof(GridLineThickness), typeof(double), typeof(CADControl), new FrameworkPropertyMetadata(0.2D, FrameworkPropertyMetadataOptions.AffectsRender, GridLineThickness_PropertyChanged));
+            DependencyProperty.Register(nameof(GridLineThickness), typeof(double), typeof(CadControl),
+                new FrameworkPropertyMetadata(0.2D, FrameworkPropertyMetadataOptions.AffectsRender, GridLineThickness_PropertyChanged));
 
         private static void GridLineThickness_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is CADControl cadControl))
+            if (!(d is CadControl cadControl))
             {
                 return;
             }
 
             cadControl.RefreshGridLinePen();
         }
-
 
         /// <summary>
         /// Get or set whether grid lines should be shown;
@@ -532,11 +528,12 @@ namespace Tida.CAD.WPF
         }
 
         public static readonly DependencyProperty ShowGridLinesProperty =
-            DependencyProperty.Register(nameof(ShowGridLines), typeof(bool), typeof(CADControl), new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender, ShowGridLines_PropertyChanged));
+            DependencyProperty.Register(nameof(ShowGridLines), typeof(bool), typeof(CadControl),
+                new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.AffectsRender, ShowGridLines_PropertyChanged));
 
         private static void ShowGridLines_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is CADControl cadControl))
+            if (!(d is CadControl cadControl))
             {
                 return;
             }
@@ -550,7 +547,7 @@ namespace Tida.CAD.WPF
         private void DrawGridLines(DrawingContext drawingContext)
         {
             //获得单元格的边长视图大小;
-            var unitLength = CADScreenConverter.ToScreen(1);
+            var unitLength = CadScreenConverter.ToScreen(1);
             if (unitLength < 3)
             {
                 return;
@@ -568,12 +565,11 @@ namespace Tida.CAD.WPF
             #region 绘制竖线;
 
             point0.Y = 0;
-            point1.Y = this.ActualHeight;
-
+            point1.Y = ActualHeight;
 
             var horiPos = PanScreenPosition.X % unitLength;
             //递增至超出可见范围;
-            while (horiPos <= this.ActualWidth)
+            while (horiPos <= ActualWidth)
             {
                 point0.X = horiPos;
                 point1.X = horiPos;
@@ -581,16 +577,16 @@ namespace Tida.CAD.WPF
                 horiPos += unitLength;
             }
 
-            #endregion
+            #endregion 绘制竖线;
 
             #region 绘制横线;
 
             point0.X = 0;
-            point1.X = this.ActualWidth;
+            point1.X = ActualWidth;
 
             var vertiPos = PanScreenPosition.Y % unitLength;
             //递增至超出可见范围;
-            while (vertiPos <= this.ActualHeight)
+            while (vertiPos <= ActualHeight)
             {
                 point0.Y = vertiPos;
                 point1.Y = vertiPos;
@@ -598,14 +594,14 @@ namespace Tida.CAD.WPF
                 vertiPos += unitLength;
             }
 
-            #endregion
+            #endregion 绘制横线;
         }
     }
 
     /// <summary>
     /// 原点部分;
     /// </summary>
-    public partial class CADControl
+    public partial class CadControl
     {
         private Pen _panPen;
 
@@ -631,10 +627,8 @@ namespace Tida.CAD.WPF
             set { SetValue(PanLengthProperty, value); }
         }
 
-
         public static readonly DependencyProperty PanLengthProperty =
-            DependencyProperty.Register(nameof(PanLength), typeof(double), typeof(CADControl), new PropertyMetadata(72.0D));
-
+            DependencyProperty.Register(nameof(PanLength), typeof(double), typeof(CadControl), new PropertyMetadata(72.0D));
 
         /// <summary>
         /// 原点的十字画刷;
@@ -646,18 +640,17 @@ namespace Tida.CAD.WPF
         }
 
         public static readonly DependencyProperty PanBrushProperty =
-            DependencyProperty.Register(nameof(PanBrush), typeof(Brush), typeof(CADControl), new PropertyMetadata(Brushes.White, PanBrush_PropertyChanged));
+            DependencyProperty.Register(nameof(PanBrush), typeof(Brush), typeof(CadControl), new PropertyMetadata(Brushes.White, PanBrush_PropertyChanged));
 
         private static void PanBrush_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is CADControl cadControl))
+            if (!(d is CadControl cadControl))
             {
                 return;
             }
 
             cadControl.RefreshPanPen();
         }
-
 
         /// <summary>
         /// 原点的十字宽度;
@@ -669,18 +662,17 @@ namespace Tida.CAD.WPF
         }
 
         public static readonly DependencyProperty PanThicknessProperty =
-            DependencyProperty.Register(nameof(PanThickness), typeof(double), typeof(CADControl), new PropertyMetadata(2D, PanThickness_PropertyChanged));
+            DependencyProperty.Register(nameof(PanThickness), typeof(double), typeof(CadControl), new PropertyMetadata(2D, PanThickness_PropertyChanged));
 
         private static void PanThickness_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is CADControl cadControl))
+            if (!(d is CadControl cadControl))
             {
                 return;
             }
 
             cadControl.RefreshPanPen();
         }
-
 
         /// <summary>
         /// 原点所在的视图坐标;
@@ -691,23 +683,21 @@ namespace Tida.CAD.WPF
             set { SetValue(PanScreenPositionProperty, value); }
         }
 
-
         public static readonly DependencyProperty PanScreenPositionProperty =
-            DependencyProperty.Register(nameof(PanScreenPosition), typeof(Point), typeof(CADControl),
+            DependencyProperty.Register(nameof(PanScreenPosition), typeof(Point), typeof(CadControl),
                 new FrameworkPropertyMetadata(default(Point),
                     FrameworkPropertyMetadataOptions.BindsTwoWayByDefault | FrameworkPropertyMetadataOptions.AffectsRender,
                     PanScreenPosition_PropertyChanged));
 
         private static void PanScreenPosition_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is CADControl cadControl))
+            if (!(d is CadControl cadControl))
             {
                 return;
             }
 
-            cadControl.UpdateCADScreenConverter();
+            cadControl.UpdateCadScreenConverter();
         }
-
 
         /// <summary>
         /// 绘制原点十字;
@@ -737,7 +727,7 @@ namespace Tida.CAD.WPF
     /// <summary>
     /// Part of Zoom;
     /// </summary>
-    public partial class CADControl
+    public partial class CadControl
     {
         /// <summary>
         /// The minimum value of <see cref="Zoom"/>
@@ -757,7 +747,7 @@ namespace Tida.CAD.WPF
         /// The minimum zoom value for <see cref="Zoom"/>
         /// </summary>
         public static readonly DependencyProperty MinZoomProperty =
-            DependencyProperty.Register(nameof(MinZoom), typeof(double), typeof(CADControl), new PropertyMetadata(DefaultMinZoom));
+            DependencyProperty.Register(nameof(MinZoom), typeof(double), typeof(CadControl), new PropertyMetadata(DefaultMinZoom));
 
         /// <summary>
         /// The value of zoom level;
@@ -775,18 +765,18 @@ namespace Tida.CAD.WPF
             DependencyProperty.Register(
                 nameof(Zoom),
                 typeof(double),
-                typeof(CADControl),
+                typeof(CadControl),
                 new FrameworkPropertyMetadata(1D, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, Zoom_PropertyChanged)
             );
 
         private static void Zoom_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs args)
         {
-            if (!(d is CADControl cadControl))
+            if (!(d is CadControl cadControl))
             {
                 return;
             }
 
-            cadControl.UpdateCADScreenConverter();
+            cadControl.UpdateCadScreenConverter();
         }
 
         /// <summary>
@@ -802,8 +792,7 @@ namespace Tida.CAD.WPF
         /// Get or set whether user can to change zoom by mouse wheeling;
         /// </summary>
         public static readonly DependencyProperty IsMouseWheelingOnZoomEnabledProperty =
-            DependencyProperty.Register(nameof(IsMouseWheelingZoomEnabled), typeof(bool), typeof(CADControl), new PropertyMetadata(true));
-
+            DependencyProperty.Register(nameof(IsMouseWheelingZoomEnabled), typeof(bool), typeof(CadControl), new PropertyMetadata(true));
 
         /// <summary>
         /// To change the zoom level on mouse wheeling;
@@ -822,7 +811,7 @@ namespace Tida.CAD.WPF
             }
 
             //根据鼠标的位置响应缩放;
-            var mouseUnitPos = CADScreenConverter.ToCAD(e.GetPosition(this));
+            var mouseUnitPos = CadScreenConverter.ToCad(e.GetPosition(this));
 
             double wheeldeltatick = 120;
             double zoomdelta = (1.25f * (Math.Abs(e.Delta) / wheeldeltatick));
@@ -836,7 +825,7 @@ namespace Tida.CAD.WPF
                 }
             }
             //放大时设定上限;
-            else if (CADScreenConverter.ToScreen(1) < 1200)
+            else if (CadScreenConverter.ToScreen(1) < 1200)
             {
                 Zoom *= zoomdelta;
             }
@@ -855,7 +844,7 @@ namespace Tida.CAD.WPF
             Point unitPos,
             Point screenPos)
         {
-            var unitPosInScreen = CADScreenConverter.ToScreen(unitPos);
+            var unitPosInScreen = CadScreenConverter.ToScreen(unitPos);
             //通过调整原点的视图偏移实现;
             PanScreenPosition = new Point(
                 PanScreenPosition.X + screenPos.X - unitPosInScreen.X,
@@ -867,7 +856,7 @@ namespace Tida.CAD.WPF
     /// <summary>
     /// 画布拖拽处理部分;
     /// </summary>
-    public partial class CADControl
+    public partial class CadControl
     {
         /// <summary>
         /// Get or set is drag behavior enabled;
@@ -879,8 +868,7 @@ namespace Tida.CAD.WPF
         }
 
         public static readonly DependencyProperty IsDragEnabledProperty =
-            DependencyProperty.Register(nameof(IsDragEnabled), typeof(bool), typeof(CADControl), new PropertyMetadata(true));
-
+            DependencyProperty.Register(nameof(IsDragEnabled), typeof(bool), typeof(CadControl), new PropertyMetadata(true));
 
         /// <summary>
         /// 鼠标按下时的拖拽响应;
@@ -994,13 +982,13 @@ namespace Tida.CAD.WPF
         }
 
         public static readonly DependencyProperty DragCursorProperty =
-            DependencyProperty.Register(nameof(DragCursor), typeof(Cursor), typeof(CADControl), new PropertyMetadata(Cursors.Hand));
+            DependencyProperty.Register(nameof(DragCursor), typeof(Cursor), typeof(CadControl), new PropertyMetadata(Cursors.Hand));
     }
 
     /// <summary>
     /// Cursor(鼠标形状)部分;
     /// </summary>
-    public partial class CADControl
+    public partial class CadControl
     {
         /// <summary>
         /// 更新Cursor;
@@ -1013,13 +1001,13 @@ namespace Tida.CAD.WPF
                 var cursor = getter();
                 if (cursor != null)
                 {
-                    this.Cursor = cursor;
+                    Cursor = cursor;
                     return;
                 }
             }
 
             //若Cursor仍未被设定,将重置为默认Cursor;
-            this.Cursor = Cursors.Arrow;
+            Cursor = Cursors.Arrow;
         }
 
         /// <summary>
@@ -1038,22 +1026,22 @@ namespace Tida.CAD.WPF
     /// <summary>
     /// 内容图层,绘制对象部分;
     /// </summary>
-    public partial class CADControl
+    public partial class CadControl
     {
         /// <summary>
         /// 当前活动图层;
         /// </summary>
-        public CADLayer ActiveLayer
+        public CadLayer ActiveLayer
         {
-            get { return (CADLayer)GetValue(ActiveLayerProperty); }
+            get { return (CadLayer)GetValue(ActiveLayerProperty); }
             set { SetValue(ActiveLayerProperty, value); }
         }
 
         public static readonly DependencyProperty ActiveLayerProperty =
             DependencyProperty.Register(
                 nameof(ActiveLayer),
-                typeof(CADLayer),
-                typeof(CADControl),
+                typeof(CadLayer),
+                typeof(CadControl),
                 new FrameworkPropertyMetadata(null,
                     FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
                     ActiveLayer_PropertyChanged
@@ -1062,28 +1050,28 @@ namespace Tida.CAD.WPF
 
         private static void ActiveLayer_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is CADControl ctrl)
+            if (d is CadControl ctrl)
             {
                 ctrl.ActiveLayerChanged?.Invoke(
                     ctrl,
-                    new ValueChangedEventArgs<CADLayer>(e.OldValue as CADLayer, e.NewValue as CADLayer)
+                    new ValueChangedEventArgs<CadLayer>(e.OldValue as CadLayer, e.NewValue as CadLayer)
                 );
             }
         }
 
-        public event EventHandler<ValueChangedEventArgs<CADLayer>> ActiveLayerChanged;
+        public event EventHandler<ValueChangedEventArgs<CadLayer>> ActiveLayerChanged;
 
         /// <summary>
         /// 所有内容图层;
         /// </summary>
-        public IEnumerable<CADLayer> Layers
+        public IEnumerable<CadLayer> Layers
         {
-            get { return (IEnumerable<CADLayer>)GetValue(LayersProperty); }
+            get { return (IEnumerable<CadLayer>)GetValue(LayersProperty); }
             set { SetValue(LayersProperty, value); }
         }
 
         public static readonly DependencyProperty LayersProperty =
-            DependencyProperty.Register(nameof(Layers), typeof(IEnumerable<CADLayer>), typeof(CADControl), new PropertyMetadata(null, Layers_PropertyChanged));
+            DependencyProperty.Register(nameof(Layers), typeof(IEnumerable<CadLayer>), typeof(CadControl), new PropertyMetadata(null, Layers_PropertyChanged));
 
         /// <summary>
         /// 图层集合发生变更时;
@@ -1092,13 +1080,13 @@ namespace Tida.CAD.WPF
         /// <param name="e"></param>
         private static void Layers_PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (!(d is CADControl ctrl))
+            if (!(d is CadControl ctrl))
             {
                 return;
             }
 
-            var oldLayers = e.OldValue as IEnumerable<CADLayer>;
-            var newLayers = e.NewValue as IEnumerable<CADLayer>;
+            var oldLayers = e.OldValue as IEnumerable<CadLayer>;
+            var newLayers = e.NewValue as IEnumerable<CadLayer>;
 
             //卸载/装载新/旧图层;
             if (oldLayers != null)
@@ -1135,7 +1123,7 @@ namespace Tida.CAD.WPF
         /// <param name="e"></param>
         private void Layers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (!(sender is IEnumerable<CADLayer> layers))
+            if (!(sender is IEnumerable<CadLayer> layers))
             {
                 return;
             }
@@ -1145,7 +1133,7 @@ namespace Tida.CAD.WPF
                 case NotifyCollectionChangedAction.Add:
                     foreach (var item in e.NewItems)
                     {
-                        if (!(item is CADLayer layer))
+                        if (!(item is CadLayer layer))
                         {
                             continue;
                         }
@@ -1155,11 +1143,10 @@ namespace Tida.CAD.WPF
 
                     break;
 
-
                 case NotifyCollectionChangedAction.Remove:
                     foreach (var item in e.OldItems)
                     {
-                        if (!(item is CADLayer layer))
+                        if (!(item is CadLayer layer))
                         {
                             continue;
                         }
@@ -1173,7 +1160,7 @@ namespace Tida.CAD.WPF
                     ///若是复位(可能是清除操作),则需将现有所有图层清除;
                     ///再逐次添加图层;
                     ///为避免遍历中移除元素,故使用<see cref="Enumerable.ToList{TSource}(IEnumerable{TSource})"/>
-                    _CADLayers.ToList().ForEach(layer => { UnSetupLayer(layer); });
+                    _cadLayers.ToList().ForEach(layer => { UnSetupLayer(layer); });
 
                     if (layers != null)
                     {
@@ -1187,6 +1174,7 @@ namespace Tida.CAD.WPF
 
                 case NotifyCollectionChangedAction.Replace:
                     break;
+
                 case NotifyCollectionChangedAction.Move:
                     break;
 
@@ -1199,7 +1187,7 @@ namespace Tida.CAD.WPF
         /// 安装图层,绘制对象,事件注册等操作;
         /// </summary>
         /// <param name="CADLayer"></param>
-        private void SetupLayer(CADLayer CADLayer)
+        private void SetupLayer(CadLayer CADLayer)
         {
             if (_layerContainerVisualDict.ContainsKey(CADLayer))
             {
@@ -1220,14 +1208,14 @@ namespace Tida.CAD.WPF
             //可见状态变化时进行响应;
             CADLayer.IsVisibleChanged += CADLayer_IsVisibleChanged;
 
-            _CADLayers.Add(CADLayer);
+            _cadLayers.Add(CADLayer);
         }
 
         /// <summary>
         /// 卸载图层;
         /// </summary>
         /// <param name="CADLayer"></param>
-        private void UnSetupLayer(CADLayer CADLayer)
+        private void UnSetupLayer(CadLayer CADLayer)
         {
             if (CADLayer == null)
             {
@@ -1249,7 +1237,7 @@ namespace Tida.CAD.WPF
 
             CADLayer.IsVisibleChanged -= CADLayer_IsVisibleChanged;
 
-            _CADLayers.Remove(CADLayer);
+            _cadLayers.Remove(CADLayer);
         }
 
         /// <summary>
@@ -1264,7 +1252,7 @@ namespace Tida.CAD.WPF
                 return;
             }
 
-            if (!(sender is CADLayer CADLayer))
+            if (!(sender is CadLayer CADLayer))
             {
                 return;
             }
@@ -1279,7 +1267,7 @@ namespace Tida.CAD.WPF
         /// <param name="e"></param>
         private void CADLayer_DrawObjectClearing(object sender, EventArgs e)
         {
-            if (!(sender is CADLayer layer))
+            if (!(sender is CadLayer layer))
             {
                 return;
             }
@@ -1287,12 +1275,11 @@ namespace Tida.CAD.WPF
             RemoveAllVisualsOfLayer(layer);
         }
 
-
         /// <summary>
         /// 添加绘制对象;
         /// </summary>
         /// <param name="drawObject"></param>
-        private void AddDrawObjects(IEnumerable<DrawObject> drawObjects, CADLayer CADLayer)
+        private void AddDrawObjects(IEnumerable<DrawObject> drawObjects, CadLayer CADLayer)
         {
             if (drawObjects == null)
             {
@@ -1320,12 +1307,11 @@ namespace Tida.CAD.WPF
             DrawObjectsAdded?.Invoke(this, new DrawObjectsAddedEventArgs(drawObjects));
         }
 
-
         /// <summary>
         /// 移除绘制元素;
         /// </summary>
         /// <param name="drawObject"></param>
-        private void RemoveDrawObjects(IEnumerable<DrawObject> drawObjects, CADLayer CADLayer)
+        private void RemoveDrawObjects(IEnumerable<DrawObject> drawObjects, CadLayer CADLayer)
         {
             if (drawObjects == null)
             {
@@ -1368,7 +1354,6 @@ namespace Tida.CAD.WPF
             DrawDrawable(drawObject);
         }
 
-
         /// <summary>
         /// 绘制对象选中状态发生变化时,触发相关事件;
         /// </summary>
@@ -1384,7 +1369,6 @@ namespace Tida.CAD.WPF
             DrawObjectIsSelectedChanged?.Invoke(this, new DrawObjectSelectedChangedEventArgs(drawObject, e.NewValue, e.OldValue));
         }
 
-
         /// <summary>
         /// 图层内可绘制元素被移除时的响应;
         /// </summary>
@@ -1397,7 +1381,7 @@ namespace Tida.CAD.WPF
                 return;
             }
 
-            if (!(sender is CADLayer CADLayer))
+            if (!(sender is CadLayer CADLayer))
             {
                 return;
             }
@@ -1447,7 +1431,6 @@ namespace Tida.CAD.WPF
             drawable.VisualChanged -= Drawable_VisualChanged;
         }
 
-
         /// <summary>
         /// 绘制对象;
         /// </summary>
@@ -1464,7 +1447,6 @@ namespace Tida.CAD.WPF
             DrawDrawableCore(drawable, drawingVisual);
         }
 
-
         /// <summary>
         /// 绘制可绘制对象核心;
         /// </summary>
@@ -1475,22 +1457,20 @@ namespace Tida.CAD.WPF
             var dc = drawingVisual.RenderOpen();
             InternalCanvas.DrawingContext = dc;
 
-            if (!(drawable is CADElement canvasElement) || canvasElement.IsVisible)
+            if (!(drawable is CadElement canvasElement) || canvasElement.IsVisible)
             {
                 drawable.Draw(InternalCanvas);
             }
-
 
             dc.Close();
             InternalCanvas.DrawingContext = null;
         }
 
-
         /// <summary>
         /// 移除来自对应图层内的所有绘制元素;
         /// </summary>
         /// <param name="CADLayer"></param>
-        private void RemoveAllVisualsOfLayer(CADLayer CADLayer)
+        private void RemoveAllVisualsOfLayer(CadLayer CADLayer)
         {
             //遍历缓存中所有的Visual,移除该图层内的所有元素;
             var removeVisualPairs = _visualDict.Where(p =>
@@ -1513,7 +1493,7 @@ namespace Tida.CAD.WPF
         /// <param name="e"></param>
         private void CADLayer_IsVisibleChanged(object sender, EventArgs e)
         {
-            if (!(sender is CADLayer CADLayer))
+            if (!(sender is CadLayer CADLayer))
             {
                 return;
             }
@@ -1559,7 +1539,7 @@ namespace Tida.CAD.WPF
     /// <summary>
     /// 绘制对象的选取(点击,按键)部分;
     /// </summary>
-    public partial class CADControl
+    public partial class CadControl
     {
         /// <summary>
         /// The event fired while selecing drawobjects on clicking;
@@ -1588,8 +1568,7 @@ namespace Tida.CAD.WPF
         }
 
         public static readonly DependencyProperty ClickSelectModeProperty =
-            DependencyProperty.Register(nameof(ClickSelectMode), typeof(ClickSelectMode), typeof(CADControl), new PropertyMetadata(ClickSelectMode.Multiple));
-
+            DependencyProperty.Register(nameof(ClickSelectMode), typeof(ClickSelectMode), typeof(CadControl), new PropertyMetadata(ClickSelectMode.Multiple));
 
         /// <summary>
         /// 鼠标移动时绘制对象的可选取状态的感应处理;
@@ -1603,13 +1582,13 @@ namespace Tida.CAD.WPF
             }
 
             //检查是否存在某个图层，该图层内存在元素符合悬停条件,若满足条件,需高亮感应;
-            var mousePosition = CADScreenConverter.ToCAD(e.GetPosition(this));
+            var mousePosition = CadScreenConverter.ToCad(e.GetPosition(this));
 
             _hoveredDrawObjects.Clear();
 
             _hoveredDrawObjects.AddRange(
                 this.GetVisibleLayers().SelectMany(p => p.DrawObjects.Where(
-                        q => q.PointInObject(mousePosition, CADScreenConverter)
+                        q => q.PointInObject(mousePosition, CadScreenConverter)
                     )
                 ));
 
@@ -1636,12 +1615,12 @@ namespace Tida.CAD.WPF
             }
 
             //将所有被悬停的元素置为被选择状态;
-            var mousePosition = CADScreenConverter.ToCAD(e.GetPosition(this));
+            var mousePosition = CadScreenConverter.ToCad(e.GetPosition(this));
             var result = false;
 
             if (ClickSelectMode == ClickSelectMode.Multiple)
             {
-                var clickedDrawObjects = this.GetAllVisibleDrawObjects().Where(p => p.PointInObject(mousePosition, CADScreenConverter));
+                var clickedDrawObjects = this.GetAllVisibleDrawObjects().Where(p => p.PointInObject(mousePosition, CadScreenConverter));
                 var clickSelectedDrawObjects = clickedDrawObjects.Where(p => !p.IsSelected).ToList();
                 var clickUnselectedDrawObjects = clickedDrawObjects.Where(p => p.IsSelected).ToList();
 
@@ -1681,7 +1660,7 @@ namespace Tida.CAD.WPF
             }
             else if (ClickSelectMode == ClickSelectMode.Single)
             {
-                var clickedDrawObject = this.GetAllVisibleDrawObjects().Where(p => p.PointInObject(mousePosition, CADScreenConverter)).FirstOrDefault(p => p != null);
+                var clickedDrawObject = this.GetAllVisibleDrawObjects().Where(p => p.PointInObject(mousePosition, CadScreenConverter)).FirstOrDefault(p => p != null);
                 var currentSelectedDrawObjects = this.GetAllVisibleDrawObjects().Where(p => p.IsSelected).ToList();
                 if (clickedDrawObject == null)
                 {
@@ -1743,7 +1722,6 @@ namespace Tida.CAD.WPF
             return false;
         }
 
-
         /// <summary>
         /// 键盘按下了Tab时的处理,交替选择单元;
         /// </summary>
@@ -1782,7 +1760,6 @@ namespace Tida.CAD.WPF
             }
         }
 
-
         /// <summary>
         /// 根据选取状态设定Cursor;
         /// </summary>
@@ -1802,7 +1779,7 @@ namespace Tida.CAD.WPF
     /// <summary>
     /// Drag select with left mouse button;
     /// </summary>
-    public partial class CADControl
+    public partial class CadControl
     {
         /// <summary>
         /// This value indicate the drag selection behavior is enabled or not,default value is true;
@@ -1814,7 +1791,7 @@ namespace Tida.CAD.WPF
         }
 
         public static readonly DependencyProperty DragSelectEnabledProperty =
-            DependencyProperty.Register(nameof(IsDragSelectEnabled), typeof(bool), typeof(CADControl), new PropertyMetadata(true));
+            DependencyProperty.Register(nameof(IsDragSelectEnabled), typeof(bool), typeof(CadControl), new PropertyMetadata(true));
 
         /// <summary>
         /// Add selected rectangle to <see cref="_visualDict"/>;
@@ -1839,7 +1816,7 @@ namespace Tida.CAD.WPF
                 return false;
             }
 
-            var mousePosition = CADScreenConverter.ToCAD(e.GetPosition(this));
+            var mousePosition = CadScreenConverter.ToCad(e.GetPosition(this));
             //若上次点击位置不为空,则进行拖放选中操作;
             if (_lastMouseDownPositionForDragSelecting != null)
             {
@@ -1862,8 +1839,8 @@ namespace Tida.CAD.WPF
                 }
 
                 //遍历选中所有在框选范围中的可见绘制对象;
-                var selectedObjects = this.GetVisibleLayers().SelectMany(p => p.DrawObjects).Where(p => p.IsVisible).Where(p => p.ObjectInRectangle(rect.Value, CADScreenConverter, _anyPointSelectForDragSelect)).ToArray();
-
+                var selectedObjects = this.GetVisibleLayers().SelectMany(p => p.DrawObjects).Where(p => p.IsVisible)
+                    .Where(p => p.ObjectInRectangle(rect.Value, CadScreenConverter, _anyPointSelectForDragSelect)).ToArray();
 
                 foreach (var drawObject in selectedObjects)
                 {
@@ -1879,7 +1856,7 @@ namespace Tida.CAD.WPF
             else if (e.LeftButton == MouseButtonState.Pressed)
             {
                 //框选矩形的起点不能命中任何绘制对象;
-                if (this.GetAllVisibleDrawObjects().Any(p => p.PointInObject(mousePosition, CADScreenConverter)))
+                if (this.GetAllVisibleDrawObjects().Any(p => p.PointInObject(mousePosition, CadScreenConverter)))
                 {
                     return false;
                 }
@@ -1903,7 +1880,7 @@ namespace Tida.CAD.WPF
                 return false;
             }
 
-            var mousePosition = CADScreenConverter.ToCAD(e.GetPosition(this));
+            var mousePosition = CadScreenConverter.ToCad(e.GetPosition(this));
 
             //若鼠标上次按下的位置不为空,则绘制选择矩形;
             if (_lastMouseDownPositionForDragSelecting == null)
@@ -1923,7 +1900,7 @@ namespace Tida.CAD.WPF
             }
 
             //计算拖放选中区域;
-            var rect = new CADRect(_lastMouseDownPositionForDragSelecting.Value, mousePosition);
+            var rect = new CadRect(_lastMouseDownPositionForDragSelecting.Value, mousePosition);
             _dragSelectRectangle.Rectangle = rect;
 
             var dragArgs = new DragSelectMouseMoveEventArgs(rect, mousePosition);
@@ -1999,12 +1976,12 @@ namespace Tida.CAD.WPF
     /// <summary>
     /// 与被选择绘制对象的交互部分;
     /// </summary>
-    public partial class CADControl
+    public partial class CadControl
     {
         private bool InteractWithSelectedDrawObjects<TEventArgs>(
             Action<DrawObject, TEventArgs> handler,
             TEventArgs eventArgs)
-            where TEventArgs : CADRoutedEventArgs
+            where TEventArgs : CadRoutedEventArgs
         {
             foreach (var drawObject in this.GetAllVisibleDrawObjects())
             {
@@ -2025,8 +2002,8 @@ namespace Tida.CAD.WPF
         private bool MouseDownOnSelectedDrawObjects(MouseButtonEventArgs e)
         {
             var mouseScreenPosition = e.GetPosition(this);
-            var mousePosition = CADScreenConverter.ToCAD(mouseScreenPosition);
-            var mouseDownEventArgs = new CADMouseButtonEventArgs(mousePosition) { MouseButtonEventArgs = e };
+            var mousePosition = CadScreenConverter.ToCad(mouseScreenPosition);
+            var mouseDownEventArgs = new CadMouseButtonEventArgs(mousePosition) { MouseButtonEventArgs = e };
             return InteractWithSelectedDrawObjects((drawObject, eventArgs) => drawObject.OnMouseDown(eventArgs), mouseDownEventArgs);
         }
 
@@ -2037,12 +2014,11 @@ namespace Tida.CAD.WPF
         private bool MouseMoveOnSelectedDrawObjects(MouseEventArgs e)
         {
             var mouseScreenPosition = e.GetPosition(this);
-            var mousePosition = CADScreenConverter.ToCAD(mouseScreenPosition);
-            var mouseMoveEventArgs = new CADMouseEventArgs(mousePosition) { MouseEventArgs = e };
+            var mousePosition = CadScreenConverter.ToCad(mouseScreenPosition);
+            var mouseMoveEventArgs = new CadMouseEventArgs(mousePosition) { MouseEventArgs = e };
             //与所有选中的绘制对象进行交互;
             return InteractWithSelectedDrawObjects((drawObject, eventArgs) => drawObject.OnMouseMove(mouseMoveEventArgs), mouseMoveEventArgs);
         }
-
 
         /// <summary>
         /// The interaction for drawobjects while a mouse is released;
@@ -2051,8 +2027,8 @@ namespace Tida.CAD.WPF
         private bool MouseUpOnSelectedDrawObjects(MouseButtonEventArgs e)
         {
             var mouseScreenPosition = e.GetPosition(this);
-            var mousePosition = CADScreenConverter.ToCAD(mouseScreenPosition);
-            var mouseUpEventArgs = new CADMouseButtonEventArgs(mousePosition) { MouseButtonEventArgs = e };
+            var mousePosition = CadScreenConverter.ToCad(mouseScreenPosition);
+            var mouseUpEventArgs = new CadMouseButtonEventArgs(mousePosition) { MouseButtonEventArgs = e };
             return InteractWithSelectedDrawObjects((drawObject, eventArgs) => drawObject.OnMouseUp(eventArgs), mouseUpEventArgs);
         }
 
@@ -2062,7 +2038,7 @@ namespace Tida.CAD.WPF
         /// <param name="e"></param>
         private bool KeyDownOnSelectedDrawObjects(KeyEventArgs e)
         {
-            var keyEventArgs = new CADKeyEventArgs { KeyEventArgs = e };
+            var keyEventArgs = new CadKeyEventArgs { KeyEventArgs = e };
             //与所有选中的绘制对象进行交互;
             return InteractWithSelectedDrawObjects((drawObject, eventArgs) => drawObject.OnKeyDown(eventArgs), keyEventArgs);
         }
@@ -2073,7 +2049,7 @@ namespace Tida.CAD.WPF
         /// <param name="e"></param>
         private bool KeyUpOnSelectedDrawObjects(KeyEventArgs e)
         {
-            var keyEventArgs = new CADKeyEventArgs { KeyEventArgs = e };
+            var keyEventArgs = new CadKeyEventArgs { KeyEventArgs = e };
             //与所有选中的绘制对象进行交互;
             return InteractWithSelectedDrawObjects((drawObject, eventArgs) => drawObject.OnKeyUp(eventArgs), keyEventArgs);
         }
@@ -2082,7 +2058,7 @@ namespace Tida.CAD.WPF
     /// <summary>
     /// 鼠标实时位置;
     /// </summary>
-    public partial class CADControl
+    public partial class CadControl
     {
         /// <summary>
         /// 当前的鼠标所在的工程数学坐标;
@@ -2100,7 +2076,7 @@ namespace Tida.CAD.WPF
         /// <param name="e"></param>
         private bool MouseMoveOnCurrentMousePosition(MouseEventArgs e)
         {
-            var point = CADScreenConverter.ToCAD(e.GetPosition(this));
+            var point = CadScreenConverter.ToCad(e.GetPosition(this));
             var oldValue = CurrentMousePosition;
             CurrentMousePosition = point;
             CurrentMousePositionChanged?.Invoke(this, new ValueChangedEventArgs<Point>(CurrentMousePosition, oldValue));
@@ -2109,48 +2085,46 @@ namespace Tida.CAD.WPF
         }
     }
 
-
     /// <summary>
     /// 原生对象部分;
     /// </summary>
-    public partial class CADControl
+    public partial class CadControl
     {
-        public void AddUIElement(UIElement child)
+        public void AddUiElement(UIElement child)
         {
             if (child == null)
             {
                 throw new ArgumentNullException(nameof(child));
             }
 
-            if (this.Children.Contains(child))
+            if (Children.Contains(child))
             {
                 return;
             }
 
-            this.Children.Add(child);
+            Children.Add(child);
         }
 
-        public void RemoveUIElement(UIElement child)
+        public void RemoveUiElement(UIElement child)
         {
             if (child == null)
             {
                 throw new ArgumentNullException(nameof(child));
             }
 
-
-            if (!this.Children.Contains(child))
+            if (!Children.Contains(child))
             {
                 return;
             }
 
-            this.Children.Remove(child);
+            Children.Remove(child);
         }
     }
 
     /// <summary>
     /// 输入事件;
     /// </summary>
-    public partial class CADControl
+    public partial class CadControl
     {
         /// <summary>
         /// 鼠标按下事件;
@@ -2161,7 +2135,6 @@ namespace Tida.CAD.WPF
         /// 鼠标移动事件;
         /// </summary>
         public event EventHandler<MouseEventArgs> CADPreviewMouseMove;
-
 
         /// <summary>
         /// 鼠标弹起事件;
@@ -2182,7 +2155,6 @@ namespace Tida.CAD.WPF
         /// 键盘输入事件;
         /// </summary>
         public event EventHandler<TextCompositionEventArgs> CADPreviewTextInput;
-
 
         /// <summary>
         /// 鼠标按下时,通知外部;
@@ -2217,7 +2189,6 @@ namespace Tida.CAD.WPF
             CADPreviewKeyUp?.Invoke(this, e);
             return e.Handled;
         }
-
 
         private bool TextInputOnPreview(TextCompositionEventArgs e)
         {

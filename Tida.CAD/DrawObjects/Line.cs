@@ -7,8 +7,5 @@ namespace Tida.CAD.DrawObjects
     /// </summary>
     public class Line : LineBase
     {
-        public Line() : base()
-        {
-        }
     }
 }

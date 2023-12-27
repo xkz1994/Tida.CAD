@@ -23,13 +23,13 @@ namespace Tida.CAD.WPF.SimpleSample.Views
         {
             InitializeComponent();
 
-            _cadLayer = new CADLayer();
-            cadControl.Layers = new CADLayer[] { _cadLayer };
+            _cadLayer = new CadLayer();
+            cadControl.Layers = new CadLayer[] { _cadLayer };
             var rectPen = new Pen(Brushes.White, 2);
             var rectBackground = Brushes.Orange;
             rectPen.Freeze();
 
-            var rect = new Rectangle(new CADRect(new Point(-2, -2), new Size(4, 4)))
+            var rect = new Rectangle(new CadRect(new Point(-2, -2), new Size(4, 4)))
             {
                 Pen = rectPen,
                 Background = rectBackground
@@ -37,7 +37,7 @@ namespace Tida.CAD.WPF.SimpleSample.Views
 
             _cadLayer.AddDrawObject(rect);
 
-            var rect2 = new Rectangle(new CADRect(new Point(4, -2), new Size(4, 4)))
+            var rect2 = new Rectangle(new CadRect(new Point(4, -2), new Size(4, 4)))
             {
                 Pen = rectPen,
                 Background = rectBackground
@@ -47,7 +47,7 @@ namespace Tida.CAD.WPF.SimpleSample.Views
             this.DataContext = new ViewModel();
         }
 
-        private readonly CADLayer _cadLayer;
+        private readonly CadLayer _cadLayer;
 
         class ViewModel : BindableBase
         {

@@ -1,30 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 
 namespace Tida.CAD.Input
 {
     /// <summary>
-    /// CADMouseButtonEventArgs;
+    /// CADMouseButtonEventArgs
     /// </summary>
-    public class CADMouseButtonEventArgs : CADRoutedEventArgs
+    public class CadMouseButtonEventArgs : CadRoutedEventArgs
     {
-        public CADMouseButtonEventArgs(Point position)
+        public CadMouseButtonEventArgs(Point position)
         {
             Position = position;
         }
 
         /// <summary>
-        /// The mouse position in CAD coordinates;
+        /// The mouse position in CAD coordinates
         /// </summary>
         public Point Position { get; }
-#if WPF
+
         /// <summary>
-        /// MouseButtonEventArgs in WPF;
+        /// MouseButtonEventArgs in WPF
         /// </summary>
         public MouseButtonEventArgs MouseButtonEventArgs { get; set; }
-#endif
     }
 }

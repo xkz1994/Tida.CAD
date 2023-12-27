@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Tida.CAD.Events;
@@ -11,206 +7,162 @@ using Tida.CAD.Input;
 namespace Tida.CAD
 {
     /// <summary>
-    /// Drawobject in layer;
+    /// Draw object in layer
     /// </summary>
-    public abstract partial class DrawObject : CADElement
+    public abstract partial class DrawObject : CadElement
     {
-        /// <summary>
-        /// Indicates whether the point in inside the object;
-        /// </summary>
-        /// <param name="point">The posion in cad coordinates</param>
-        /// <param name="cadScreenConverter"></param>
-        /// <returns></returns>
-        public virtual bool PointInObject(Point point, ICADScreenConverter cadScreenConverter) => false;
+        public event EventHandler<CadMouseButtonEventArgs> PreviewMouseDown;
+        public event EventHandler<CadMouseEventArgs> PreviewMouseMove;
+        public event EventHandler<CadMouseButtonEventArgs> PreviewMouseUp;
+        public event EventHandler<CadKeyEventArgs> PreviewKeyDown;
+        public event EventHandler<CadKeyEventArgs> PreviewKeyUp;
+        public event EventHandler<TextCompositionEventArgs> PreviewTextInput;
 
         /// <summary>
-        /// Indicated whether the object in inside a rectangle;
+        /// The event raised when IsSelected changed
         /// </summary>
-        /// <param name="rect">The selection rectangle</param>
-        /// <param name="anyPoint">To indicate whether the drawobject should be hit when the rect just intersets with the drawobject that is not inside the rect</param>
-        /// <param name="cadScreenConverter"></param>
-        /// <returns></returns>
-        public virtual bool ObjectInRectangle(CADRect rect, ICADScreenConverter cadScreenConverter, bool anyPoint) => false;
-
-
-        /// <summary>
-        /// Get the bounding rect for the drawobject;
-        /// </summary>
-        /// <returns></returns>
-        public virtual CADRect? GetBoundingRect() => null;
+        public event EventHandler<ValueChangedEventArgs<bool>> IsSelectedChanged;
 
         private bool _isSelected;
 
         /// <summary>
-        /// IsSelected;
+        /// IsSelected
         /// </summary>
         public bool IsSelected
         {
             get => _isSelected;
             set
             {
-                if (_isSelected == value)
-                {
-                    return;
-                }
+                if (_isSelected == value) return;
 
                 _isSelected = value;
-
                 var e = new ValueChangedEventArgs<bool>(_isSelected, !_isSelected);
                 OnSelectedChanged(e);
                 IsSelectedChanged?.Invoke(this, e);
-
-
                 RaiseVisualChanged();
             }
         }
 
-        /// <summary>
-        /// The protected virtual method invoked while IsSelected changed;
-        /// </summary>
-        /// <param name="e"></param>
-        protected virtual void OnSelectedChanged(ValueChangedEventArgs<bool> e)
-        {
-        }
+        internal CadLayer InternalLayer { get; set; }
 
         /// <summary>
-        /// The event raised when IsSelected changed;
+        /// The parent layer of the draw object;
         /// </summary>
-        public event EventHandler<ValueChangedEventArgs<bool>> IsSelectedChanged;
-
-        /// <summary>
-        /// The parent layer of the drawobject;
-        /// </summary>
-        public CADLayer Layer => InternalLayer;
-
-        internal CADLayer InternalLayer { get; set; }
+        public CadLayer Layer => InternalLayer;
     }
 
     /// <summary>
-    /// The interaction of the drawobject (These interactions are availabel only when <see cref="IsSelected"/> is True);
+    /// 绘制对象的交互（仅当<see cref="IsSelected"/> is True）时，这些交互才可用）
     /// </summary>
     public abstract partial class DrawObject
     {
         /// <summary>
-        /// The method invoked while mouse is moving;
+        /// Indicates whether the point in inside the object
         /// </summary>
-        /// <param name="canvas"></param>
-        /// <param name="point"></param>
-        /// <remarks>This interaction are availabel only when <see cref="IsSelected"/> is True</remarks>
-        public void OnMouseMove(CADMouseEventArgs e)
-        {
-            PreviewMouseMove?.Invoke(this, e);
-            if (e.Handled)
-            {
-                return;
-            }
-
-            OnMouseMoveCore(e);
-        }
-
-        protected virtual void OnMouseMoveCore(CADMouseEventArgs e)
-        {
-        }
+        public virtual bool PointInObject(Point point, ICadScreenConverter cadScreenConverter) => false;
 
         /// <summary>
-        /// The method invoked while mouse is pressed;
+        /// Indicated whether the object in inside a rectangle
         /// </summary>
-        /// <param name="canvas"></param>
-        /// <remarks>This interaction are availabel only when <see cref="IsSelected"/> is True</remarks>
-        public void OnMouseDown(CADMouseButtonEventArgs e)
-        {
-            PreviewMouseDown?.Invoke(this, e);
-            if (e.Handled)
-            {
-                return;
-            }
-
-            OnMouseDownCore(e);
-        }
-
-        protected virtual void OnMouseDownCore(CADMouseButtonEventArgs e)
-        {
-        }
+        /// <param name="rect">The selection rectangle</param>
+        /// <param name="anyPoint">指示当 rect 刚好与不在 rect 内的 draw object 相交时是否应命中 draw object</param>
+        public virtual bool ObjectInRectangle(CadRect rect, ICadScreenConverter cadScreenConverter, bool anyPoint) => false;
 
         /// <summary>
-        /// The method invoked while the mouse is released;
+        /// Get the bounding rect for the draw object
         /// </summary>
-        /// <param name="canvas"></param>
-        /// <param name="point"></param>
-        /// <param name="snapShape"></param>
-        /// <remarks>This interaction are availabel only when <see cref="IsSelected"/> is True</remarks>
-        public void OnMouseUp(CADMouseButtonEventArgs e)
+        public virtual CadRect? GetBoundingRect() => null;
+
+        /// <summary>
+        /// The method invoked while the mouse is released
+        /// </summary>
+        public void OnMouseUp(CadMouseButtonEventArgs e)
         {
             PreviewMouseUp?.Invoke(this, e);
-            if (e.Handled)
-            {
-                return;
-            }
+            if (e.Handled) return;
 
             OnMouseUpCore(e);
         }
 
-
-        protected virtual void OnMouseUpCore(CADMouseButtonEventArgs e)
+        /// <summary>
+        /// The method invoked while mouse is pressed
+        /// </summary>
+        public void OnMouseDown(CadMouseButtonEventArgs e)
         {
+            PreviewMouseDown?.Invoke(this, e);
+            if (e.Handled) return;
+
+            OnMouseDownCore(e);
         }
 
         /// <summary>
-        /// The method invoked while the mouse is released;
+        /// The method invoked while mouse is moving
         /// </summary>
-        /// <param name="canvas"></param>
-        /// <remarks>This interaction are availabel only when <see cref="IsSelected"/> is True</remarks>
-        public void OnKeyDown(CADKeyEventArgs e)
+        public void OnMouseMove(CadMouseEventArgs e)
         {
-            PreviewKeyDown?.Invoke(this, e);
-            if (e.Handled)
-            {
-                return;
-            }
+            PreviewMouseMove?.Invoke(this, e);
+            if (e.Handled) return;
 
-            OnKeyDownCore(e);
+            OnMouseMoveCore(e);
         }
 
-        protected virtual void OnKeyDownCore(CADKeyEventArgs e)
-        {
-        }
-
-        public void OnKeyUp(CADKeyEventArgs e)
+        public void OnKeyUp(CadKeyEventArgs e)
         {
             PreviewKeyUp?.Invoke(this, e);
 
-            if (e.Handled)
-            {
-                return;
-            }
+            if (e.Handled) return;
 
             OnKeyUpCore(e);
         }
 
-        protected virtual void OnKeyUpCore(CADKeyEventArgs e)
+        /// <summary>
+        /// The method invoked while the mouse is released
+        /// </summary>
+        public void OnKeyDown(CadKeyEventArgs e)
         {
+            PreviewKeyDown?.Invoke(this, e);
+            if (e.Handled) return;
+
+            OnKeyDownCore(e);
         }
 
         public void OnTextInput(TextCompositionEventArgs e)
         {
             PreviewTextInput?.Invoke(this, e);
-            if (e.Handled)
-            {
-                return;
-            }
+            if (e.Handled) return;
 
             OnTextInputCore(e);
+        }
+
+        protected virtual void OnMouseUpCore(CadMouseButtonEventArgs e)
+        {
+        }
+
+        protected virtual void OnMouseDownCore(CadMouseButtonEventArgs e)
+        {
+        }
+
+        protected virtual void OnMouseMoveCore(CadMouseEventArgs e)
+        {
+        }
+
+        /// <summary>
+        /// The protected virtual method invoked while IsSelected changed
+        /// </summary>
+        protected virtual void OnSelectedChanged(ValueChangedEventArgs<bool> e)
+        {
+        }
+
+        protected virtual void OnKeyUpCore(CadKeyEventArgs e)
+        {
+        }
+
+        protected virtual void OnKeyDownCore(CadKeyEventArgs e)
+        {
         }
 
         protected virtual void OnTextInputCore(TextCompositionEventArgs e)
         {
         }
-
-        public event EventHandler<CADMouseButtonEventArgs> PreviewMouseDown;
-        public event EventHandler<CADMouseEventArgs> PreviewMouseMove;
-        public event EventHandler<CADMouseButtonEventArgs> PreviewMouseUp;
-        public event EventHandler<CADKeyEventArgs> PreviewKeyDown;
-        public event EventHandler<CADKeyEventArgs> PreviewKeyUp;
-        public event EventHandler<TextCompositionEventArgs> PreviewTextInput;
     }
 }

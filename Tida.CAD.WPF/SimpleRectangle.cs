@@ -12,14 +12,14 @@ namespace Tida.CAD.WPF
     /// <summary>
     /// The simple implementation to draw a rect,used to drag and select;
     /// </summary>
-    class SimpleRectangle : CADElement
+    class SimpleRectangle : CadElement
     {
         /// <summary>
         /// 矩形数据;
         /// </summary>
-        private CADRect? _rectangle;
+        private CadRect? _rectangle;
 
-        public CADRect? Rectangle
+        public CadRect? Rectangle
         {
             get { return _rectangle; }
             set

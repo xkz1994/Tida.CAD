@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Tida.CAD.Events
 {
     /// <summary>
-    /// 绘制对象被移除事件参数;
+    /// 绘制对象被移除事件参数
     /// </summary>
     public class DrawObjectsRemovedEventArgs : EventArgs
     {
@@ -14,7 +14,7 @@ namespace Tida.CAD.Events
         }
 
         /// <summary>
-        /// 对应的绘制对象;
+        /// 对应的绘制对象
         /// </summary>
         public IEnumerable<DrawObject> DrawObjects { get; }
     }
